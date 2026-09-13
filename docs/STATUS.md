@@ -17,19 +17,24 @@ Updated: 2026-09-13 (Australia/Canberra)
 - Canonical future repository URL recorded as
   <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
 
+- Deployment workflow added for `main` pushes and manual dispatch: Node.js 24,
+  project-subpath build, `dist/`-only Pages artifact, and scoped deployment job.
+- Public contribution guide is tracked as root `CLAUDE.md`; private run receipts
+  remain outside the repository and static build output.
+
 ## Pending
 
-- The independent Git repository is published on branch `main` at
-  <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
-- The public contribution guide is tracked as root [`CLAUDE.md`](../CLAUDE.md);
-  private run receipts remain outside the repository and static build output.
-- No GitHub Pages setup, custom domain, or deployment has been verified.
-- The Pages base path and public Citadel backlink destination remain unset.
+- Confirm repository visibility through an authenticated GitHub administrator.
+  Anonymous API inspection returned 404; this does not establish visibility.
+- Select **GitHub Actions** in repository **Settings → Pages**, then verify a
+  successful Actions deployment and the live pages, assets, data, and navigation.
+- No successful deployment, live URL, custom domain, or public Citadel backlink
+  has been verified at this checkpoint.
 - Fixture records require provenance, licensing/rights, safety, and editorial
   review before any promotion to sourced/publication-ready content.
 
 ## Next step
 
-Choose and review the first sourced content milestone. Website deployment and
-Pages configuration remain separate work; the candidate Pages base path is
-`/library-of-the-citadel/`, but no deployment or live URL has been verified.
+Complete authenticated Pages setup and deployment verification. The workflow's
+base path is `/library-of-the-citadel/`; the default source configuration remains
+deployment-neutral. Then choose and review the first sourced content milestone.

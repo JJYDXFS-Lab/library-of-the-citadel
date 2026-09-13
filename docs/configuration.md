@@ -56,9 +56,24 @@ host; `.nojekyll` is written so a Jekyll-based host does not drop
 underscore-prefixed paths. Detail pages are real directories with `index.html`,
 so deep links and reloads work without a router or a server process.
 
-This local tree configures no Git remote, Pages settings, runtime, or scheduler.
-The owner-supplied canonical repository URL is
-`https://github.com/JJYDXFS-Lab/library-of-the-citadel.git`, recorded for future
-setup only. The local directory is `library-of-the-citadel/`; no push,
-publication, deployment, Pages base path, custom domain, or Citadel destination
-has been configured, and no repository name or host is assumed in `src/`.
+## GitHub Pages workflow
+
+The canonical repository is
+`https://github.com/JJYDXFS-Lab/library-of-the-citadel.git`.
+`.github/workflows/pages.yml` runs on pushes to `main` and manual dispatch.
+It uses Node.js 24, runs `npm run check`, then builds with
+`LIBRARY_BASE_PATH=/library-of-the-citadel/ npm run build`. There is no dependency
+installation step. Only `dist/` is uploaded; source documentation (including
+`CLAUDE.md`), private run receipts, and logs must never enter that artifact.
+
+In the repository's **Settings → Pages → Build and deployment**, select
+**GitHub Actions** as the source. Preserve any existing custom-domain settings;
+this workflow does not create one or automatically enable Pages. The deployment
+job uses the `github-pages` environment with only `pages: write` and
+`id-token: write`; the build job has `contents: read` only.
+
+The expected default URL is
+`https://jjydxfs-lab.github.io/library-of-the-citadel/`, but it is not a verified
+live site until the Actions deployment succeeds and the served pages/assets are
+checked. See `STATUS.md` for the factual checkpoint. The Citadel backlink remains
+unset, and all three recipe records remain illustrative fixtures.

@@ -12,9 +12,9 @@ backend, no build toolchain — Node's standard library and plain HTML/CSS/JS.
 >
 > The local project directory is `library-of-the-citadel/`. The owner-supplied
 > canonical repository URL is <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
-> The source repository is public at the canonical URL above. Repository
-> publication does not imply a website deployment; no Pages site is configured
-> or verified by this project documentation.
+> Repository visibility is managed on GitHub. The Pages workflow is defined
+> in `.github/workflows/pages.yml`; a workflow file alone does not establish a
+> successful deployment. See the configuration and status docs for setup.
 
 > **Fixture build.** The three records in this repository were authored to
 > exercise the content contract and the presentation framework. They are not
@@ -65,8 +65,9 @@ root build. **Nothing here starts a server**, and the deployed output needs none
 
 ## What this repository deliberately does not do
 
-It does not configure a Git remote, a Pages host, a runtime, or a scheduler;
-the canonical repository URL is documentation only and no repository name or
-host is compiled into `src/`. It fetches nothing at runtime —
+The Pages workflow builds and deploys only `dist/` at the project subpath;
+repository Pages settings must separately select **GitHub Actions**. No custom
+domain, Citadel destination, or scheduler is configured, and no repository name
+or host is compiled into `src/`. It fetches nothing at runtime —
 no fonts, images, analytics, or third-party scripts. It ships no images, and
 records say so in `rights.image_rights_review_state`.
