@@ -12,8 +12,9 @@ backend, no build toolchain — Node's standard library and plain HTML/CSS/JS.
 >
 > The local project directory is `library-of-the-citadel/`. The owner-supplied
 > canonical repository URL is <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
-> This local tree is not yet a Git repository, and nothing has been pushed,
-> published, deployed, or configured for Pages.
+> The source repository is public at the canonical URL above. Repository
+> publication does not imply a website deployment; no Pages site is configured
+> or verified by this project documentation.
 
 > **Fixture build.** The three records in this repository were authored to
 > exercise the content contract and the presentation framework. They are not

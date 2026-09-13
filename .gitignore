@@ -2,8 +2,6 @@
 /dist/
 /dist-*/
 
-# Local-only contributor checkpoint and execution artifacts — never part of the published site.
-/CLAUDE.md
 # Local run receipts and agent scratch space — never part of the published site.
 /.agent-runs/
 /.agent-office-runs/

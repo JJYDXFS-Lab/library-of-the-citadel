@@ -19,13 +19,17 @@ Updated: 2026-09-13 (Australia/Canberra)
 
 ## Pending
 
-- The local tree is now an independent Git repository on branch `main`. Its `origin` fetch URL is the owner-supplied canonical URL <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>; the push URL uses the equivalent authenticated SSH endpoint. The remote was verified read-only and currently exposes no refs.
-- No push, public publication, GitHub Pages setup, custom domain, or deployment
-  has been performed or authorized.
+- The independent Git repository is published on branch `main` at
+  <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
+- The public contribution guide is tracked as root [`CLAUDE.md`](../CLAUDE.md);
+  private run receipts remain outside the repository and static build output.
+- No GitHub Pages setup, custom domain, or deployment has been verified.
 - The Pages base path and public Citadel backlink destination remain unset.
 - Fixture records require provenance, licensing/rights, safety, and editorial
   review before any promotion to sourced/publication-ready content.
 
 ## Next step
 
-The project is ready for an owner-approved initial commit and push after a public-content review. Push/publication and Pages configuration remain separate approval gates. The candidate Pages base path is `/library-of-the-citadel/`, but no deployment or live URL has been verified.
+Choose and review the first sourced content milestone. Website deployment and
+Pages configuration remain separate work; the candidate Pages base path is
+`/library-of-the-citadel/`, but no deployment or live URL has been verified.
