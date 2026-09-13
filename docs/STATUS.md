@@ -14,7 +14,7 @@ Updated: 2026-09-13 (Australia/Canberra)
   and deterministic rebuild behavior.
 - Local directory renamed to `library-of-the-citadel/` after prior work stopped.
 - Internal run receipts were preserved outside this public project tree.
-- Canonical future repository URL recorded as
+- Canonical public repository URL:
   <https://github.com/JJYDXFS-Lab/library-of-the-citadel.git>.
 
 - Deployment workflow added for `main` pushes and manual dispatch: Node.js 24,
@@ -22,19 +22,26 @@ Updated: 2026-09-13 (Australia/Canberra)
 - Public contribution guide is tracked as root `CLAUDE.md`; private run receipts
   remain outside the repository and static build output.
 
+## Publication verified
+
+- Repository visibility changed from Private to Public on 2026-09-13.
+- GitHub Pages source is **GitHub Actions**, with enforced HTTPS and no custom domain.
+- Live site: <https://jjydxfs-lab.github.io/library-of-the-citadel/>.
+- Deployed source: `efcf62800ee748742d5545250af8294dc460d1df`.
+- [Deployment run 34754500267, attempt 2](https://github.com/JJYDXFS-Lab/library-of-the-citadel/actions/runs/34754500267/attempts/2)
+  succeeded after re-running the failed deployment job; the existing build artifact was reused.
+- Live hall, gallery, representative Rice Porridge detail, About page, CSS and
+  JavaScript returned HTTP 200. Browser navigation and search (`rice`: 1 of 3)
+  passed; fixture, unsourced, rights and safety-review labels remained visible.
+
 ## Pending
 
-- Confirm repository visibility through an authenticated GitHub administrator.
-  Anonymous API inspection returned 404; this does not establish visibility.
-- Select **GitHub Actions** in repository **Settings → Pages**, then verify a
-  successful Actions deployment and the live pages, assets, data, and navigation.
-- No successful deployment, live URL, custom domain, or public Citadel backlink
-  has been verified at this checkpoint.
+- No custom domain or public Citadel backlink is configured. The disabled
+  backlink placeholder remains intentional; do not invent a destination.
 - Fixture records require provenance, licensing/rights, safety, and editorial
   review before any promotion to sourced/publication-ready content.
 
 ## Next step
 
-Complete authenticated Pages setup and deployment verification. The workflow's
-base path is `/library-of-the-citadel/`; the default source configuration remains
-deployment-neutral. Then choose and review the first sourced content milestone.
+Choose and review the first sourced content milestone. The deployment base path
+is `/library-of-the-citadel/`; the default source configuration remains deployment-neutral.

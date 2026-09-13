@@ -16,6 +16,9 @@ backend, no build toolchain — Node's standard library and plain HTML/CSS/JS.
 > in `.github/workflows/pages.yml`; a workflow file alone does not establish a
 > successful deployment. See the configuration and status docs for setup.
 
+**Live fixture site:** <https://jjydxfs-lab.github.io/library-of-the-citadel/> —
+public repository and GitHub Actions deployment verified on 2026-09-13.
+
 > **Fixture build.** The three records in this repository were authored to
 > exercise the content contract and the presentation framework. They are not
 > researched, sourced, kitchen-tested, or publication-ready, and they make no
