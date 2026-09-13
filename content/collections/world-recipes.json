@@ -1,0 +1,32 @@
+{
+  "schema_version": "library.collection/1.0.0",
+  "collection_id": "world-recipes",
+  "record_class": "fixture",
+  "publication_ready": false,
+  "record_notice": "Fixture collection. The three records below were authored for this repository to exercise the content contract and the presentation framework. They are not researched, sourced, tested, or publication-ready knowledge records.",
+  "title": {
+    "primary": "World Recipes",
+    "alt": ["世界食谱"]
+  },
+  "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
+  "scope_note": "Contains exactly three illustrative fixture records, seeded so the hall, gallery, search, region filter, and detail views can be built and checked end to end. It contains no researched recipe, no sourced text, no image, no authenticity or history claim, and no cooking-test result. Adding a sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
+  "item_ids": [
+    "wr-fixture-griddle-flatbread",
+    "wr-fixture-rice-porridge",
+    "wr-fixture-simmered-bean-soup"
+  ],
+  "reviewed_at": "2026-09-13",
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-13",
+      "change": "Initial fixture collection created alongside the first Library framework build. No prior version exists.",
+      "supersedes": null
+    }
+  ],
+  "rights": {
+    "content_license": "Original fixture text authored for this repository; reusable under the repository's own terms once the owner sets them.",
+    "license_review_state": "fixture-original-text"
+  }
+}

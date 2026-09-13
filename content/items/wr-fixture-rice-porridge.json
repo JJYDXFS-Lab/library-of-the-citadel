@@ -1,0 +1,87 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-fixture-rice-porridge",
+  "collection_id": "world-recipes",
+  "record_class": "fixture",
+  "publication_ready": false,
+  "record_notice": "FIXTURE RECORD — written for this repository to demonstrate the Library content contract. It is not researched, not sourced, not kitchen-tested, and not publication-ready. Nothing here asserts the history, authenticity, or regional ownership of any dish.",
+
+  "name": {
+    "primary": "Rice Porridge",
+    "alt": ["Fixture B", "米粥"]
+  },
+
+  "region": {
+    "label": "East Asia",
+    "cuisine_label": "Grain porridges",
+    "label_basis": "fixture-illustrative"
+  },
+
+  "summary": "Rice simmered in a large excess of water until the grains break down. Used here as a worked example of a record whose variants differ by ratio and finishing rather than by ingredient list.",
+
+  "variants": [
+    {
+      "variant_id": "thin-long-simmer",
+      "label": "Thin, long simmer",
+      "region_label": "East Asia",
+      "difference_note": "Roughly one part rice to twelve parts water, simmered until the grains lose their edges and the liquid turns opaque."
+    },
+    {
+      "variant_id": "thick-short-simmer",
+      "label": "Thick, short simmer",
+      "region_label": "Southeast Asia",
+      "difference_note": "Roughly one part rice to eight parts water and a shorter cook, leaving whole grains suspended in the liquid. Kept as its own variant, not treated as an undercooked version of the first."
+    }
+  ],
+
+  "ingredients": [
+    { "item": "Short- or medium-grain white rice", "quantity": "100 g" },
+    { "item": "Water", "quantity": "800 ml to 1.2 L", "note": "Choose the ratio from the variant you are following." },
+    { "item": "Salt", "quantity": "to taste", "note": "Added at the end, since the liquid reduces while cooking." },
+    { "item": "Fresh spring onion, ginger, or a spoon of oil", "quantity": "optional", "note": "Finishing only; not part of the base preparation." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Rinse the rice under cold water until the water running off is no longer cloudy, then drain." },
+    { "step": 2, "instruction": "Combine the rice and the full quantity of water in a heavy pot and bring to a boil over high heat." },
+    { "step": 3, "instruction": "Lower the heat until the surface is barely moving and set the lid slightly ajar so the pot does not boil over." },
+    { "step": 4, "instruction": "Simmer, stirring every ten minutes or so to keep the rice from catching on the base: about 40 minutes for the thin variant, about 25 for the thick one." },
+    { "step": 5, "instruction": "Stop when the texture matches the variant you are following. The porridge continues to thicken as it cools, so pull it slightly looser than you want it." },
+    { "step": 6, "instruction": "Season with salt off the heat, and add any finishing ingredients just before serving." }
+  ],
+
+  "yield_note": "Two to three bowls.",
+
+  "sources": [],
+  "source_state": "none-fixture-authored",
+  "provenance_note": "No source. This text was written directly for this repository as fixture content. The empty source list is the honest state; it is not awaiting substitution with a guessed URL.",
+
+  "reviewed_at": "2026-09-13",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-13",
+      "change": "Record created as fixture content for the first Library framework build.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original fixture text authored for this repository.",
+    "license_review_state": "fixture-original-text",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Starchy porridge boils over easily and the foam that escapes is scalding; keep the lid ajar and the heat low.",
+      "This record has had no food-safety review. Treat it as an interface fixture, not as kitchen guidance."
+    ],
+    "review_state": "fixture-not-reviewed"
+  },
+
+  "tags": ["rice", "porridge", "simmered", "vegetarian", "fixture"]
+}

@@ -1,0 +1,14 @@
+{
+  "$comment": "Deployment configuration. Selected values have environment overrides; see docs/configuration.md. No repository name, remote URL, or Pages host is hardcoded in src/. The official project display name is exactly \"Library of the Citadel\" — a distinct project from Atom-KB's separate Library; neither mirrors, syncs, nor supersedes the other.",
+  "siteName": "Library of the Citadel",
+  "siteNameAlt": "图书馆",
+  "tagline": "A visual hall for world knowledge.",
+  "basePath": "/",
+  "citadel": {
+    "label": "Cyber Citadel",
+    "url": "",
+    "note": "Citadel backlink is unset by default. Set citadel.url (or LIBRARY_CITADEL_URL) once the owner provisions the address; while it is empty the build renders a disabled placeholder instead of inventing a destination."
+  },
+  "buildNotice": "Fixture build. All records in this repository are illustrative demonstrations of the Library of the Citadel content contract, not researched or publication-ready knowledge records.",
+  "footerNote": "Library of the Citadel — an independent static Library framework, distinct from Atom-KB's separate Library. No backend, no tracking, no external asset requests."
+}

@@ -1,0 +1,409 @@
+// Checks for the Library framework. Node standard library only — node:test,
+// node:assert, node:fs. There is nothing to install.
+//
+//   node --test tests/*.mjs
+//
+// The build tests write into dedicated dist-test-* directories so they never
+// disturb the dist/ and dist-preview/ output a human is looking at.
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, existsSync, readdirSync, statSync, rmSync } from 'node:fs';
+import { after } from 'node:test';
+import path from 'node:path';
+
+import { repoRoot, normalizeBasePath, makeWithBase, resolveOutDir, loadConfig } from '../src/config.mjs';
+import { loadContent, regionsOf } from '../src/content.mjs';
+import { checkItem, checkCollection } from '../src/rules.mjs';
+import { validate } from '../src/schema-validate.mjs';
+import { esc } from '../src/templates/pages.mjs';
+import { build } from '../src/build.mjs';
+
+const EXPECTED_ITEM_IDS = [
+  'wr-fixture-griddle-flatbread',
+  'wr-fixture-rice-porridge',
+  'wr-fixture-simmered-bean-soup',
+];
+
+/** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
+function walk(dir, base = dir) {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...walk(full, base));
+    else out.push(path.relative(base, full));
+  }
+  return out.sort();
+}
+
+function linksIn(html) {
+  return [...html.matchAll(/(?:href|src)="([^"]*)"/g)].map((m) => m[1]);
+}
+
+/** Build once per base path and cache, so the suite does not rebuild per assertion. */
+const builds = new Map();
+function buildOnce(key, env) {
+  if (!builds.has(key)) builds.set(key, build(env));
+  return builds.get(key);
+}
+const rootBuild = () => buildOnce('root', { LIBRARY_OUT_DIR: 'dist-test-root' });
+const previewBuild = () => buildOnce('preview', {
+  LIBRARY_BASE_PATH: '/library-preview/',
+  LIBRARY_OUT_DIR: 'dist-test-preview',
+});
+
+const read = (r, rel) => readFileSync(path.join(r.outDir, rel), 'utf8');
+
+function cleanTestOutputs() {
+  for (const name of ['dist-test-root', 'dist-test-preview', 'dist-test-stable']) {
+    rmSync(path.join(repoRoot, name), { recursive: true, force: true });
+  }
+}
+after(cleanTestOutputs);
+// Node 18 may complete the top-level after hook before independently scheduled
+// top-level tests finish writing. The synchronous exit hook is the final guard.
+process.on('exit', cleanTestOutputs);
+
+// ------------------------------------------------------------ content
+
+test('every content record validates against its schema and the cross-record rules', () => {
+  const { errors } = loadContent();
+  assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
+});
+
+test('the repository holds exactly three fixture records in one collection', () => {
+  const { items, collections } = loadContent();
+  assert.equal(items.length, 3);
+  assert.equal(collections.length, 1);
+  assert.deepEqual(items.map((i) => i.item_id).sort(), EXPECTED_ITEM_IDS);
+  assert.deepEqual([...collections[0].item_ids].sort(), EXPECTED_ITEM_IDS);
+});
+
+test('no record claims to be sourced, reviewed, or publication-ready', () => {
+  const { items, collections } = loadContent();
+  for (const record of [...items, ...collections]) {
+    assert.equal(record.record_class, 'fixture', `${record.item_id ?? record.collection_id} is not a fixture`);
+    assert.equal(record.publication_ready, false);
+    assert.match(record.record_notice, /fixture/i);
+  }
+  for (const item of items) {
+    assert.deepEqual(item.sources, []);
+    assert.equal(item.source_state, 'none-fixture-authored');
+    assert.equal(item.region.label_basis, 'fixture-illustrative');
+    assert.notEqual(item.safety.review_state, 'reviewed');
+    assert.deepEqual(item.rights.images, []);
+  }
+});
+
+test('the region facet has a usable spread for the filter', () => {
+  const { items } = loadContent();
+  const regions = regionsOf(items);
+  assert.equal(regions.length, 3);
+  assert.deepEqual(regions, [...regions].sort());
+});
+
+// -------------------------------------------------------------- rules
+
+const fixtureItem = () => JSON.parse(readFileSync(
+  path.join(repoRoot, 'content', 'items', 'wr-fixture-rice-porridge.json'), 'utf8',
+));
+
+test('the honesty rules reject a fixture that grows a source pointer', () => {
+  const item = fixtureItem();
+  item.sources.push({ url: 'https://example.com/a', title: 'A', accessed_at: '2026-09-13' });
+  const errors = checkItem(item);
+  assert.ok(errors.some((e) => /must not carry source pointers/.test(e)), errors.join('; '));
+  assert.ok(errors.some((e) => /placeholder marker "example\.com"/.test(e)), errors.join('; '));
+});
+
+test('the honesty rules reject a fixture promoted to publication-ready or reviewed', () => {
+  const ready = fixtureItem();
+  ready.publication_ready = true;
+  assert.ok(checkItem(ready).some((e) => /must not be marked publication_ready/.test(e)));
+
+  const reviewed = fixtureItem();
+  reviewed.safety.review_state = 'reviewed';
+  assert.ok(checkItem(reviewed).some((e) => /must not claim a completed safety review/.test(e)));
+});
+
+test('the rules reject broken method numbering and a broken version chain', () => {
+  const skipped = fixtureItem();
+  skipped.method[2].step = 9;
+  assert.ok(checkItem(skipped).some((e) => /method steps must be numbered/.test(e)));
+
+  const mismatched = fixtureItem();
+  mismatched.record_version = '2.0.0';
+  assert.ok(checkItem(mismatched).some((e) => /is not the first \(newest\) change_history entry/.test(e)));
+});
+
+test('the rules reject an unreviewed record that ships an image', () => {
+  const item = fixtureItem();
+  item.rights.images.push({ url: 'local.png', rights_note: 'unknown' });
+  assert.ok(checkItem(item).some((e) => /image_rights_review_state/.test(e)));
+});
+
+test('the collection rules catch a manifest that drifts from the files on disk', () => {
+  const { collections, items } = loadContent();
+  const collection = JSON.parse(JSON.stringify(collections[0]));
+  collection.item_ids.push('wr-fixture-does-not-exist');
+  assert.ok(checkCollection(collection, items).some((e) => /has no record under content\/items/.test(e)));
+
+  const dropped = JSON.parse(JSON.stringify(collections[0]));
+  dropped.item_ids = dropped.item_ids.slice(1);
+  assert.ok(checkCollection(dropped, items).some((e) => /is not listed in the .* manifest/.test(e)));
+});
+
+// --------------------------------------------------------- validator
+
+test('the schema validator reports type, required and unexpected-property problems', () => {
+  const schema = {
+    type: 'object',
+    required: ['a'],
+    additionalProperties: false,
+    properties: { a: { type: 'string', minLength: 2 } },
+  };
+  assert.deepEqual(validate({ a: 'ok' }, schema), []);
+  assert.equal(validate({}, schema).length, 1);
+  assert.equal(validate({ a: 'x' }, schema).length, 1);
+  assert.equal(validate({ a: 'ok', b: 1 }, schema).length, 1);
+});
+
+test('the schema validator refuses a keyword it does not actually enforce', () => {
+  assert.throws(() => validate(1, { type: 'integer', maximum: 3 }), /Unsupported JSON Schema keyword "maximum"/);
+});
+
+// ---------------------------------------------------------- base path
+
+test('base paths normalize to one canonical shape', () => {
+  for (const raw of ['', '/', undefined]) assert.equal(normalizeBasePath(raw), '/');
+  for (const raw of ['library-preview', '/library-preview', 'library-preview/', '/library-preview/']) {
+    assert.equal(normalizeBasePath(raw), '/library-preview/');
+  }
+});
+
+test('withBase refuses anything that is already absolute', () => {
+  const withBase = makeWithBase('/library-preview/');
+  assert.equal(withBase('recipes/'), '/library-preview/recipes/');
+  assert.equal(withBase(''), '/library-preview/');
+  assert.throws(() => withBase('/recipes/'), /build-relative/);
+  assert.throws(() => withBase('https://elsewhere.invalid/'), /build-relative/);
+});
+
+test('the output directory cannot resolve onto the repository itself', () => {
+  for (const bad of ['', '.', './', 'src', 'src/assets', 'content', '../escape', '/tmp/elsewhere']) {
+    assert.throws(() => resolveOutDir(bad), /LIBRARY_OUT_DIR/, `resolveOutDir accepted ${JSON.stringify(bad)}`);
+  }
+  assert.equal(resolveOutDir('dist'), path.join(repoRoot, 'dist'));
+  assert.equal(resolveOutDir(undefined), path.join(repoRoot, 'dist'));
+});
+
+test('no repository name, remote, or host is compiled into the configuration', () => {
+  const cfg = loadConfig({});
+  assert.equal(cfg.citadel.url, '', 'the citadel URL must stay empty until an owner configures one');
+  assert.equal(cfg.basePath, '/');
+});
+
+// ------------------------------------------------------------ the name
+
+const OFFICIAL_NAME = 'Library of the Citadel';
+
+test('the official display name is the configured value and the built-in default', () => {
+  const fileConfig = JSON.parse(readFileSync(path.join(repoRoot, 'config', 'site.config.json'), 'utf8'));
+  assert.equal(fileConfig.siteName, OFFICIAL_NAME);
+  assert.equal(loadConfig({}).siteName, OFFICIAL_NAME,
+    'a build with no overrides must carry the official name, not a generic "Library"');
+});
+
+test('every generated page titles and wordmarks the official name', () => {
+  const r = rootBuild();
+  for (const page of PAGES) {
+    const html = read(r, page);
+    assert.match(html, new RegExp(`<title>[^<]* · ${OFFICIAL_NAME}</title>`), `${page}: wrong <title> suffix`);
+    assert.ok(html.includes(`<span class="wordmark__name">${OFFICIAL_NAME}</span>`), `${page}: wrong header wordmark`);
+  }
+  const hall = read(r, 'index.html');
+  assert.match(hall, new RegExp(`<h1 id="hall-title" class="hall__title">${OFFICIAL_NAME}`), 'the hall title is not the official name');
+});
+
+test('the build states that this is not Atom-KB\'s Library', () => {
+  const about = read(rootBuild(), 'about/index.html');
+  assert.match(about, /Atom-KB&#39;s separate Library/,
+    'the about page must name the distinction from Atom-KB\'s separate Library');
+  assert.match(about, /neither\s+mirrors, syncs, nor supersedes/);
+  assert.match(read(rootBuild(), 'index.html'), /distinct from Atom-KB&#39;s separate Library/,
+    'the colophon footer must carry the distinction on every page');
+});
+
+test('esc neutralizes every character that could break out of markup', () => {
+  assert.equal(esc(`<a href="x" title='y'>&</a>`), '&lt;a href=&quot;x&quot; title=&#39;y&#39;&gt;&amp;&lt;/a&gt;');
+  assert.equal(esc(null), '');
+});
+
+// ------------------------------------------------------------- builds
+
+const PAGES = ['index.html', 'recipes/index.html', 'about/index.html',
+  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`)];
+const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll', 'data/world-recipes.json'];
+
+for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
+  test(`the ${label} build emits every page, asset, and data file`, () => {
+    const r = run();
+    assert.equal(r.cfg.basePath, base);
+    assert.equal(r.itemCount, 3);
+    for (const rel of [...PAGES, ...ASSETS]) {
+      assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel} in the ${label} build`);
+    }
+    assert.deepEqual(walk(r.outDir), [...PAGES, ...ASSETS].sort(), `unexpected file set in the ${label} build`);
+    assert.ok(r.bytes > 0);
+  });
+
+  test(`every generated link in the ${label} build is rooted at its configured base path`, () => {
+    const r = run();
+    for (const page of PAGES) {
+      for (const link of linksIn(read(r, page))) {
+        if (!link.startsWith('/')) continue; // "#main" and relative links are fine as-is.
+        assert.ok(link.startsWith(base), `${page}: link "${link}" is not under base "${base}"`);
+        assert.ok(!link.startsWith('//'), `${page}: link "${link}" looks protocol-relative`);
+      }
+    }
+  });
+
+  test(`the ${label} build reaches every detail page from the gallery`, () => {
+    const r = run();
+    const gallery = read(r, 'recipes/index.html');
+    for (const id of EXPECTED_ITEM_IDS) {
+      assert.ok(gallery.includes(`href="${base}recipes/${id}/"`), `gallery does not link ${id} at base ${base}`);
+    }
+  });
+}
+
+test('the subpath build shares no absolute link shape with the root build', () => {
+  const preview = read(previewBuild(), 'recipes/index.html');
+  assert.ok(!/(?:href|src)="\/(?!library-preview\/)/.test(preview),
+    'the subpath build emitted a link rooted at "/" instead of "/library-preview/"');
+});
+
+test('detail pages carry prev/next navigation in manifest order, with no dangling ends', () => {
+  const r = rootBuild();
+  const { collections } = loadContent();
+  const order = collections[0].item_ids;
+
+  order.forEach((id, i) => {
+    const html = read(r, `recipes/${id}/index.html`);
+    assert.ok(html.includes(`href="/recipes/"`), `${id}: no link back to the collection index`);
+
+    const prev = html.match(/class="record-nav__prev" href="([^"]+)"/);
+    const next = html.match(/class="record-nav__next" href="([^"]+)"/);
+    assert.equal(Boolean(prev), i > 0, `${id}: wrong presence of a previous link`);
+    assert.equal(Boolean(next), i < order.length - 1, `${id}: wrong presence of a next link`);
+    if (prev) assert.equal(prev[1], `/recipes/${order[i - 1]}/`);
+    if (next) assert.equal(next[1], `/recipes/${order[i + 1]}/`);
+  });
+});
+
+test('every internal link in the root build resolves to a file that was actually written', () => {
+  const r = rootBuild();
+  const emitted = new Set(walk(r.outDir).map((f) => `/${f.split(path.sep).join('/')}`));
+  for (const page of PAGES) {
+    for (const link of linksIn(read(r, page))) {
+      if (!link.startsWith('/')) continue;
+      const target = link.endsWith('/') ? `${link}index.html` : link;
+      assert.ok(emitted.has(target), `${page}: link "${link}" has no file at "${target}"`);
+    }
+  }
+});
+
+test('the gallery exposes the search, filter, and empty-state hooks the script binds to', () => {
+  const html = read(rootBuild(), 'recipes/index.html');
+  for (const hook of ['data-filters', 'data-search', 'data-region', 'data-status',
+    'data-reset', 'data-grid', 'data-empty', 'data-reset-inline']) {
+    assert.ok(html.includes(hook), `gallery is missing the "${hook}" hook`);
+  }
+  assert.match(html, /<p class="filters__status" aria-live="polite"/);
+  assert.match(html, /<div class="empty-state" data-empty hidden>/);
+  assert.match(html, /<noscript>/);
+
+  for (const region of regionsOf(loadContent().items)) {
+    assert.ok(html.includes(`<option value="${region}">`), `no filter option for region "${region}"`);
+  }
+  assert.equal([...html.matchAll(/data-haystack="/g)].length, 3, 'every card needs a search haystack');
+  assert.equal([...html.matchAll(/class="card"/g)].length, 3);
+
+  const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
+  for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
+    '[data-reset]', '[data-grid]', '[data-empty]', '[data-reset-inline]']) {
+    assert.ok(app.includes(hook), `app.js never queries "${hook}"`);
+  }
+});
+
+test('hiding a grid actually hides it: the stylesheet overrides its own display rule', () => {
+  const css = readFileSync(path.join(repoRoot, 'src', 'assets', 'site.css'), 'utf8');
+  assert.match(css, /\[hidden\]\s*\{\s*display:\s*none\s*!important;?\s*\}/,
+    'app.js sets .hidden on the grid, which sets display:grid; an explicit [hidden] rule must win');
+  assert.doesNotMatch(css, /головы/, 'the stylesheet contains corrupted text');
+});
+
+test('the hall and every page carry the accessibility landmarks', () => {
+  const r = rootBuild();
+  for (const page of PAGES) {
+    const html = read(r, page);
+    assert.match(html, /^<!DOCTYPE html>/);
+    assert.match(html, /<html lang="en">/);
+    assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1">/);
+    assert.match(html, /<a class="skip-link" href="#main">/, `${page}: no skip link`);
+    assert.match(html, /<main id="main">/, `${page}: no main landmark`);
+    assert.equal([...html.matchAll(/<h1[ >]/g)].length, page === 'index.html' ? 1 : 1, `${page}: needs exactly one h1`);
+    assert.ok(html.includes('fixture-banner'), `${page}: the fixture notice must appear on every page`);
+  }
+  const hall = read(r, 'index.html');
+  assert.ok(hall.includes('href="/recipes/"'), 'the hall does not open the collection');
+  assert.ok(hall.includes('aria-hidden="true"'), 'the decorative vault must be hidden from assistive tech');
+});
+
+// ----------------------------------------------------- nothing leaks
+
+test('the build output contains no run receipts, secrets, or local paths', () => {
+  const FORBIDDEN = [
+    '.agent-runs', '.agent-office-runs', 'ro-agent-harness',
+    'BEGIN RSA PRIVATE KEY', 'BEGIN OPENSSH PRIVATE KEY',
+    'api_key', 'API_KEY', 'secret_key', 'ANTHROPIC_API_KEY',
+    repoRoot, process.env.HOME ?? '/Users/',
+  ].filter(Boolean);
+
+  for (const r of [rootBuild(), previewBuild()]) {
+    for (const rel of walk(r.outDir)) {
+      assert.ok(!rel.includes('.agent'), `${rel} should never be copied into the output`);
+      const body = readFileSync(path.join(r.outDir, rel), 'utf8');
+      for (const needle of FORBIDDEN) {
+        assert.ok(!body.includes(needle), `${rel} leaks "${needle}"`);
+      }
+    }
+  }
+});
+
+test('the published data file is presentation-free content and nothing else', () => {
+  const r = rootBuild();
+  const data = JSON.parse(read(r, 'data/world-recipes.json'));
+  assert.equal(data.items.length, 3);
+  assert.equal(data.collection.collection_id, 'world-recipes');
+  assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
+  for (const item of data.items) assert.equal(item.record_class, 'fixture');
+});
+
+test('the output is static and fetches nothing from a third party', () => {
+  const r = rootBuild();
+  for (const rel of walk(r.outDir)) {
+    if (!rel.endsWith('.html') && !rel.endsWith('.css')) continue;
+    const body = readFileSync(path.join(r.outDir, rel), 'utf8');
+    assert.doesNotMatch(body, /(?:href|src|url\()\s*["']?https?:\/\//,
+      `${rel} makes an external request; this build must fetch nothing`);
+  }
+});
+
+test('a build leaves no stray file behind and is byte-stable across runs', () => {
+  const first = build({ LIBRARY_OUT_DIR: 'dist-test-stable' });
+  const firstFiles = walk(first.outDir).map((f) => [f, statSync(path.join(first.outDir, f)).size]);
+  const second = build({ LIBRARY_OUT_DIR: 'dist-test-stable' });
+  const secondFiles = walk(second.outDir).map((f) => [f, statSync(path.join(second.outDir, f)).size]);
+  assert.deepEqual(secondFiles, firstFiles, 'two consecutive builds disagree');
+});

@@ -1,0 +1,27 @@
+# Build output. Every dist* directory is generated and safe to delete.
+/dist/
+/dist-*/
+
+# Local-only contributor checkpoint and execution artifacts — never part of the published site.
+/CLAUDE.md
+# Local run receipts and agent scratch space — never part of the published site.
+/.agent-runs/
+/.agent-office-runs/
+
+# Secrets. Nothing in this repository reads them today; the rule is here so a
+# later addition cannot quietly commit one.
+.env
+.env.*
+*.pem
+*.key
+
+# OS and editor noise.
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Not used by this project (it has no dependencies), listed so an accidental
+# install does not get committed.
+node_modules/

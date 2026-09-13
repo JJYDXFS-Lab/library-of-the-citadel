@@ -1,0 +1,88 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-fixture-griddle-flatbread",
+  "collection_id": "world-recipes",
+  "record_class": "fixture",
+  "publication_ready": false,
+  "record_notice": "FIXTURE RECORD — written for this repository to demonstrate the Library content contract. It is not researched, not sourced, not kitchen-tested, and not publication-ready. Nothing here asserts the history, authenticity, or regional ownership of any dish.",
+
+  "name": {
+    "primary": "Griddle Flatbread",
+    "alt": ["Fixture A"]
+  },
+
+  "region": {
+    "label": "West Asia",
+    "cuisine_label": "Flatbreads",
+    "label_basis": "fixture-illustrative"
+  },
+
+  "summary": "A plain flour-and-water dough rested briefly, rolled thin, and cooked dry on a hot griddle. Used here as the simplest possible worked example of a record with two regional variants.",
+
+  "variants": [
+    {
+      "variant_id": "thin-dry-griddled",
+      "label": "Thin, dry-griddled",
+      "region_label": "West Asia",
+      "difference_note": "Rolled to roughly 2 mm and cooked on a dry surface, so the bread stays flexible and pale with scattered blisters."
+    },
+    {
+      "variant_id": "thick-fat-brushed",
+      "label": "Thicker, fat-brushed",
+      "region_label": "South Asia",
+      "difference_note": "Rolled to roughly 5 mm and brushed with fat during cooking, giving a softer crumb and a browner surface. Recorded as a parallel variant rather than a correction of the first."
+    }
+  ],
+
+  "ingredients": [
+    { "item": "Plain wheat flour", "quantity": "250 g", "note": "Plus a little extra for dusting." },
+    { "item": "Warm water", "quantity": "150 ml", "note": "Added gradually; flours vary in how much they take." },
+    { "item": "Salt", "quantity": "1 tsp" },
+    { "item": "Neutral oil or melted butter", "quantity": "as needed", "note": "Only for the thick, fat-brushed variant." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Mix the flour and salt, then add the warm water a little at a time until a shaggy dough forms." },
+    { "step": 2, "instruction": "Knead on a lightly floured surface until the dough is smooth and no longer sticky, roughly 6 to 8 minutes." },
+    { "step": 3, "instruction": "Cover and rest for 20 to 30 minutes so the dough relaxes and rolls out without springing back." },
+    { "step": 4, "instruction": "Divide into six pieces. Roll each to the thickness called for by the variant you are following." },
+    { "step": 5, "instruction": "Heat a heavy pan or griddle over medium-high heat until a drop of water skitters across it." },
+    { "step": 6, "instruction": "Cook each bread until it puffs and shows coloured spots, roughly 1 to 2 minutes per side, brushing with fat only if you are following the thick variant." },
+    { "step": 7, "instruction": "Stack the cooked breads under a cloth so trapped steam keeps them soft while you finish the rest." }
+  ],
+
+  "yield_note": "Six breads.",
+
+  "sources": [],
+  "source_state": "none-fixture-authored",
+  "provenance_note": "No source. This text was written directly for this repository as fixture content. There is deliberately no invented URL here: a fabricated pointer would be worse than an empty list, because it would look like provenance that was never established.",
+
+  "reviewed_at": "2026-09-13",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-13",
+      "change": "Record created as fixture content for the first Library framework build.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original fixture text authored for this repository.",
+    "license_review_state": "fixture-original-text",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "A griddle hot enough to cook flatbread will burn skin on contact; handle the pan with a dry cloth or mitt.",
+      "This record has had no food-safety review. Treat it as an interface fixture, not as kitchen guidance."
+    ],
+    "review_state": "fixture-not-reviewed"
+  },
+
+  "tags": ["bread", "griddle", "vegetarian", "fixture"]
+}

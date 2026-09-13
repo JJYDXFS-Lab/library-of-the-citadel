@@ -1,0 +1,92 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-fixture-simmered-bean-soup",
+  "collection_id": "world-recipes",
+  "record_class": "fixture",
+  "publication_ready": false,
+  "record_notice": "FIXTURE RECORD — written for this repository to demonstrate the Library content contract. It is not researched, not sourced, not kitchen-tested, and not publication-ready. Nothing here asserts the history, authenticity, or regional ownership of any dish.",
+
+  "name": {
+    "primary": "Simmered Bean Soup",
+    "alt": ["Fixture C"]
+  },
+
+  "region": {
+    "label": "Mediterranean",
+    "cuisine_label": "Legume soups",
+    "label_basis": "fixture-illustrative"
+  },
+
+  "summary": "Dried beans soaked and then simmered with aromatics until soft. Used here as a worked example of a record that carries a real, scoped safety caveat rather than a generic one.",
+
+  "variants": [
+    {
+      "variant_id": "brothy-whole-bean",
+      "label": "Brothy, whole bean",
+      "region_label": "Mediterranean",
+      "difference_note": "Left loose, with the beans whole and the cooking liquid served as broth."
+    },
+    {
+      "variant_id": "partly-crushed",
+      "label": "Partly crushed",
+      "region_label": "North Africa",
+      "difference_note": "A portion of the beans is crushed against the side of the pot near the end, which thickens the liquid without any added starch. Recorded alongside the first variant rather than replacing it."
+    }
+  ],
+
+  "ingredients": [
+    { "item": "Dried white or brown beans", "quantity": "250 g", "note": "Soaked; see the soaking step and the safety caveats." },
+    { "item": "Water", "quantity": "1.5 L", "note": "For cooking; the soaking water is discarded." },
+    { "item": "Onion", "quantity": "1 medium, diced" },
+    { "item": "Garlic", "quantity": "2 cloves, sliced" },
+    { "item": "Olive oil", "quantity": "2 tbsp" },
+    { "item": "Bay leaf", "quantity": "1" },
+    { "item": "Salt", "quantity": "to taste", "note": "Added once the beans are already tender." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Cover the dried beans with cold water by several centimetres and soak for 8 to 12 hours." },
+    { "step": 2, "instruction": "Drain the beans and discard the soaking water. Rinse them once more." },
+    { "step": 3, "instruction": "Warm the olive oil in a heavy pot and cook the onion gently until soft and translucent, then add the garlic for another minute." },
+    { "step": 4, "instruction": "Add the drained beans, the bay leaf, and the fresh water. Bring to a full rolling boil and hold it there for at least 10 minutes before lowering the heat." },
+    { "step": 5, "instruction": "Simmer, partly covered, until the beans are completely tender all the way through, typically 60 to 90 minutes depending on how old the beans are." },
+    { "step": 6, "instruction": "If you are following the partly-crushed variant, press some of the beans against the side of the pot now and stir them back in." },
+    { "step": 7, "instruction": "Season with salt only at this point, remove the bay leaf, and rest the soup off the heat for a few minutes before serving." }
+  ],
+
+  "yield_note": "Four bowls.",
+
+  "sources": [],
+  "source_state": "none-fixture-authored",
+  "provenance_note": "No source. This text was written directly for this repository as fixture content. The safety caveats below are included to show that the field carries scoped, record-specific warnings; they are not offered as reviewed food-safety guidance.",
+
+  "reviewed_at": "2026-09-13",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-13",
+      "change": "Record created as fixture content for the first Library framework build.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original fixture text authored for this repository.",
+    "license_review_state": "fixture-original-text",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Some dried beans, kidney beans in particular, contain a toxin that is only destroyed by a vigorous boil; undercooking at low temperature can leave them more hazardous than raw. The rolling-boil step exists for that reason and should not be shortened.",
+      "Beans are done only when they are soft through the centre. Partly cooked beans are unpleasant and, for some varieties, unsafe.",
+      "This record has had no food-safety review. Treat it as an interface fixture, not as kitchen guidance, and check an authoritative food-safety source before cooking dried beans."
+    ],
+    "review_state": "fixture-not-reviewed"
+  },
+
+  "tags": ["legume", "soup", "simmered", "vegetarian", "fixture"]
+}

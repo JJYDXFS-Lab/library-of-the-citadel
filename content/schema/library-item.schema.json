@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "library.item/1.0.0",
+  "title": "Library of the Citadel knowledge item",
+  "description": "Portable knowledge-item record for Library of the Citadel (a distinct project from Atom-KB's separate Library). The $id and schema_version are stable identifiers and are deliberately unchanged by the naming decision. Deliberately readable without any Library of the Citadel presentation code. Only the JSON Schema subset listed in docs/content-schema.md is interpreted by src/schema-validate.mjs; keep new constraints inside that subset or add them as a cross-record rule in src/rules.mjs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "item_id",
+    "collection_id",
+    "record_class",
+    "publication_ready",
+    "record_notice",
+    "name",
+    "region",
+    "summary",
+    "variants",
+    "ingredients",
+    "method",
+    "sources",
+    "source_state",
+    "provenance_note",
+    "reviewed_at",
+    "record_version",
+    "change_history",
+    "rights",
+    "safety"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "library.item/1.0.0" },
+
+    "item_id": {
+      "type": "string",
+      "description": "Stable identifier. Never reused, never renumbered when records are reordered or superseded.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "collection_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+
+    "record_class": {
+      "type": "string",
+      "description": "fixture = authored to demonstrate the schema and the presentation framework; sourced = derived from identified sources and eligible for publication review.",
+      "enum": ["fixture", "sourced"]
+    },
+    "publication_ready": {
+      "type": "boolean",
+      "description": "Must be false for record_class fixture (enforced in src/rules.mjs)."
+    },
+    "record_notice": {
+      "type": "string",
+      "description": "Human-readable honesty banner rendered on every view of this record.",
+      "minLength": 20
+    },
+
+    "name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["primary"],
+      "properties": {
+        "primary": { "type": "string", "minLength": 1 },
+        "alt": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "region": {
+      "type": "object",
+      "description": "Region and cuisine labels are presentation/filter facets, not attribution claims. label_basis records how much weight the label carries.",
+      "additionalProperties": false,
+      "required": ["label", "cuisine_label", "label_basis"],
+      "properties": {
+        "label": { "type": "string", "minLength": 1 },
+        "cuisine_label": { "type": "string", "minLength": 1 },
+        "label_basis": {
+          "type": "string",
+          "enum": ["fixture-illustrative", "source-attributed"]
+        }
+      }
+    },
+
+    "summary": { "type": "string", "minLength": 1 },
+
+    "variants": {
+      "type": "array",
+      "description": "Regional variants stay side by side. The framework never collapses them into one supposedly definitive version.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["variant_id", "label", "region_label", "difference_note"],
+        "properties": {
+          "variant_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "region_label": { "type": "string", "minLength": 1 },
+          "difference_note": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "ingredients": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["item"],
+        "properties": {
+          "item": { "type": "string", "minLength": 1 },
+          "quantity": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+
+    "method": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["step", "instruction"],
+        "properties": {
+          "step": { "type": "integer" },
+          "instruction": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "yield_note": { "type": "string" },
+
+    "sources": {
+      "type": "array",
+      "description": "Identified source pointers. Empty is legal and expected for fixtures; src/rules.mjs requires at least one entry for record_class sourced. Placeholder or invented URLs are never permitted.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "title", "accessed_at"],
+        "properties": {
+          "url": { "type": "string", "pattern": "^https?://" },
+          "title": { "type": "string", "minLength": 1 },
+          "accessed_at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "source_state": {
+      "type": "string",
+      "description": "none-fixture-authored is the only honest value for a record with no sources: the text was written for this repository to exercise the schema.",
+      "enum": ["none-fixture-authored", "sources-recorded", "sources-pending-review"]
+    },
+    "provenance_note": { "type": "string", "minLength": 1 },
+
+    "reviewed_at": {
+      "type": "string",
+      "description": "Retrieval date for sourced records; authoring/review date for fixtures.",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+
+    "record_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "change_history": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Newest first. supersedes names the record_version this entry replaced, or null for the initial entry.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "date", "change", "supersedes"],
+        "properties": {
+          "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "change": { "type": "string", "minLength": 1 },
+          "supersedes": { "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_license", "license_review_state", "image_rights_review_state", "images"],
+      "properties": {
+        "content_license": { "type": "string", "minLength": 1 },
+        "license_review_state": {
+          "type": "string",
+          "enum": ["not-reviewed", "fixture-original-text", "cleared", "blocked"]
+        },
+        "image_rights_review_state": {
+          "type": "string",
+          "enum": ["no-images-in-record", "not-reviewed", "cleared", "blocked"]
+        },
+        "images": {
+          "type": "array",
+          "description": "Must stay empty unless image_rights_review_state is cleared (enforced in src/rules.mjs).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url", "rights_note"],
+            "properties": {
+              "url": { "type": "string" },
+              "rights_note": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["caveats", "review_state"],
+      "properties": {
+        "caveats": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "review_state": {
+          "type": "string",
+          "enum": ["fixture-not-reviewed", "not-reviewed", "reviewed"]
+        }
+      }
+    },
+
+    "tags": { "type": "array", "items": { "type": "string" } }
+  }
+}
