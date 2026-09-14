@@ -3,21 +3,29 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Fixture collection. The three records below were authored for this repository to exercise the content contract and the presentation framework. They are not researched, sourced, tested, or publication-ready knowledge records.",
+  "record_notice": "Mixed collection. Two records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites, and neither has been kitchen-tested here or given a professional food-safety review. The other three are fixtures, authored for this repository to exercise the content contract, and are not knowledge records at all. Every record says which it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains exactly three illustrative fixture records, seeded so the hall, gallery, search, region filter, and detail views can be built and checked end to end. It contains no researched recipe, no sourced text, no image, no authenticity or history claim, and no cooking-test result. Adding a sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
+  "scope_note": "Contains five records of two kinds. Two are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
   "item_ids": [
+    "wr-oven-lamb-kofta-traybake",
+    "wr-oven-lamb-potato-bake",
     "wr-fixture-griddle-flatbread",
     "wr-fixture-rice-porridge",
     "wr-fixture-simmered-bean-soup"
   ],
-  "reviewed_at": "2026-09-13",
-  "record_version": "1.0.0",
+  "reviewed_at": "2026-09-14",
+  "record_version": "1.1.0",
   "change_history": [
+    {
+      "version": "1.1.0",
+      "date": "2026-09-14",
+      "change": "Added two sourced beginner oven recipes ahead of the three existing fixtures, which are unchanged. The collection is now mixed, and the notice and scope note say so.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-13",
@@ -26,7 +34,7 @@
     }
   ],
   "rights": {
-    "content_license": "Original fixture text authored for this repository; reusable under the repository's own terms once the owner sets them.",
+    "content_license": "Original text authored for this repository; reusable under the repository's own terms once the owner sets them. Rights in the pages the sourced records cite remain with their authors and publishers.",
     "license_review_state": "fixture-original-text"
   }
 }

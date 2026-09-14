@@ -21,7 +21,7 @@ A file under `content/items/` must be named for its `item_id`.
 | `record_class` | `fixture` (authored to demonstrate the contract) or `sourced` (derived from identified sources). |
 | `publication_ready` | Must be `false` for a fixture. |
 | `record_notice` | Honesty banner rendered on every view of the record. |
-| `name`, `region`, `summary`, `tags` | Display and search facets. `region.label_basis` records how much weight the label carries — it is a filter facet, not an attribution claim. |
+| `name`, `region`, `summary`, `tags` | Display and search facets. `region.label_basis` records how much weight the label carries — it is a filter facet, not an attribution claim. `source-attributed` means the cited page names the region itself; `editorial-facet` means this project assigned it for browsing and the source makes no such claim; `fixture-illustrative` is for demonstration records. |
 | `variants` | Regional variants held side by side. The framework never nominates one as definitive. |
 | `ingredients`, `method`, `yield_note` | `method` steps are numbered `1..n` in order. |
 | `sources`, `source_state`, `provenance_note` | Empty `sources` is legal and expected for a fixture; it is the honest state, not a placeholder. |
@@ -31,6 +31,30 @@ A file under `content/items/` must be named for its `item_id`.
 
 Collection manifests carry the same provenance, version, and rights fields, plus
 `title`, `description`, `scope_note`, and `item_ids` (membership by id only).
+
+## Sourced records
+
+A `sourced` record derives from identified sources and is held to the opposite
+rules from a fixture: it must carry at least one entry in `sources`, must not
+use `source_state: none-fixture-authored`, and must not claim
+`fixture-original-text` licensing. Each `sources` entry carries `url`, `title`
+and `accessed_at`; author or publisher attribution goes in its `note`, since the
+entry has no dedicated field for it.
+
+Three honesty distinctions are worth stating, because the schema alone does not
+enforce them:
+
+- **Editorial checking is not a food-safety review.** A record checked against
+  its source keeps `safety.review_state: not-reviewed`. `reviewed` would claim a
+  professional review that has not happened.
+- **Sourced is not publication-ready.** `publication_ready` stays `false` until
+  a separate factual review.
+- **Facts are paraphrased, not reproduced.** `rights.content_license` says so,
+  and `license_review_state` stays `not-reviewed` until a rights review.
+
+Where a record states a safe internal temperature, it names the authority in the
+same step. Time is not a safety control, and poultry, minced meat, whole cuts
+and fish have different thresholds.
 
 ## Translation overlays
 
@@ -57,8 +81,14 @@ says so with a visible notice. `name.alt` and `title.alt` legitimately keep
 cross-language aliases — "Rice Porridge" alongside 米粥 — which is what lets a
 search typed in either language find the record.
 
-Translating a fixture does not promote it. All three records remain
-`record_class: fixture`, unsourced, and not publication-ready in every locale.
+Translating a record does not promote it. A fixture stays a fixture in every
+locale, and a sourced record stays unreviewed and not publication-ready in every
+locale.
+
+Numbers are the part of a translation that can do harm. Quantities, times,
+temperatures, sizes and safe internal thresholds must be identical in every
+language; `tests/locale.mjs` compares them field by field for the sourced
+records rather than trusting a reading.
 
 ## The validated subset
 

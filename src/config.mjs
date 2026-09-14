@@ -23,6 +23,10 @@ const DEFAULTS = {
   citadel: { label: 'Citadel', url: '', note: '' },
   buildNotice: '',
   footerNote: '',
+  // Attribution for this site's own presentation and editorial work. Empty by
+  // default: the build states a holder only where one is configured, exactly as
+  // it refuses to invent a Citadel destination.
+  copyright: { year: '', holders: '' },
 };
 
 /**
@@ -93,10 +97,13 @@ export function loadConfig(env = process.env) {
   if (env.LIBRARY_CITADEL_LABEL !== undefined) citadel.label = env.LIBRARY_CITADEL_LABEL;
   citadel.url = String(citadel.url ?? '').trim();
 
+  const copyright = { ...DEFAULTS.copyright, ...(fileConfig.copyright ?? {}) };
+
   const config = {
     ...DEFAULTS,
     ...fileConfig,
     citadel,
+    copyright,
     siteName: env.LIBRARY_SITE_NAME ?? fileConfig.siteName ?? DEFAULTS.siteName,
     basePath: normalizeBasePath(env.LIBRARY_BASE_PATH ?? fileConfig.basePath ?? DEFAULTS.basePath),
     outDir: resolveOutDir(env.LIBRARY_OUT_DIR),

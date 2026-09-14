@@ -1,0 +1,101 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-lamb-kofta-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Lamb Kofta Meatball Traybake",
+    "alt": ["Lamb Kofte Meatball Traybake", "羊肉丸烤盘菜"]
+  },
+
+  "region": {
+    "label": "West Asia",
+    "cuisine_label": "Spiced minced-lamb meatballs",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Spiced lamb meatballs roasted in one tray on a bed of peppers and onions. A forgiving first oven dish: nothing is browned in a pan first, the meatballs are rolled by hand, and minced lamb is cooked right through rather than to a judged degree of doneness.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Lamb mince", "quantity": "500 g" },
+    { "item": "Ground cumin", "quantity": "2 teaspoons" },
+    { "item": "Ground coriander", "quantity": "2 teaspoons" },
+    { "item": "Chilli flakes", "quantity": "1/2 teaspoon" },
+    { "item": "Fresh parsley, finely chopped", "quantity": "1 tablespoon" },
+    { "item": "Fresh mint, finely chopped", "quantity": "1 tablespoon" },
+    { "item": "Garlic cloves, grated or crushed", "quantity": "3" },
+    { "item": "Pistachio kernels, finely chopped", "quantity": "25 g", "note": "Tree nut. Omit only if you accept that the record then departs from its source." },
+    { "item": "Lemon juice", "quantity": "Juice of half a lemon" },
+    { "item": "Plain flour", "quantity": "2 tablespoons", "note": "Wheat. Binds the mixture with the egg." },
+    { "item": "Egg, beaten", "quantity": "1 medium" },
+    { "item": "Bell peppers, sliced", "quantity": "3" },
+    { "item": "Red onions, each peeled and cut into 8 wedges", "quantity": "2" },
+    { "item": "Olive oil", "quantity": "2 tablespoons", "note": "For the vegetables." },
+    { "item": "Salt and pepper", "quantity": "The source seasons the meatball mixture and the vegetables to taste and gives no weight." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 220°C conventional, or 200°C fan (gas mark 7). Both figures are stated by the source; neither is a conversion made here." },
+    { "step": 2, "instruction": "Put the mince, cumin, coriander, chilli flakes, parsley, mint, garlic, pistachios, lemon juice, flour, egg, salt and pepper in a large bowl and mix." },
+    { "step": 3, "instruction": "Spread the peppers and onion wedges over a large roasting pan in a single layer, turn them through the olive oil and season." },
+    { "step": 4, "instruction": "Roll the mixture into balls a little smaller than a golf ball — the source gets 20 from this quantity — and space them among the vegetables." },
+    { "step": 5, "instruction": "Roast for 15 minutes." },
+    { "step": 6, "instruction": "Take the pan out, lift the meatballs off, stir the vegetables, then set the meatballs back the other way up." },
+    { "step": 7, "instruction": "Roast for a further 15 to 20 minutes, until the meatballs are cooked all the way through. Minced lamb is safe at an internal 71°C measured in the centre of the largest ball (Health Canada, Safe cooking temperatures); the elapsed time is not the test." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source, and makes about 20 meatballs. Source times: 15 minutes preparation and 30 minutes cooking. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.easypeasyfoodie.com/lamb-kofte-meatball-traybake/",
+      "title": "Lamb Kofte Meatball Traybake",
+      "accessed_at": "2026-09-14",
+      "note": "Author: Eb Gargano. Publisher: Easy Peasy Foodie. Quantities, oven temperature, meatball count and step timings are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-09-14",
+      "note": "Health Canada. Source of the 71°C ground-lamb threshold used above."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. Two things are recorded as the source leaves them: its stated cook time of 30 minutes is shorter than its own steps, which run 15 minutes plus a further 15 to 20; and it writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here. Spoon volumes differ by country: a tablespoon defined as 15 mL holds a quarter less than one defined as 20 mL, so measure with a single spoon set rather than mixing them.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Minced lamb carries surface bacteria through the whole mixture, so it must be cooked right through — unlike a whole cut. Health Canada gives 71°C internal for ground lamb; the UK Food Standards Agency puts the general rule as 70°C held for 2 minutes and states that any meat minced or skewered all the way through should be cooked thoroughly.",
+      "Raw mince and the egg both contaminate what they touch. Wash hands, bowl and board after mixing, and do not return cooked meatballs to the unwashed plate or pan surface that held them raw.",
+      "Allergens in this record: egg, wheat flour, and pistachio (tree nut).",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["lamb", "minced", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

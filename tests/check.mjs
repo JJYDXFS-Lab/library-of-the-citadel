@@ -19,11 +19,27 @@ import { validate } from '../src/schema-validate.mjs';
 import { esc } from '../src/templates/pages.mjs';
 import { build } from '../src/build.mjs';
 
-const EXPECTED_ITEM_IDS = [
+// The collection is mixed, and the two kinds are held to different rules: a
+// fixture must never acquire a source, and a sourced record must never be
+// without one. Keeping the two lists apart is what lets each test say which.
+const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-griddle-flatbread',
   'wr-fixture-rice-porridge',
   'wr-fixture-simmered-bean-soup',
 ];
+const EXPECTED_SOURCED_IDS = [
+  'wr-oven-lamb-kofta-traybake',
+  'wr-oven-lamb-potato-bake',
+];
+// Recipes drafted but not released. They must not be loadable, must not appear
+// in any page or data file, and must not reach a published commit.
+const UNRELEASED_DRAFT_IDS = [
+  'wr-oven-chicken-thigh-traybake',
+  'wr-oven-halloumi-chickpea-traybake',
+  'wr-oven-root-veg-traybake',
+  'wr-oven-salmon-traybake',
+];
+const EXPECTED_ITEM_IDS = [...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS].sort();
 
 /** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
 function walk(dir, base = dir) {
@@ -71,22 +87,25 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds exactly three fixture records in one collection', () => {
+test('the repository holds five records in one collection: two sourced, three fixtures', () => {
   const { items, collections } = loadContent();
-  assert.equal(items.length, 3);
+  assert.equal(items.length, 5);
   assert.equal(collections.length, 1);
+  const idsOfClass = (cls) => items.filter((i) => i.record_class === cls).map((i) => i.item_id).sort();
+  assert.deepEqual(idsOfClass('fixture'), EXPECTED_FIXTURE_IDS);
+  assert.deepEqual(idsOfClass('sourced'), EXPECTED_SOURCED_IDS);
   assert.deepEqual(items.map((i) => i.item_id).sort(), EXPECTED_ITEM_IDS);
   assert.deepEqual([...collections[0].item_ids].sort(), EXPECTED_ITEM_IDS);
 });
 
-test('no record claims to be sourced, reviewed, or publication-ready', () => {
+test('the fixture gates still hold: no fixture has grown a source or a review', () => {
   const { items, collections } = loadContent();
-  for (const record of [...items, ...collections]) {
-    assert.equal(record.record_class, 'fixture', `${record.item_id ?? record.collection_id} is not a fixture`);
+  for (const record of collections) {
     assert.equal(record.publication_ready, false);
-    assert.match(record.record_notice, /fixture/i);
   }
-  for (const item of items) {
+  for (const item of items.filter((i) => i.record_class === 'fixture')) {
+    assert.equal(item.publication_ready, false);
+    assert.match(item.record_notice, /fixture/i);
     assert.deepEqual(item.sources, []);
     assert.equal(item.source_state, 'none-fixture-authored');
     assert.equal(item.region.label_basis, 'fixture-illustrative');
@@ -95,11 +114,47 @@ test('no record claims to be sourced, reviewed, or publication-ready', () => {
   }
 });
 
+test('every sourced record carries its provenance and claims no review it has not had', () => {
+  const { items } = loadContent();
+  const sourced = items.filter((i) => i.record_class === 'sourced');
+  assert.equal(sourced.length, 2);
+
+  for (const item of sourced) {
+    const where = item.item_id;
+    // Provenance: a sourced record without a source is the failure this gate exists for.
+    assert.ok(item.sources.length >= 1, `${where}: no source recorded`);
+    for (const source of item.sources) {
+      assert.match(source.url, /^https:\/\//, `${where}: source URL is not https`);
+      assert.ok(source.title.trim(), `${where}: a source has no title`);
+      assert.equal(source.accessed_at, '2026-09-14', `${where}: source access date is not the recorded one`);
+      // Author or publisher attribution travels with the pointer.
+      assert.match(source.note ?? '', /Author:|published by|Health Canada|Publisher:/,
+        `${where}: source "${source.title}" records no author or publisher`);
+    }
+    assert.equal(item.source_state, 'sources-recorded', `${where}: wrong source_state`);
+
+    // Honest review states: editorial checking is not a food-safety review.
+    assert.equal(item.publication_ready, false, `${where}: claims to be publication-ready`);
+    assert.notEqual(item.safety.review_state, 'reviewed', `${where}: claims a completed safety review`);
+    assert.notEqual(item.rights.license_review_state, 'fixture-original-text',
+      `${where}: sourced text cannot claim fixture licensing`);
+    assert.notEqual(item.region.label_basis, 'fixture-illustrative', `${where}: wrong region label basis`);
+    assert.deepEqual(item.rights.images, [], `${where}: sourced records ship no images`);
+
+    // The banner a reader sees must name what the record is and is not.
+    assert.match(item.record_notice, /sourced/i, `${where}: the notice does not say the record is sourced`);
+    assert.match(item.record_notice, /not been kitchen-tested|no professional food-safety review/i,
+      `${where}: the notice does not disclaim testing and safety review`);
+  }
+});
+
 test('the region facet has a usable spread for the filter', () => {
   const { items } = loadContent();
   const regions = regionsOf(items);
-  assert.equal(regions.length, 3);
+  assert.ok(regions.length >= 3, 'the filter needs more than a couple of regions to be worth having');
+  assert.equal(new Set(regions).size, regions.length, 'a region label is duplicated');
   assert.deepEqual(regions, [...regions].sort());
+  for (const region of regions) assert.ok(region.trim(), 'a record has a blank region label');
 });
 
 // -------------------------------------------------------------- rules
@@ -264,7 +319,7 @@ for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewB
   test(`the ${label} build emits every page, asset, and data file`, () => {
     const r = run();
     assert.equal(r.cfg.basePath, base);
-    assert.equal(r.itemCount, 3);
+    assert.equal(r.itemCount, 5);
     for (const rel of [...ALL_PAGES, ...ASSETS]) {
       assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel} in the ${label} build`);
     }
@@ -341,8 +396,8 @@ test('the gallery exposes the search, filter, and empty-state hooks the script b
   for (const region of regionsOf(loadContent().items)) {
     assert.ok(html.includes(`<option value="${region}">`), `no filter option for region "${region}"`);
   }
-  assert.equal([...html.matchAll(/data-haystack="/g)].length, 3, 'every card needs a search haystack');
-  assert.equal([...html.matchAll(/class="card"/g)].length, 3);
+  assert.equal([...html.matchAll(/data-haystack="/g)].length, 5, 'every card needs a search haystack');
+  assert.equal([...html.matchAll(/class="card"/g)].length, 5);
 
   const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
   for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
@@ -382,6 +437,44 @@ test('the hall and every page carry the accessibility landmarks', () => {
 
 // ----------------------------------------------------- nothing leaks
 
+test('no unreleased draft recipe is loadable or present anywhere in the output', () => {
+  // Four further oven recipes were drafted and are not part of this release.
+  // They are kept outside the repository's content tree, so the loader cannot
+  // see them; this test is what stops one reappearing by accident.
+  const { items } = loadContent();
+  for (const id of UNRELEASED_DRAFT_IDS) {
+    assert.ok(!items.some((i) => i.item_id === id), `${id} is loadable but is not in this release`);
+    assert.ok(!existsSync(path.join(repoRoot, 'content', 'items', `${id}.json`)),
+      `${id} is still under content/items/`);
+    assert.ok(!existsSync(path.join(repoRoot, 'content', 'locales', 'items', 'zh', `${id}.json`)),
+      `${id}: its zh overlay is still under content/locales/`);
+  }
+
+  // Both the IDs and text distinctive to those drafts, in every emitted file.
+  const DRAFT_TERMS = ['Cajun', '卡真', 'Halloumi', 'halloumi', '哈罗米', 'Salmon', 'salmon', '三文鱼',
+    'parsnip', '欧防风', 'chickpea', '鹰嘴豆'];
+  for (const r of [rootBuild(), previewBuild()]) {
+    for (const rel of walk(r.outDir)) {
+      const body = readFileSync(path.join(r.outDir, rel), 'utf8');
+      for (const needle of [...UNRELEASED_DRAFT_IDS, ...DRAFT_TERMS]) {
+        assert.ok(!body.includes(needle), `${rel} carries unreleased draft content "${needle}"`);
+      }
+    }
+  }
+});
+
+test('only the released recipe routes are emitted', () => {
+  for (const r of [rootBuild(), previewBuild()]) {
+    const detailRoutes = walk(r.outDir)
+      .filter((rel) => /^(zh\/)?recipes\/[^/]+\/index\.html$/.test(rel))
+      .map((rel) => rel.replace(/^(zh\/)?recipes\//, '').replace(/\/index\.html$/, ''))
+      .sort();
+    // Five records, two page sets.
+    assert.deepEqual(detailRoutes, [...EXPECTED_ITEM_IDS, ...EXPECTED_ITEM_IDS].sort(),
+      'the emitted detail routes are not exactly the released records, once per locale');
+  }
+});
+
 test('the build output contains no run receipts, secrets, or local paths', () => {
   const FORBIDDEN = [
     '.agent-runs', '.agent-office-runs', 'ro-agent-harness',
@@ -404,10 +497,12 @@ test('the build output contains no run receipts, secrets, or local paths', () =>
 test('the published data file is presentation-free content and nothing else', () => {
   const r = rootBuild();
   const data = JSON.parse(read(r, 'data/world-recipes.json'));
-  assert.equal(data.items.length, 3);
+  assert.equal(data.items.length, 5);
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
-  for (const item of data.items) assert.equal(item.record_class, 'fixture');
+  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 2);
+  assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
+  for (const item of data.items) assert.equal(item.publication_ready, false);
 });
 
 test('the output is static and fetches nothing from a third party', () => {

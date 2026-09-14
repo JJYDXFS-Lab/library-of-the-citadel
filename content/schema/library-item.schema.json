@@ -75,7 +75,8 @@
         "cuisine_label": { "type": "string", "minLength": 1 },
         "label_basis": {
           "type": "string",
-          "enum": ["fixture-illustrative", "source-attributed"]
+          "description": "fixture-illustrative = a label invented for a demonstration record; source-attributed = the cited source names this region or cuisine itself; editorial-facet = this project assigned the label as a browsing facet and the source makes no such claim.",
+          "enum": ["fixture-illustrative", "source-attributed", "editorial-facet"]
         }
       }
     },

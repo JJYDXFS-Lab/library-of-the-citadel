@@ -86,9 +86,19 @@ ${citadelLink(cfg, L)}
 }
 
 function foot(cfg, L) {
+  // The copyright line covers this site's own presentation and editorial work
+  // and is written the same way in every locale, the way a name is. The rights
+  // note beside it is prose and is therefore localized. Neither one claims
+  // anything about third-party material beyond leaving its rights where they
+  // are. An unconfigured holder renders no line rather than a guessed one.
+  const copyright = String(cfg.copyright.holders).trim()
+    ? `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${esc(cfg.copyright.holders)}.</p>`
+    : '';
   return `<footer class="colophon">
 <p class="colophon__notice">${esc(L.site.buildNotice)}</p>
 <p>${esc(L.site.footerNote)}</p>
+<p class="colophon__rights">${esc(L.t('footer.rights_note'))}</p>
+${copyright}
 <p class="colophon__meta">${fill(L.t.raw('footer.base_path'), { basePath: code(cfg.basePath) })}</p>
 </footer>
 <script src="${cfg.withBase('assets/app.js')}" defer></script>
@@ -96,7 +106,16 @@ function foot(cfg, L) {
 </html>`;
 }
 
-const fixtureBanner = (L, text) => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t('fixture.tag'))}</span> ${esc(text)}</p>`;
+/**
+ * The honesty banner. Its tag names what the reader is looking at: a record
+ * banner takes the record's own class, while a collection or build notice —
+ * which now covers records of both classes — takes the neutral tag.
+ */
+const noticeBanner = (L, text, tagKey = 'notice.tag') => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t(tagKey))}</span> ${esc(text)}</p>`;
+
+const classTag = (recordClass) => (recordClass === 'sourced' ? 'sourced.tag' : 'fixture.tag');
+
+const classMark = (recordClass) => (recordClass === 'sourced' ? 'card.sourced' : 'card.fixture');
 
 /**
  * Record text that has no translation for this locale renders its English
@@ -135,7 +154,7 @@ ${chrome(cfg, L, { nav: '', route: '' })}
     </div>
   </section>
 
-  ${fixtureBanner(L, L.site.buildNotice)}
+  ${noticeBanner(L, L.site.buildNotice)}
 
   <section class="shelves" aria-labelledby="shelves-title">
     <h2 id="shelves-title" class="section-title">${esc(L.t('hall.collections_title'))}</h2>
@@ -185,7 +204,7 @@ function card(L, entry) {
   <a class="card__link" href="${L.path(itemPath(item))}">
     <span class="card__marks">
       <span class="card__region">${esc(item.region.label)}</span>
-      <span class="card__class">${esc(L.t('card.fixture'))}</span>
+      <span class="card__class">${esc(L.t(classMark(item.record_class)))}</span>
       ${entry.state === 'none' ? `<span class="card__untranslated">${esc(L.t('card.untranslated'))}</span>` : ''}
     </span>
     <h3 class="card__title">${esc(item.name.primary)}</h3>
@@ -212,7 +231,7 @@ ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
     <p class="collection-head__desc">${esc(collection.description)}</p>
   </header>
 
-  ${fixtureBanner(L, collection.record_notice)}
+  ${noticeBanner(L, collection.record_notice)}
   ${translationNotice(L, view.collection.state)}
 
   <form class="filters" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
@@ -279,24 +298,24 @@ ${chrome(cfg, L, { nav: 'recipes/', route: itemPath(item) })}
 <main id="main">
   <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> <a href="${L.path('recipes/')}">${esc(collection.title.primary)}</a> <span aria-hidden="true">/</span> ${esc(item.name.primary)}</p>
 
-  ${fixtureBanner(L, item.record_notice)}
+  ${noticeBanner(L, item.record_notice, classTag(item.record_class))}
   ${translationNotice(L, entry.state)}
 
   <article class="record">
     <header class="record__head">
-      <p class="record__marks"><span class="card__region">${esc(item.region.label)}</span> <span class="card__class">${esc(L.t('card.fixture'))}</span></p>
+      <p class="record__marks"><span class="card__region">${esc(item.region.label)}</span> <span class="card__class">${esc(L.t(classMark(item.record_class)))}</span></p>
       <h1>${esc(item.name.primary)}</h1>
       ${(item.name.alt ?? []).length ? `<p class="record__alt">${esc(item.name.alt.join(' · '))}</p>` : ''}
       <p class="record__summary">${esc(item.summary)}</p>
     </header>
 
-    <section class="record__block" aria-labelledby="h-variants">
+    ${item.variants.length === 0 ? '' : `<section class="record__block" aria-labelledby="h-variants">
       <h2 id="h-variants">${esc(L.t('detail.variants_title'))}</h2>
       <p class="block-note">${esc(L.t('detail.variants_note'))}</p>
       <ul class="variants">
 ${item.variants.map((v) => `        <li class="variant"><p class="variant__label">${esc(v.label)}</p><p class="variant__region">${esc(v.region_label)}</p><p>${esc(v.difference_note)}</p></li>`).join('\n')}
       </ul>
-    </section>
+    </section>`}
 
     <div class="record__columns">
       <section class="record__block" aria-labelledby="h-ingredients">
@@ -368,7 +387,7 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
     <h1>${esc(L.t('page.title.about'))}</h1>
   </header>
 
-  ${fixtureBanner(L, L.site.buildNotice)}
+  ${noticeBanner(L, L.site.buildNotice)}
 
   <section class="prose">
     <h2>${esc(L.t('about.name_title'))}</h2>
@@ -378,8 +397,16 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
     <p>${fill(L.t.raw('about.status_body'), {
       count: String(items.length),
       collection: esc(collection.title.primary),
-      class: code('fixture'),
+      sourced: String(items.filter((e) => e.record.record_class === 'sourced').length),
+      fixture: String(items.filter((e) => e.record.record_class === 'fixture').length),
     })} ${esc(collection.scope_note)}</p>
+
+    <h2>${esc(L.t('about.sourced_title'))}</h2>
+    <ul>
+      <li>${esc(L.t('about.sourced.cites'))}</li>
+      <li>${esc(L.t('about.sourced.paraphrase'))}</li>
+      <li>${esc(L.t('about.sourced.untested'))}</li>
+    </ul>
 
     <h2>${esc(L.t('about.notfixture_title'))}</h2>
     <ul>

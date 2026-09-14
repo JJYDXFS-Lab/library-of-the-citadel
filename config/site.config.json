@@ -9,6 +9,7 @@
     "url": "",
     "note": "Citadel backlink is unset by default. Set citadel.url (or LIBRARY_CITADEL_URL) once the owner provisions the address; while it is empty the build renders a disabled placeholder instead of inventing a destination."
   },
-  "buildNotice": "Fixture build. All records in this repository are illustrative demonstrations of the Library of the Citadel content contract, not researched or publication-ready knowledge records.",
-  "footerNote": "Library of the Citadel — an independent static Library framework, distinct from Atom-KB's separate Library. No backend, no tracking, no external asset requests."
+  "buildNotice": "Mixed build. Two records are sourced: their cooking facts are summarized in this project's own words from the pages they cite and checked against them, but neither has been cooked or tested here and neither has had a professional food-safety review. Three records are illustrative fixtures that demonstrate the content contract. No record is publication-ready.",
+  "footerNote": "Library of the Citadel — an independent static Library framework, distinct from Atom-KB's separate Library. No backend, no tracking, no external asset requests.",
+  "copyright": { "year": 2026, "holders": "Atom & Claude" }
 }

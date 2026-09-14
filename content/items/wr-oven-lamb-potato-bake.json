@@ -1,0 +1,91 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-lamb-potato-bake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Lamb Chop and Potato Bake",
+    "alt": ["Mediterranean lamb and potato tray bake", "羊排土豆烤盘菜"]
+  },
+
+  "region": {
+    "label": "Mediterranean",
+    "cuisine_label": "Herb-seasoned lamb and potato bakes",
+    "label_basis": "source-attributed"
+  },
+
+  "summary": "Forequarter lamb chops and sliced potatoes baked together under a sealed cover, then finished uncovered until the potatoes colour. The second forgiving lamb approach in this collection: a whole cut rather than mince, laid flat in one dish, with no browning, no trimming and nothing to carve.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Forequarter lamb chops", "quantity": "4" },
+    { "item": "Italian herb potato recipe base", "quantity": "1 sachet, 40 g", "note": "The source is a seasoning manufacturer and specifies its own branded sachet. Check the packet for allergens; this record has not verified its contents." },
+    { "item": "Pontiac potatoes, thinly sliced", "quantity": "3, about 380 g in total", "note": "The source says only thinly sliced and states no thickness, so none is given here." },
+    { "item": "Olive oil", "quantity": "1 tablespoon, stated by the source as 20 mL", "note": "This source defines its tablespoon as the 20 mL Australian spoon. A 15 mL tablespoon holds a quarter less." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan-forced. Both figures are stated by the source; neither is a conversion made here." },
+    { "step": 2, "instruction": "Grease a shallow baking dish large enough to hold the four chops flat in a single layer." },
+    { "step": 3, "instruction": "Season both sides of the chops with about 1 1/2 tablespoons of the recipe base and lay them in the dish." },
+    { "step": 4, "instruction": "Turn the potato slices through the olive oil with the rest of the recipe base, then arrange them over the chops." },
+    { "step": 5, "instruction": "Cover with baking paper and then foil, pinching the edges tightly to seal, and bake for 45 minutes." },
+    { "step": 6, "instruction": "Take off the foil, set the oven to 200°C — which changes the setting only if you have been using the 180°C fan-forced figure — and bake uncovered for a further 15 minutes, until the potatoes are golden brown and the lamb is tender." },
+    { "step": 7, "instruction": "Check the lamb at the thickest part of a chop, clear of the bone. Health Canada gives 63°C internal for a medium-rare lamb cut and 71°C for medium. The source's own endpoint — potatoes golden, lamb tender — is a texture cue rather than a temperature, so measure instead of going by the clock." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 1 hour in the oven. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.mccormick.com.au/recipes/produce-partners/mediterranean-lamb-and-potato-tray-bake",
+      "title": "Mediterranean lamb and potato tray bake",
+      "accessed_at": "2026-09-14",
+      "note": "No named author; published by McCormick Australia. Quantities, oven temperatures, the covering method and step timings are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-09-14",
+      "note": "Health Canada. Source of the 63°C and 71°C lamb-cut thresholds used above."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from McCormick Australia's page, accessed 2026-09-14; the safety thresholds are Health Canada's. Two limits are worth stating plainly. The source is a seasoning manufacturer and the dish is built around one branded sachet, so it is not a generic-ingredient recipe; and its final step says to increase the temperature to 200°C without naming a corresponding fan figure, which is recorded above exactly as written rather than converted. The baking-paper-and-foil cover is the source's own instruction; no heat tolerance is claimed for either material here.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "A chop is a whole cut, not mince: the UK Food Standards Agency states that whole cuts other than poultry and pork carry bacteria on the outer surface only, and may be served pink in the middle. That is why the threshold here differs from the minced-lamb record in this collection.",
+      "Health Canada gives 63°C internal for a medium-rare lamb cut and 71°C for medium. Measure at the thickest point away from the bone; bone conducts heat and reads high.",
+      "Raw lamb juices run in the dish. Wash hands, board and knife after handling, and keep the raw packaging away from the sliced potatoes.",
+      "The branded seasoning sachet has not been checked for allergens by this project; read its packet.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["lamb", "chops", "potato", "oven", "one-dish", "beginner", "sourced"]
+}

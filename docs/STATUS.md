@@ -40,6 +40,67 @@ Updated: 2026-09-14 (Australia/Canberra)
   backlink placeholder remains intentional; do not invent a destination.
 - Fixture records require provenance, licensing/rights, safety, and editorial
   review before any promotion to sourced/publication-ready content.
+- Two sourced oven recipes are prepared for release; see the milestone section
+  below. Further oven recipes were drafted but are not part of this release and
+  are not present in the repository.
+
+## Local footer milestone — written, not verified, not published
+
+Every page in both locales now ends with a shared copyright line, `© 2026 Atom
+& Claude.`, composed from the new `copyright.year` and `copyright.holders` keys
+in `config/site.config.json`, plus a localized rights note stating that records
+citing sources summarize cooking facts in this project's own words, reproduce no
+source text or image, and leave third-party rights with their owners. The
+copyright line is identical in every locale because it is a name; the note is
+prose and is translated. Changed: `config/site.config.json`, `src/config.mjs`,
+`src/templates/pages.mjs`, both UI dictionaries, `tests/locale.mjs`, and
+`docs/configuration.md`. No stylesheet change; the existing colophon styling
+covers both lines.
+
+`npm run check` was **not run** — command execution is unavailable in this
+environment, so the new test and the build output are unverified here and must
+be validated independently before this is relied on.
+
+## Sourced oven recipes — two prepared for release
+
+Two sourced beginner oven recipes are prepared for release, in English with full
+Chinese translations, alongside the three existing fixtures, which are
+unchanged. The collection is now mixed — five records — and its manifest, notice
+and scope note say so.
+
+- The two: a lamb kofta meatball traybake and a lamb chop and potato bake. Each
+  is one tray or dish with no pan-searing, no carving and no judged degree of
+  doneness.
+- Further oven recipes were drafted and are **not** part of this release. They
+  are not in the repository, do not load, and appear in no page, data file or
+  search payload; a test asserts that. They will be finished under their own
+  review before any of them is released.
+- Each record names the page its quantities, oven temperature and timings come
+  from, the author or publisher, and the access date 2026-09-14. Oven
+  temperatures and fan/conventional modes are reproduced exactly as the source
+  states them; no temperature conversion was invented.
+- Safe internal temperatures are attributed to Health Canada, and the
+  whole-cut/minced/poultry distinction to the UK Food Standards Agency. Minced
+  lamb and an intact lamb cut are treated as the different cases they are: 71°C
+  for the mince, 63°C medium-rare or 71°C medium for the chop.
+- Every record is `publication_ready: false`, `safety.review_state:
+  not-reviewed`, and `license_review_state: not-reviewed`. Editorial checking
+  against a source is not a professional food-safety review, and nothing here
+  has been cooked or tested.
+- Supporting changes: `editorial-facet` added to `region.label_basis` for
+  labels this project assigns rather than takes from a source; the record-class
+  mark, honesty banner tag and About page now distinguish sourced from fixture
+  in both locales; the detail template omits the variants block when a record
+  has none.
+- Tests were updated and extended: five-record counts, separate fixture and
+  sourced gates, source provenance, per-record class marking, a field-by-field
+  EN/ZH numeric parity check, and a release-scope test asserting that the
+  unreleased drafts are neither loadable nor present anywhere in the output.
+- Verified locally on 2026-09-14: `npm run check` **70 of 70 passed, 0 failed,
+  none skipped**; `npm run build`, `npm run build:preview` and a build at the
+  deployment base path each emitted **21 files, 5 records, locales en and zh**.
+  Generated output stays untracked. Live publication is still to be verified
+  independently after any deployment.
 
 ## Bilingual release — locally accepted, publication authorized
 
@@ -97,3 +158,13 @@ then verify the new deployment and both live language routes. This source
 checkpoint records pre-push acceptance, not a premature deployment-success claim.
 Do not begin a new content milestone as part of this closure. The deployment
 base path is `/library-of-the-citadel/`; default configuration remains neutral.
+
+### Footer local acceptance
+
+Independent local validation of the footer milestone passed all **63 tests**,
+with no failures or skips, plus root, preview-subpath and project-subpath builds.
+All 12 generated HTML routes contain the identical copyright line and localized
+rights note. Local headless Chrome passed 40 checks, including seven representative
+English/Chinese routes, language switching, search and mobile overflow. This is
+local validation, not publication or logged-in desktop-profile evidence.
+The six sourced oven recipes remain unstarted; all three fixtures are unchanged.

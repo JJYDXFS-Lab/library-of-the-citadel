@@ -15,6 +15,8 @@ default**. Nothing in `src/` knows a repository name, a remote URL, or a host.
 | `citadel.label` | `LIBRARY_CITADEL_LABEL` | Backlink label. |
 | `buildNotice` | — | Honesty banner on the hall and about pages. |
 | `footerNote` | — | Colophon line. |
+| `copyright.year` | — | Year in the footer copyright line. |
+| `copyright.holders` | — | Who is named in that line. Empty renders no line. |
 | — | `LIBRARY_OUT_DIR` | Output directory, relative to the repository. Default `dist`. |
 
 ## Base paths
@@ -62,6 +64,25 @@ therefore refuses any value that is empty, resolves to the repository root,
 escapes the repository, or points into `src`, `content`, `config`, `docs`,
 `tests`, `.git`, or a run-receipt directory. Use a dedicated directory such as
 `dist` or `dist-preview`.
+
+## The footer
+
+Two lines sit at the foot of every page, in every locale, and they say
+different kinds of thing:
+
+- **The copyright line** — `© <year> <holders>.` from `config/site.config.json`
+  — covers this site's own presentation and editorial work. It is a name, so it
+  is written identically in every locale rather than translated. Leaving
+  `copyright.holders` empty renders no line at all; the build states a holder
+  only where one is configured.
+- **The rights note** is prose and is localized like any other interface string
+  (`footer.rights_note` in each dictionary). It records that a record citing
+  sources summarizes cooking facts in this project's own words, that no source
+  text or image is reproduced, and that rights in third-party material stay
+  with their owners.
+
+The second is attribution, not a grant: naming this site's authors changes
+nothing about third-party rights and licenses no source material.
 
 ## The Citadel backlink
 

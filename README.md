@@ -24,12 +24,22 @@ fragment. The switch is a real link and works with scripting disabled.
 **Live fixture site:** <https://jjydxfs-lab.github.io/library-of-the-citadel/> —
 public repository and GitHub Actions deployment verified on 2026-09-13.
 
-> **Fixture build.** The three records in this repository were authored to
-> exercise the content contract and the presentation framework. They are not
-> researched, sourced, kitchen-tested, or publication-ready, and they make no
-> claim about the history, authenticity, or regional ownership of any dish.
-> Each has a Chinese translation; translating a fixture does not research,
-> source, or review it, and the labels say so in both languages.
+> **Mixed build.** Five records, of two kinds, every one of them translated into
+> Chinese and labelled with which kind it is.
+>
+> - **Two sourced** beginner oven recipes. Each cites the page its quantities,
+>   oven temperature and timings come from, with the date that page was read,
+>   and cites the food-safety authority behind any temperature threshold it
+>   states. The directions are written here in this project's own words; no
+>   source text or photograph is reproduced. They have been checked against
+>   their sources, but **nothing has been cooked or tested here and none has had
+>   a professional food-safety review**.
+> - **Three fixtures**, authored to exercise the content contract. They are not
+>   researched, sourced, kitchen-tested, or publication-ready, and they make no
+>   claim about the history, authenticity, or regional ownership of any dish.
+>
+> No record is publication-ready. Translating a record does not research, test,
+> or review it, and the labels say so in both languages.
 
 ## Requirements
 

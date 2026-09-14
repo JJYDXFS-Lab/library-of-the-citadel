@@ -23,12 +23,18 @@ import {
   loadOverlay, localizeItem, localizeCollection, localizeView, localizedRegions,
 } from '../src/i18n.mjs';
 import { build } from '../src/build.mjs';
+import { esc } from '../src/templates/pages.mjs';
 
-const EXPECTED_ITEM_IDS = [
+const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-griddle-flatbread',
   'wr-fixture-rice-porridge',
   'wr-fixture-simmered-bean-soup',
 ];
+const EXPECTED_SOURCED_IDS = [
+  'wr-oven-lamb-kofta-traybake',
+  'wr-oven-lamb-potato-bake',
+];
+const EXPECTED_ITEM_IDS = [...EXPECTED_SOURCED_IDS, ...EXPECTED_FIXTURE_IDS];
 
 const readJson = (...parts) => JSON.parse(readFileSync(path.join(repoRoot, ...parts), 'utf8'));
 const baseItem = (id) => readJson('content', 'items', `${id}.json`);
@@ -232,7 +238,7 @@ function translatablePairs(english, localized) {
   return pairs;
 }
 
-test('every fixture record is fully translated into zh, with no English left behind', () => {
+test('every record is fully translated into zh, with no English left behind', () => {
   for (const id of EXPECTED_ITEM_IDS) {
     const item = baseItem(id);
     const { record, state } = localizeItem(item, loadOverlay('items', 'zh', id), 'zh');
@@ -248,8 +254,11 @@ test('every fixture record is fully translated into zh, with no English left beh
     }
 
     // The disclaimer and the safety caveats are the two things a reader must
-    // not have to read in a language they did not choose.
-    assert.match(record.record_notice, /示例记录/, `${id}: the fixture disclaimer is not in Chinese`);
+    // not have to read in a language they did not choose. Each class of record
+    // has its own disclaimer, and the translated one must say the same thing:
+    // a fixture is a demonstration, a sourced record is checked but untested.
+    assert.match(record.record_notice, item.record_class === 'sourced' ? /有来源的记录/ : /示例记录/,
+      `${id}: the ${item.record_class} disclaimer is not in Chinese`);
     assert.equal(record.safety.caveats.length, item.safety.caveats.length, `${id}: a safety caveat was dropped`);
 
     // Alternative names stay as written: translated where a translation exists,
@@ -282,9 +291,11 @@ test('translating a record moves no ID and changes no part of the data contract'
     assert.equal(record.item_id, item.item_id);
     assert.equal(record.collection_id, item.collection_id);
     assert.equal(record.schema_version, item.schema_version);
-    assert.equal(record.record_class, 'fixture');
+    // Translating never reclassifies a record or moves its provenance: whatever
+    // class and sources the English record has, the localized one has exactly.
+    assert.equal(record.record_class, item.record_class);
     assert.equal(record.publication_ready, false);
-    assert.deepEqual(record.sources, []);
+    assert.deepEqual(record.sources, item.sources);
     assert.equal(record.source_state, item.source_state);
     assert.equal(record.reviewed_at, item.reviewed_at);
     assert.equal(record.record_version, item.record_version);
@@ -323,8 +334,9 @@ test('a region filter value stays canonical English so a filtered link survives 
   const en = localizedRegions(localizeView('en', { collection: collections[0], items: ordered }).entries);
   const zh = localizedRegions(localizeView('zh', { collection: collections[0], items: ordered }).entries);
 
-  assert.equal(en.length, 3);
-  assert.equal(zh.length, 3);
+  assert.equal(en.length, canonical.length);
+  assert.equal(zh.length, canonical.length);
+  assert.ok(canonical.length >= 3, 'the region filter needs a usable spread');
   assert.deepEqual(en.map((r) => r.value).sort(), canonical);
   assert.deepEqual(zh.map((r) => r.value).sort(), canonical, 'the zh filter values must stay English');
   assert.deepEqual(en.map((r) => r.label), en.map((r) => r.value), 'en labels are the canonical labels');
@@ -381,6 +393,31 @@ test('each page set declares its own language and keeps the shared slugs', () =>
       for (const other of LOCALES) {
         assert.ok(html.includes(`data-locale-code="${other.code}"`), `${rel}: no switch entry for ${other.code}`);
       }
+    }
+  }
+});
+
+test('every page in both locales carries the shared footer line and its own rights note', () => {
+  const r = localeBuild();
+  const cfg = loadConfig({});
+  const dicts = loadDictionaries();
+
+  // The copyright line names who made this site's own presentation and
+  // editorial work. It is a name, so it is written identically in every locale;
+  // the rights note beside it is prose, so each locale shows its own.
+  assert.equal(cfg.copyright.year, 2026);
+  assert.equal(cfg.copyright.holders, 'Atom & Claude');
+  const line = `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${esc(cfg.copyright.holders)}.</p>`;
+
+  for (const loc of LOCALES) {
+    const other = LOCALES.find((l) => l.code !== loc.code);
+    const note = esc(dicts.get(loc.code)['footer.rights_note']);
+    const foreign = esc(dicts.get(other.code)['footer.rights_note']);
+    for (const rel of pagesFor(loc)) {
+      const html = read(r, rel);
+      assert.ok(html.includes(line), `${rel}: the shared footer line is missing or not identical`);
+      assert.ok(html.includes(`<p class="colophon__rights">${note}</p>`), `${rel}: no ${loc.code} rights note`);
+      assert.ok(!html.includes(foreign), `${rel}: shows the ${other.code} rights note instead of its own`);
     }
   }
 });
@@ -546,11 +583,91 @@ test('the per-locale data files are the same records with the same IDs', () => {
 
   assert.deepEqual(en.translation_state, Object.fromEntries(EXPECTED_ITEM_IDS.map((id) => [id, 'source'])));
   assert.deepEqual(zh.translation_state, Object.fromEntries(EXPECTED_ITEM_IDS.map((id) => [id, 'complete'])));
+  // The zh export carries the same provenance as the canonical record it
+  // translates — a fixture stays sourceless, a sourced record keeps its sources
+  // — and neither ever claims a review or publication readiness it lacks.
+  const canonical = new Map(ordered.map((i) => [i.item_id, i]));
   for (const item of zh.items) {
-    assert.equal(item.record_class, 'fixture');
+    const en_ = canonical.get(item.item_id);
+    assert.equal(item.record_class, en_.record_class);
+    assert.deepEqual(item.sources, en_.sources);
     assert.equal(item.publication_ready, false);
-    assert.deepEqual(item.sources, []);
     assert.notEqual(item.safety.review_state, 'reviewed');
+    if (item.record_class === 'fixture') assert.deepEqual(item.sources, []);
+  }
+});
+
+// ===================================== the sourced records, in both languages
+
+/** Every number in a string, normalized so "1,5" and "1.5" compare equal. */
+const numbersIn = (s) => (String(s).match(/\d+(?:[.,]\d+)?/g) ?? [])
+  .map((n) => n.replace(',', '.'))
+  .sort();
+
+test('the zh translation of a sourced record repeats every number exactly', () => {
+  for (const id of EXPECTED_SOURCED_IDS) {
+    const item = baseItem(id);
+    const { record } = localizeItem(item, loadOverlay('items', 'zh', id), 'zh');
+    // A quantity, a temperature, a time or a safe internal threshold that drifts
+    // between languages is the one translation bug that could actually hurt
+    // someone, so it is checked field by field rather than by eye.
+    for (const [field, english, localized] of translatablePairs(item, record)) {
+      assert.deepEqual(numbersIn(localized), numbersIn(english),
+        `${id}: ${field} — zh has ${JSON.stringify(numbersIn(localized))}, en has ${JSON.stringify(numbersIn(english))}`);
+    }
+  }
+});
+
+test('every sourced record carries a source, an attribution and one access date', () => {
+  for (const id of EXPECTED_SOURCED_IDS) {
+    const item = baseItem(id);
+    assert.equal(item.record_class, 'sourced');
+    assert.ok(item.sources.length >= 1, `${id}: no source`);
+    for (const source of item.sources) {
+      assert.match(source.url, /^https:\/\//, `${id}: source URL is not https`);
+      assert.equal(source.accessed_at, '2026-09-14', `${id}: unexpected access date`);
+      assert.ok(source.title.trim(), `${id}: a source has no title`);
+    }
+    // A safety threshold in the method must come with the authority behind it.
+    const method = item.method.map((m) => m.instruction).join(' ');
+    if (/\d+°C internal|internal \d+°C|safe at an internal/.test(method)) {
+      assert.match(method, /Health Canada/, `${id}: states a safe internal temperature with no authority named`);
+    }
+  }
+});
+
+test('the generated pages show each sourced record its source and access date, in both locales', () => {
+  const r = localeBuild();
+  for (const loc of LOCALES) {
+    for (const id of EXPECTED_SOURCED_IDS) {
+      const html = read(r, `${loc.prefix}recipes/${id}/index.html`);
+      for (const source of baseItem(id).sources) {
+        assert.ok(html.includes(source.url), `${loc.code}/${id}: the page does not show ${source.url}`);
+      }
+      assert.ok(html.includes('2026-09-14'), `${loc.code}/${id}: the page shows no access date`);
+    }
+  }
+});
+
+test('each record is marked with its own class, in each locale', () => {
+  const r = localeBuild();
+  const dicts = loadDictionaries();
+  for (const loc of LOCALES) {
+    const sourcedMark = dicts.get(loc.code)['card.sourced'];
+    const fixtureMark = dicts.get(loc.code)['card.fixture'];
+    assert.notEqual(sourcedMark, fixtureMark, `${loc.code}: the two class marks are the same word`);
+    for (const [ids, mark, other] of [
+      [EXPECTED_SOURCED_IDS, sourcedMark, fixtureMark],
+      [EXPECTED_FIXTURE_IDS, fixtureMark, sourcedMark],
+    ]) {
+      for (const id of ids) {
+        const html = read(r, `${loc.prefix}recipes/${id}/index.html`);
+        assert.ok(html.includes(`<span class="card__class">${esc(mark)}</span>`),
+          `${loc.code}/${id}: not marked "${mark}"`);
+        assert.ok(!html.includes(`<span class="card__class">${esc(other)}</span>`),
+          `${loc.code}/${id}: also marked "${other}"`);
+      }
+    }
   }
 });
 
