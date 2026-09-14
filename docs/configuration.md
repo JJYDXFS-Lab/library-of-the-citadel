@@ -35,6 +35,26 @@ npm run build:preview  # basePath "/library-preview/", -> dist-preview/
 `withBase()` throws if handed a path that is already absolute, so a template
 cannot accidentally emit a link that only works at the root.
 
+## Locales
+
+**Locales are not configurable.** There is no config key and no environment
+override for them: the locale table — code, `html lang`, route prefix, endonym —
+is a source constant in `src/i18n.mjs`. English is the default and owns the
+site root; Chinese is served from the `zh/` prefix under whatever base path is
+configured, so a preview build serves `/library-preview/zh/recipes/`.
+
+The four configured site strings — `tagline`, `buildNotice`, `footerNote`, and
+`citadel.note` — are read from `config/site.config.json` for the default locale
+only, because that file holds one language at a time. Every other locale must
+supply them as `site.tagline`, `site.build_notice`, `site.footer_note`, and
+`site.citadel_note` in its dictionary under `content/locales/ui/`, and the build
+fails if one is missing. `siteName`, `siteNameAlt`, and the Citadel backlink
+label are shared across locales as configured.
+
+The reader's own language choice is a browser concern, not a build one: it is
+stored in `localStorage` under the key `library-of-the-citadel.locale` and never
+consulted at build time.
+
 ## The output directory
 
 The build **deletes its output directory before writing it**. `resolveOutDir()`

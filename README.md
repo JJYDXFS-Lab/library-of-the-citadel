@@ -4,6 +4,11 @@ A static Library framework: a hall, a **World Recipes** gallery with search and 
 region filter, and one generated page per knowledge record. No dependencies, no
 backend, no build toolchain — Node's standard library and plain HTML/CSS/JS.
 
+The site is bilingual. English is the default and owns the site root; Chinese is
+the same page set again under `zh/`, with identical routes and record IDs, so
+switching language keeps the page, the search, the region filter, and the
+fragment. The switch is a real link and works with scripting disabled.
+
 > **Name.** The official project and display name is exactly **Library of the
 > Citadel**. It is a distinct project from **Atom-KB's separate Library**: the
 > two hold different content in different stores, and this project neither
@@ -23,6 +28,8 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 > exercise the content contract and the presentation framework. They are not
 > researched, sourced, kitchen-tested, or publication-ready, and they make no
 > claim about the history, authenticity, or regional ownership of any dish.
+> Each has a Chinese translation; translating a fixture does not research,
+> source, or review it, and the labels say so in both languages.
 
 ## Requirements
 
@@ -52,6 +59,7 @@ root build. **Nothing here starts a server**, and the deployed output needs none
 | `content/items/` | One JSON file per record, named for its `item_id`. |
 | `content/collections/` | Collection manifests; membership is by `item_id`. |
 | `content/schema/` | JSON Schema documents — the source of truth for shape. |
+| `content/locales/` | Interface dictionaries and additive record-translation overlays, keyed by stable record IDs. |
 | `config/site.config.json` | Deployment configuration; deployment values plus documented environment overrides. |
 | `src/` | Config, content loading, validation, rules, templates, build. |
 | `src/assets/` | `site.css` and `app.js`, copied verbatim into the output. |

@@ -2,6 +2,10 @@
 // Static build. Reads content/ + config/, writes a self-contained directory of
 // HTML and assets with no runtime server dependency.
 //
+// One full page set is emitted per locale: the default locale at the output
+// root, every other locale under its own route prefix, same slugs and same
+// record IDs throughout.
+//
 //   node src/build.mjs
 //   LIBRARY_BASE_PATH=/library-preview/ node src/build.mjs
 //   LIBRARY_OUT_DIR=dist-preview node src/build.mjs
@@ -10,12 +14,16 @@ import { mkdirSync, writeFileSync, rmSync, cpSync, statSync, readdirSync } from 
 import path from 'node:path';
 
 import { loadConfig, repoRoot } from './config.mjs';
-import { loadContentOrThrow, regionsOf } from './content.mjs';
-import { hallPage, galleryPage, detailPage, aboutPage } from './templates/pages.mjs';
+import { loadContentOrThrow } from './content.mjs';
+import { LOCALES, DEFAULT_LOCALE, loadDictionaries, makeLocale, localizeView, localizedRegions } from './i18n.mjs';
+import { hallPage, galleryPage, detailPage, aboutPage, withCollectionTitle } from './templates/pages.mjs';
 
 export function build(env = process.env) {
   const cfg = loadConfig(env);
   const { collections, items } = loadContentOrThrow();
+  // Fails closed: a missing or empty interface string stops the build here
+  // rather than reaching a page as a raw dotted key.
+  const dicts = loadDictionaries();
 
   const collection = collections.find((c) => c.collection_id === 'world-recipes');
   if (!collection) throw new Error('No "world-recipes" collection manifest found under content/collections/.');
@@ -33,16 +41,46 @@ export function build(env = process.env) {
     written.push(path.relative(cfg.outDir, file));
   };
 
-  emit('.', hallPage(cfg, { collection, items: ordered }));
-  emit('recipes', galleryPage(cfg, { collection, items: ordered, regions: regionsOf(ordered) }));
-  emit('about', aboutPage(cfg, { collection, items: ordered }));
-  ordered.forEach((item, i) => {
-    emit(path.join('recipes', item.item_id), detailPage(cfg, {
-      collection,
-      item,
-      neighbours: { prev: ordered[i - 1] ?? null, next: ordered[i + 1] ?? null },
-    }));
-  });
+  mkdirSync(path.join(cfg.outDir, 'data'), { recursive: true });
+
+  for (const loc of LOCALES) {
+    const base = makeLocale(cfg, loc.code, dicts);
+    const view = localizeView(loc.code, { collection, items: ordered });
+    const L = withCollectionTitle(base, view.collection.record);
+    // The locale's route prefix is a directory under the output root; the
+    // default locale has none and therefore owns the root itself.
+    const at = (rel) => path.join(loc.prefix === '' ? '.' : loc.prefix, rel);
+
+    emit(at('.'), hallPage(cfg, L, view));
+    emit(at('recipes'), galleryPage(cfg, L, view, { regions: localizedRegions(view.entries) }));
+    emit(at('about'), aboutPage(cfg, L, view));
+    view.entries.forEach((entry, i) => {
+      emit(at(path.join('recipes', entry.record.item_id)), detailPage(cfg, L, view, {
+        entry,
+        neighbours: {
+          prev: view.entries[i - 1]?.record ?? null,
+          next: view.entries[i + 1]?.record ?? null,
+        },
+      }));
+    });
+
+    // A machine-readable copy of the content, so the records stay consumable by
+    // a Citadel index adapter without scraping the HTML. Presentation-free. The
+    // default locale keeps the canonical filename and the canonical English
+    // text; each other locale gets a sibling view with identical IDs.
+    const dataFile = loc.code === DEFAULT_LOCALE ? 'world-recipes.json' : `world-recipes.${loc.code}.json`;
+    writeFileSync(
+      path.join(cfg.outDir, 'data', dataFile),
+      `${JSON.stringify({
+        locale: loc.code,
+        collection: view.collection.record,
+        items: view.entries.map((e) => e.record),
+        translation_state: Object.fromEntries(view.entries.map((e) => [e.record.item_id, e.state])),
+      }, null, 2)}\n`,
+      'utf8',
+    );
+    written.push(path.join('data', dataFile));
+  }
 
   cpSync(path.join(repoRoot, 'src', 'assets'), path.join(cfg.outDir, 'assets'), { recursive: true });
   for (const f of readdirSync(path.join(cfg.outDir, 'assets'))) written.push(path.join('assets', f));
@@ -52,18 +90,15 @@ export function build(env = process.env) {
   writeFileSync(path.join(cfg.outDir, '.nojekyll'), '', 'utf8');
   written.push('.nojekyll');
 
-  // A machine-readable copy of the content, so the records stay consumable by a
-  // Citadel index adapter without scraping the HTML. Presentation-free.
-  mkdirSync(path.join(cfg.outDir, 'data'), { recursive: true });
-  writeFileSync(
-    path.join(cfg.outDir, 'data', 'world-recipes.json'),
-    `${JSON.stringify({ collection, items: ordered }, null, 2)}\n`,
-    'utf8',
-  );
-  written.push(path.join('data', 'world-recipes.json'));
-
   const bytes = written.reduce((sum, rel) => sum + statSync(path.join(cfg.outDir, rel)).size, 0);
-  return { cfg, outDir: cfg.outDir, written, bytes, itemCount: ordered.length };
+  return {
+    cfg,
+    outDir: cfg.outDir,
+    written,
+    bytes,
+    itemCount: ordered.length,
+    locales: LOCALES.map((l) => l.code),
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
@@ -72,6 +107,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const kb = (r.bytes / 1024).toFixed(1);
     console.log(`Built ${r.written.length} files (${kb} KB) for base path "${r.cfg.basePath}"`);
     console.log(`  records: ${r.itemCount}`);
+    console.log(`  locales: ${r.locales.join(', ')}`);
     console.log(`  output:  ${path.relative(repoRoot, r.outDir)}/`);
   } catch (err) {
     console.error(`Build failed: ${err.message}`);

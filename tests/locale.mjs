@@ -1,0 +1,890 @@
+// Bilingual checks: the localization module, the generated per-locale output,
+// and the browser-side language switch. Node standard library only — node:test,
+// node:assert, node:fs, node:vm. There is nothing to install.
+//
+//   node --test tests/*.mjs
+//
+// The browser script is exercised by running src/assets/app.js inside a vm
+// context against a small hand-built DOM. That keeps the switch's real edge
+// cases — refused storage, a stale href after filtering, a dropped fragment —
+// under test without a browser and without a dependency.
+
+import test, { after } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, existsSync, readdirSync, rmSync } from 'node:fs';
+import { runInNewContext } from 'node:vm';
+import path from 'node:path';
+
+import { repoRoot, loadConfig } from '../src/config.mjs';
+import { loadContent } from '../src/content.mjs';
+import {
+  DEFAULT_LOCALE, LOCALES, LOCALE_CODES, LOCALE_STORAGE_KEY,
+  localeByCode, loadDictionaries, format, makeLocale,
+  loadOverlay, localizeItem, localizeCollection, localizeView, localizedRegions,
+} from '../src/i18n.mjs';
+import { build } from '../src/build.mjs';
+
+const EXPECTED_ITEM_IDS = [
+  'wr-fixture-griddle-flatbread',
+  'wr-fixture-rice-porridge',
+  'wr-fixture-simmered-bean-soup',
+];
+
+const readJson = (...parts) => JSON.parse(readFileSync(path.join(repoRoot, ...parts), 'utf8'));
+const baseItem = (id) => readJson('content', 'items', `${id}.json`);
+const baseCollection = () => readJson('content', 'collections', 'world-recipes.json');
+
+function cleanTestOutputs() {
+  rmSync(path.join(repoRoot, 'dist-test-locale'), { recursive: true, force: true });
+}
+after(cleanTestOutputs);
+process.on('exit', cleanTestOutputs);
+
+let cached = null;
+function localeBuild() {
+  if (!cached) cached = build({ LIBRARY_OUT_DIR: 'dist-test-locale' });
+  return cached;
+}
+const read = (r, rel) => readFileSync(path.join(r.outDir, rel), 'utf8');
+
+// =================================================== the module: dictionaries
+
+test('the locale table is well formed and English owns the site root', () => {
+  assert.equal(DEFAULT_LOCALE, 'en');
+  assert.deepEqual(LOCALE_CODES, ['en', 'zh']);
+  assert.equal(localeByCode('en').prefix, '', 'the default locale must not take a route prefix');
+  assert.equal(localeByCode('zh').prefix, 'zh/');
+  assert.equal(localeByCode('zh').htmlLang, 'zh-Hans');
+  assert.equal(localeByCode('nope'), undefined);
+
+  const prefixes = LOCALES.map((l) => l.prefix);
+  assert.equal(new Set(prefixes).size, prefixes.length, 'two locales share a route prefix');
+  for (const loc of LOCALES) {
+    assert.ok(loc.endonym.trim(), `${loc.code} has no endonym to label its own switch entry`);
+    if (loc.code !== DEFAULT_LOCALE) assert.match(loc.prefix, /^[a-z-]+\/$/);
+  }
+});
+
+test('every interface dictionary is complete, non-empty, and free of extra keys', () => {
+  const dicts = loadDictionaries();
+  assert.deepEqual([...dicts.keys()], LOCALE_CODES);
+
+  const en = dicts.get('en');
+  const zh = dicts.get('zh');
+  assert.equal(en.$comment, undefined, 'the $comment scaffold must not reach a dictionary lookup');
+
+  const uiKeys = (d) => Object.keys(d).filter((k) => !k.startsWith('site.')).sort();
+  assert.deepEqual(uiKeys(zh), uiKeys(en), 'the zh dictionary is not key-for-key with en');
+  assert.ok(uiKeys(en).length > 50, 'the dictionary should cover the whole interface');
+
+  for (const [code, dict] of dicts) {
+    for (const [key, value] of Object.entries(dict)) {
+      assert.equal(typeof value, 'string', `${code}: "${key}" is not a string`);
+      assert.notEqual(value.trim(), '', `${code}: "${key}" is empty`);
+    }
+  }
+
+  // The default locale reads its four site strings from config; every other
+  // locale must supply them, because the config file holds one language only.
+  for (const key of ['site.tagline', 'site.build_notice', 'site.footer_note', 'site.citadel_note']) {
+    assert.equal(en[key], undefined, `en must not duplicate ${key}; config/site.config.json owns it`);
+    assert.equal(typeof zh[key], 'string', `zh is missing ${key}`);
+  }
+
+  // Placeholders are part of the contract: a translation may reorder them but
+  // must not invent or drop one.
+  const placeholders = (s) => [...String(s).matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
+  for (const key of uiKeys(en)) {
+    assert.deepEqual(placeholders(zh[key]), placeholders(en[key]), `zh "${key}" has different placeholders`);
+  }
+});
+
+test('interface text fails closed instead of falling back to English or a raw key', () => {
+  const cfg = loadConfig({});
+  const dicts = loadDictionaries();
+  const gapped = new Map(dicts);
+  const partial = { ...dicts.get('zh') };
+  delete partial['nav.hall'];
+  gapped.set('zh', partial);
+
+  const L = makeLocale(cfg, 'zh', gapped);
+  assert.throws(() => L.t('nav.hall'), /Missing interface string "nav.hall" for locale "zh"/);
+  assert.throws(() => makeLocale(cfg, 'fr', dicts), /Unknown locale "fr"/);
+});
+
+test('format substitutes braced placeholders and refuses an unsupplied one', () => {
+  assert.equal(format('Showing {shown} of {total}.', { shown: 2, total: 3 }), 'Showing 2 of 3.');
+  assert.equal(format('no placeholders'), 'no placeholders');
+  assert.throws(() => format('Served from {basePath}.', {}), /No value supplied for placeholder "\{basePath\}"/);
+});
+
+test('a locale context links inside its own locale and across to the other one', () => {
+  const cfg = loadConfig({});
+  const sub = loadConfig({ LIBRARY_BASE_PATH: '/library-preview/' });
+  const en = makeLocale(cfg, 'en');
+  const zh = makeLocale(cfg, 'zh');
+
+  assert.equal(en.path(''), '/');
+  assert.equal(en.path('recipes/'), '/recipes/');
+  assert.equal(zh.path('recipes/'), '/zh/recipes/');
+  assert.equal(en.pathIn('zh', 'recipes/wr-fixture-rice-porridge/'), '/zh/recipes/wr-fixture-rice-porridge/');
+  assert.equal(zh.pathIn('en', 'recipes/wr-fixture-rice-porridge/'), '/recipes/wr-fixture-rice-porridge/');
+  assert.throws(() => en.pathIn('fr', ''), /Unknown locale "fr"/);
+
+  // The same two helpers under a subpath deployment.
+  assert.equal(makeLocale(sub, 'zh').path('about/'), '/library-preview/zh/about/');
+  assert.equal(makeLocale(sub, 'zh').pathIn('en', 'about/'), '/library-preview/about/');
+
+  assert.equal(en.isDefault, true);
+  assert.equal(zh.isDefault, false);
+  assert.equal(zh.htmlLang, 'zh-Hans');
+  // en takes its site strings from config; zh takes them from its dictionary.
+  assert.equal(en.site.tagline, cfg.tagline);
+  assert.notEqual(zh.site.tagline, cfg.tagline);
+  for (const value of Object.values(zh.site)) assert.equal(typeof value, 'string');
+});
+
+// ======================================================= the module: overlays
+
+test('an overlay is looked up by stable ID, and a missing one is a normal state', () => {
+  assert.equal(loadOverlay('items', 'en', 'wr-fixture-rice-porridge'), null,
+    'the source language must never read an overlay');
+  assert.equal(loadOverlay('items', 'zh', 'wr-fixture-does-not-exist'), null,
+    'a missing translation is the untranslated state, not an error');
+  for (const id of EXPECTED_ITEM_IDS) {
+    const overlay = loadOverlay('items', 'zh', id);
+    assert.ok(overlay, `no zh overlay for ${id}`);
+    assert.equal(overlay.$comment, undefined, 'the $comment scaffold must not reach the record');
+  }
+  assert.ok(loadOverlay('collections', 'zh', 'world-recipes'));
+});
+
+test('an untranslated record falls back to the English original, whole and unchanged', () => {
+  const item = baseItem('wr-fixture-simmered-bean-soup');
+  const { record, state, english, canonicalRegion } = localizeItem(item, null, 'zh');
+  assert.equal(state, 'none');
+  assert.deepEqual(record, item, 'the fallback record must be the English record, field for field');
+  assert.equal(english, item);
+  assert.equal(canonicalRegion, item.region.label);
+  assert.deepEqual(item, baseItem('wr-fixture-simmered-bean-soup'), 'localization mutated the base record');
+});
+
+test('a half-written overlay is reported as partial and leaves the rest in English', () => {
+  const item = baseItem('wr-fixture-rice-porridge');
+  const { record, state } = localizeItem(item, { name: { primary: '米粥' } }, 'zh');
+  assert.equal(state, 'partial');
+  assert.equal(record.name.primary, '米粥');
+  assert.equal(record.summary, item.summary, 'an untranslated field must keep the English original');
+  assert.equal(record.method[0].instruction, item.method[0].instruction);
+
+  // A list translation is all-or-nothing: a wrong-length or blank-padded list is
+  // not usable, so the English list stands rather than a half-empty one.
+  const short = localizeItem(item, { safety: { caveats: ['只有一条'] } }, 'zh');
+  assert.deepEqual(short.record.safety.caveats, item.safety.caveats);
+  const blank = localizeItem(item, { summary: '   ' }, 'zh');
+  assert.equal(blank.record.summary, item.summary, 'a whitespace-only translation is not a translation');
+  assert.equal(blank.state, 'none', 'no usable field means the record is untranslated, not partly translated');
+
+  assert.equal(localizeItem(item, null, 'en').state, 'source');
+});
+
+const HAN = /[㐀-䶿一-鿿]/;
+
+/**
+ * Whether an English original carries words that a translator has to replace.
+ * A field that is only digits, punctuation and units of notation — the bay
+ * leaf's quantity "1" — reads the same in both languages, so finding it inside
+ * the Chinese "1 片" is the numeral being kept, not the field being left in
+ * English. Such a field is still held to `notEqual` and to the Han check.
+ */
+const carriesEnglishWords = (s) => /[A-Za-z]/.test(String(s));
+
+/**
+ * Every prose slot that a complete zh translation must actually carry in
+ * Chinese, paired with its English original. Alternative names are excluded on
+ * purpose: `name.alt` and `title.alt` hold proper names, attributions, and
+ * cross-language aliases, so a translated record legitimately keeps English
+ * text there — which is also what makes bilingual search work. The check runs
+ * field by field rather than over the serialized record for exactly that
+ * reason.
+ */
+function translatablePairs(english, localized) {
+  const pairs = [
+    ['record_notice', english.record_notice, localized.record_notice],
+    ['name.primary', english.name.primary, localized.name.primary],
+    ['summary', english.summary, localized.summary],
+    ['provenance_note', english.provenance_note, localized.provenance_note],
+    ['region.label', english.region.label, localized.region.label],
+    ['region.cuisine_label', english.region.cuisine_label, localized.region.cuisine_label],
+    ['rights.content_license', english.rights.content_license, localized.rights.content_license],
+    ...english.method.map((m, i) => [`method[${m.step}]`, m.instruction, localized.method[i].instruction]),
+    ...english.safety.caveats.map((c, i) => [`safety.caveats[${i}]`, c, localized.safety.caveats[i]]),
+    ...english.variants.flatMap((v, i) => [
+      [`variants.${v.variant_id}.label`, v.label, localized.variants[i].label],
+      [`variants.${v.variant_id}.region_label`, v.region_label, localized.variants[i].region_label],
+      [`variants.${v.variant_id}.difference_note`, v.difference_note, localized.variants[i].difference_note],
+    ]),
+    ...english.ingredients.flatMap((g, i) => Object.keys(g)
+      .map((field) => [`ingredients[${i}].${field}`, g[field], localized.ingredients[i][field]])),
+    ...english.change_history.map((h, i) => [`change_history.${h.version}`, h.change, localized.change_history[i].change]),
+  ];
+  if (english.yield_note) pairs.push(['yield_note', english.yield_note, localized.yield_note]);
+  return pairs;
+}
+
+test('every fixture record is fully translated into zh, with no English left behind', () => {
+  for (const id of EXPECTED_ITEM_IDS) {
+    const item = baseItem(id);
+    const { record, state } = localizeItem(item, loadOverlay('items', 'zh', id), 'zh');
+    assert.equal(state, 'complete', `${id}: the zh overlay does not fill every translatable slot`);
+
+    for (const [field, english, localized] of translatablePairs(item, record)) {
+      assert.ok(String(localized).trim(), `${id}: ${field} is empty in zh`);
+      assert.notEqual(localized, english, `${id}: ${field} is still the English original`);
+      if (carriesEnglishWords(english)) {
+        assert.ok(!String(localized).includes(english), `${id}: ${field} still carries its English original`);
+      }
+      assert.match(localized, HAN, `${id}: ${field} was never written in Chinese`);
+    }
+
+    // The disclaimer and the safety caveats are the two things a reader must
+    // not have to read in a language they did not choose.
+    assert.match(record.record_notice, /示例记录/, `${id}: the fixture disclaimer is not in Chinese`);
+    assert.equal(record.safety.caveats.length, item.safety.caveats.length, `${id}: a safety caveat was dropped`);
+
+    // Alternative names stay as written: translated where a translation exists,
+    // English where the alias is the point.
+    assert.equal(record.name.alt.length, item.name.alt.length, `${id}: an alternative name was dropped`);
+  }
+
+  const collection = baseCollection();
+  const localizedCollection = localizeCollection(collection, loadOverlay('collections', 'zh', 'world-recipes'), 'zh');
+  assert.equal(localizedCollection.state, 'complete');
+  for (const [field, english, localized] of [
+    ['record_notice', collection.record_notice, localizedCollection.record.record_notice],
+    ['title.primary', collection.title.primary, localizedCollection.record.title.primary],
+    ['description', collection.description, localizedCollection.record.description],
+    ['scope_note', collection.scope_note, localizedCollection.record.scope_note],
+  ]) {
+    assert.notEqual(localized, english, `world-recipes: ${field} is still the English original`);
+    assert.match(localized, HAN, `world-recipes: ${field} was never written in Chinese`);
+  }
+  assert.equal(localizeCollection(collection, null, 'zh').state, 'none');
+  assert.equal(localizeCollection(collection, null, 'en').state, 'source');
+});
+
+test('translating a record moves no ID and changes no part of the data contract', () => {
+  for (const id of EXPECTED_ITEM_IDS) {
+    const item = baseItem(id);
+    const { record } = localizeItem(item, loadOverlay('items', 'zh', id), 'zh');
+
+    assert.deepEqual(Object.keys(record).sort(), Object.keys(item).sort(), `${id}: field set changed`);
+    assert.equal(record.item_id, item.item_id);
+    assert.equal(record.collection_id, item.collection_id);
+    assert.equal(record.schema_version, item.schema_version);
+    assert.equal(record.record_class, 'fixture');
+    assert.equal(record.publication_ready, false);
+    assert.deepEqual(record.sources, []);
+    assert.equal(record.source_state, item.source_state);
+    assert.equal(record.reviewed_at, item.reviewed_at);
+    assert.equal(record.record_version, item.record_version);
+    assert.deepEqual(record.tags, item.tags, 'tags are machine facets and stay canonical');
+    assert.equal(record.region.label_basis, item.region.label_basis);
+    assert.equal(record.safety.review_state, item.safety.review_state);
+    assert.equal(record.rights.license_review_state, item.rights.license_review_state);
+    assert.equal(record.rights.image_rights_review_state, item.rights.image_rights_review_state);
+    assert.deepEqual(record.rights.images, []);
+
+    assert.deepEqual(record.variants.map((v) => v.variant_id), item.variants.map((v) => v.variant_id));
+    assert.deepEqual(record.method.map((m) => m.step), item.method.map((m) => m.step));
+    assert.equal(record.ingredients.length, item.ingredients.length);
+    assert.deepEqual(record.change_history.map((h) => h.version), item.change_history.map((h) => h.version));
+    assert.deepEqual(record.change_history.map((h) => h.date), item.change_history.map((h) => h.date));
+    assert.deepEqual(record.change_history.map((h) => h.supersedes), item.change_history.map((h) => h.supersedes));
+    assert.deepEqual(record.safety.caveats.length, item.safety.caveats.length);
+    assert.equal(record.record_notice.length > 0, true);
+
+    // An ingredient row keeps whichever optional fields the canonical row had,
+    // and grows none it did not.
+    item.ingredients.forEach((row, i) => {
+      assert.deepEqual(Object.keys(record.ingredients[i]).sort(), Object.keys(row).sort(),
+        `${id}: ingredient ${i} changed shape`);
+    });
+
+    assert.deepEqual(item, baseItem(id), `${id}: the base record was mutated in place`);
+  }
+});
+
+test('a region filter value stays canonical English so a filtered link survives a switch', () => {
+  const { collections, items } = loadContent();
+  const ordered = collections[0].item_ids.map((id) => items.find((i) => i.item_id === id));
+  const canonical = [...new Set(ordered.map((i) => i.region.label))].sort();
+
+  const en = localizedRegions(localizeView('en', { collection: collections[0], items: ordered }).entries);
+  const zh = localizedRegions(localizeView('zh', { collection: collections[0], items: ordered }).entries);
+
+  assert.equal(en.length, 3);
+  assert.equal(zh.length, 3);
+  assert.deepEqual(en.map((r) => r.value).sort(), canonical);
+  assert.deepEqual(zh.map((r) => r.value).sort(), canonical, 'the zh filter values must stay English');
+  assert.deepEqual(en.map((r) => r.label), en.map((r) => r.value), 'en labels are the canonical labels');
+  for (const region of zh) {
+    assert.notEqual(region.label, region.value, `the zh label for "${region.value}" was never translated`);
+    assert.doesNotMatch(region.label, /[A-Za-z]/, `the zh label for "${region.value}" still reads as English`);
+  }
+  assert.deepEqual(zh.map((r) => r.label), [...zh.map((r) => r.label)].sort((a, b) => a.localeCompare(b, 'en')));
+});
+
+test('a locale view keeps manifest order and pairs every record with its state', () => {
+  const { collections, items } = loadContent();
+  const ordered = collections[0].item_ids.map((id) => items.find((i) => i.item_id === id));
+  for (const code of LOCALE_CODES) {
+    const view = localizeView(code, { collection: collections[0], items: ordered });
+    assert.deepEqual(view.entries.map((e) => e.record.item_id), collections[0].item_ids, `${code}: order drifted`);
+    assert.equal(view.collection.record.collection_id, 'world-recipes');
+    const expected = code === DEFAULT_LOCALE ? 'source' : 'complete';
+    for (const entry of view.entries) assert.equal(entry.state, expected, `${code}/${entry.record.item_id}`);
+  }
+});
+
+// ==================================================== the generated page sets
+
+const PAGE_ROUTES = ['index.html', 'recipes/index.html', 'about/index.html',
+  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`)];
+const pagesFor = (loc) => PAGE_ROUTES.map((rel) => `${loc.prefix}${rel}`);
+
+test('the build emits one complete page set per locale, plus one data file each', () => {
+  const r = localeBuild();
+  assert.deepEqual(r.locales, LOCALE_CODES);
+  for (const loc of LOCALES) {
+    for (const rel of pagesFor(loc)) {
+      assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel}`);
+    }
+  }
+  assert.ok(existsSync(path.join(r.outDir, 'data', 'world-recipes.json')));
+  assert.ok(existsSync(path.join(r.outDir, 'data', 'world-recipes.zh.json')));
+  assert.deepEqual(readdirSync(path.join(r.outDir, 'data')).sort(),
+    ['world-recipes.json', 'world-recipes.zh.json']);
+});
+
+test('each page set declares its own language and keeps the shared slugs', () => {
+  const r = localeBuild();
+  for (const loc of LOCALES) {
+    for (const rel of pagesFor(loc)) {
+      const html = read(r, rel);
+      assert.match(html, new RegExp(`<html lang="${loc.htmlLang}">`), `${rel}: wrong lang attribute`);
+      assert.ok(html.includes('data-locale-switch'), `${rel}: no language switch`);
+      assert.ok(html.includes(`data-locale-current="${loc.code}"`), `${rel}: wrong current locale`);
+      assert.ok(html.includes(`data-locale-key="${LOCALE_STORAGE_KEY}"`), `${rel}: no storage key on the switch`);
+      // Both locales are always offered, as real links, so the switch works
+      // with scripting disabled.
+      for (const other of LOCALES) {
+        assert.ok(html.includes(`data-locale-code="${other.code}"`), `${rel}: no switch entry for ${other.code}`);
+      }
+    }
+  }
+});
+
+test('the switch on every page points at the same route in the other locale', () => {
+  const r = localeBuild();
+  const hrefOf = (html, code) => {
+    const m = new RegExp(`<a href="([^"]+)"[^>]*data-locale-code="${code}"`).exec(html);
+    assert.ok(m, `no switch link for ${code}`);
+    return m[1];
+  };
+  for (const rel of PAGE_ROUTES) {
+    const route = rel.replace(/index\.html$/, '');
+    assert.equal(hrefOf(read(r, rel), 'zh'), `/zh/${route}`, `${rel}: wrong zh target`);
+    assert.equal(hrefOf(read(r, `zh/${rel}`), 'en'), `/${route}`, `zh/${rel}: wrong en target`);
+    assert.equal(hrefOf(read(r, `zh/${rel}`), 'zh'), `/zh/${route}`, `zh/${rel}: self link is not self`);
+  }
+});
+
+/**
+ * The text a reader actually sees: markup, and therefore every attribute value,
+ * removed. The gallery deliberately carries `{shown}`/`{total}` templates in
+ * data-status-* attributes for the browser to fill in at filter time, so a
+ * placeholder check has to look at rendered text rather than at raw HTML.
+ */
+const visibleText = (html) => html
+  .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
+  .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
+  .replace(/<[^>]*>/g, ' ');
+
+test('no raw interface key and no dotted placeholder reaches a generated page', () => {
+  const r = localeBuild();
+  const keys = Object.keys(loadDictionaries().get('en'));
+  for (const loc of LOCALES) {
+    for (const rel of pagesFor(loc)) {
+      const html = read(r, rel);
+      for (const key of keys) {
+        assert.ok(!html.includes(key), `${rel} leaks the raw interface key "${key}"`);
+      }
+      assert.doesNotMatch(visibleText(html), /\{\w+\}/, `${rel} shows an unsubstituted placeholder`);
+      assert.ok(!html.includes('undefined'), `${rel} rendered an undefined value`);
+    }
+
+    // The one place a placeholder is meant to survive the build: the status
+    // templates the script fills in. They must be present, in this locale, with
+    // their placeholders intact.
+    const gallery = read(r, `${loc.prefix}recipes/index.html`);
+    for (const [attr, placeholders] of [
+      ['data-status-all', ['{total}']],
+      ['data-status-some', ['{shown}', '{total}']],
+      ['data-status-none', []],
+    ]) {
+      const template = new RegExp(`${attr}="([^"]*)"`).exec(gallery);
+      assert.ok(template, `${loc.code} gallery: no "${attr}" template for the script to fill in`);
+      for (const placeholder of placeholders) {
+        assert.ok(template[1].includes(placeholder),
+          `${loc.code} gallery: "${attr}" lost its "${placeholder}" placeholder`);
+      }
+    }
+  }
+});
+
+test('the zh pages are actually in Chinese and the en pages are untouched', () => {
+  const r = localeBuild();
+  const zhGallery = read(r, 'zh/recipes/index.html');
+  const enGallery = read(r, 'recipes/index.html');
+
+  // What each page set *shows* as its own title, not what its HTML happens to
+  // contain. The English records carry Chinese aliases on purpose — the
+  // collection's title.alt is 世界食谱 and the rice porridge record's name.alt is
+  // 米粥 — and the build both displays those aliases and folds them into the
+  // card haystack, which is what makes a search typed in either language work.
+  // So Chinese in the English HTML is expected; Chinese as the English page's
+  // heading or card title is the leak worth failing on.
+  const headingOf = (html) => /<h1>([^<]*)/.exec(html)?.[1];
+  const cardTitles = (html) => [...html.matchAll(/<h3 class="card__title">([^<]*)<\/h3>/g)].map((m) => m[1]);
+  const haystacks = (html) => [...html.matchAll(/data-haystack="([^"]*)"/g)].map((m) => m[1]);
+
+  const collection = baseCollection();
+  const porridge = collection.item_ids.indexOf('wr-fixture-rice-porridge');
+  const zhOverlay = loadOverlay('collections', 'zh', 'world-recipes');
+
+  assert.equal(headingOf(zhGallery), zhOverlay.title.primary,
+    'the zh gallery does not show the translated collection title');
+  assert.deepEqual(cardTitles(zhGallery),
+    collection.item_ids.map((id) => loadOverlay('items', 'zh', id).name.primary),
+    'a zh card does not show its translated record name');
+  assert.equal(cardTitles(zhGallery)[porridge], '米粥');
+
+  assert.equal(headingOf(enGallery), collection.title.primary,
+    'the English gallery heading is not the English collection title');
+  assert.deepEqual(cardTitles(enGallery), collection.item_ids.map((id) => baseItem(id).name.primary),
+    'a translated title leaked into the English page set');
+
+  // Translated prose — a summary, a description, the fixture notice — is not an
+  // alias and has no business on an English page.
+  for (const [field, text] of [
+    ['description', zhOverlay.description],
+    ['record_notice', zhOverlay.record_notice],
+    ['summary', loadOverlay('items', 'zh', 'wr-fixture-rice-porridge').summary],
+  ]) {
+    assert.ok(!enGallery.includes(text), `a translated ${field} leaked into the English page set`);
+  }
+
+  // The aliases themselves must survive in both sets: dropping them would make
+  // this test pass and bilingual search stop working.
+  assert.ok(haystacks(enGallery).some((h) => h.includes('米粥')),
+    'the English page set lost the Chinese alias that lets a Chinese query find the record');
+  assert.ok(haystacks(zhGallery).some((h) => h.includes('rice porridge')),
+    'the zh page set lost the English original that lets an English query find the record');
+
+  // The filter option values stay canonical English in both page sets, so
+  // ?region= is shareable across languages; only the option text is localized.
+  for (const region of ['East Asia', 'Mediterranean', 'West Asia']) {
+    assert.ok(zhGallery.includes(`<option value="${region}">`), `zh gallery lost the canonical value "${region}"`);
+    assert.ok(enGallery.includes(`<option value="${region}">`), `en gallery lost the canonical value "${region}"`);
+  }
+  assert.ok(!zhGallery.includes('>East Asia<'), 'the zh option text was never translated');
+
+  // Complete translations mean no page in either set shows a fallback notice.
+  for (const loc of LOCALES) {
+    for (const rel of pagesFor(loc)) {
+      assert.ok(!read(r, rel).includes('translation-notice'),
+        `${rel} shows an untranslated-fallback notice, but every record is translated`);
+    }
+  }
+});
+
+test('every zh link stays inside the zh page set, and every link resolves to a file', () => {
+  const r = localeBuild();
+  const emitted = new Set([...pagesFor(LOCALES[0]), ...pagesFor(LOCALES[1])].map((f) => `/${f}`));
+  for (const rel of pagesFor(localeByCode('zh'))) {
+    const html = read(r, rel);
+    for (const link of [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1])) {
+      if (!link.startsWith('/')) continue;
+      if (link.startsWith('/assets/')) continue;
+      const target = link.endsWith('/') ? `${link}index.html` : link;
+      assert.ok(emitted.has(target), `${rel}: link "${link}" has no file at "${target}"`);
+      // The one link that legitimately leaves the zh tree is the switch back to
+      // English; everything else must stay under /zh/.
+      const isSwitch = new RegExp(`href="${link}"[^>]*data-locale-code="en"`).test(html);
+      if (!isSwitch) assert.ok(link.startsWith('/zh/'), `${rel}: link "${link}" escapes the zh page set`);
+    }
+  }
+});
+
+test('the per-locale data files are the same records with the same IDs', () => {
+  const r = localeBuild();
+  const en = JSON.parse(read(r, 'data/world-recipes.json'));
+  const zh = JSON.parse(read(r, 'data/world-recipes.zh.json'));
+  const { collections } = loadContent();
+
+  assert.equal(en.locale, 'en');
+  assert.equal(zh.locale, 'zh');
+  assert.deepEqual(zh.items.map((i) => i.item_id), en.items.map((i) => i.item_id));
+  assert.deepEqual(en.items.map((i) => i.item_id), collections[0].item_ids);
+  assert.deepEqual(zh.collection.item_ids, en.collection.item_ids);
+  assert.equal(zh.collection.collection_id, 'world-recipes');
+
+  // The default-locale export stays byte-faithful to the canonical records.
+  const ordered = collections[0].item_ids.map((id) => baseItem(id));
+  assert.deepEqual(en.items, ordered, 'the en data file is no longer the canonical English record set');
+
+  assert.deepEqual(en.translation_state, Object.fromEntries(EXPECTED_ITEM_IDS.map((id) => [id, 'source'])));
+  assert.deepEqual(zh.translation_state, Object.fromEntries(EXPECTED_ITEM_IDS.map((id) => [id, 'complete'])));
+  for (const item of zh.items) {
+    assert.equal(item.record_class, 'fixture');
+    assert.equal(item.publication_ready, false);
+    assert.deepEqual(item.sources, []);
+    assert.notEqual(item.safety.review_state, 'reviewed');
+  }
+});
+
+// ================================================ the browser-side switch
+
+const APP_SRC = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
+
+class El {
+  constructor(attrs = {}, children = []) {
+    this.attrs = { ...attrs };
+    this.children = children;
+    this.listeners = new Map();
+    this.hidden = false;
+    this.textContent = '';
+    this.focused = false;
+  }
+
+  getAttribute(name) {
+    return Object.prototype.hasOwnProperty.call(this.attrs, name) ? this.attrs[name] : null;
+  }
+
+  setAttribute(name, value) { this.attrs[name] = String(value); }
+
+  addEventListener(type, fn) {
+    if (!this.listeners.has(type)) this.listeners.set(type, []);
+    this.listeners.get(type).push(fn);
+  }
+
+  /** Fire a listener the way a browser would, with a minimal event object. */
+  fire(type) {
+    const event = { type, preventDefault() { this.defaultPrevented = true; }, defaultPrevented: false };
+    for (const fn of this.listeners.get(type) ?? []) fn(event);
+    return event;
+  }
+
+  descendants() {
+    return this.children.flatMap((child) => [child, ...child.descendants()]);
+  }
+
+  matches(selector) {
+    if (selector.startsWith('.')) {
+      return (this.getAttribute('class') ?? '').split(/\s+/).includes(selector.slice(1));
+    }
+    const attr = /^\[([\w-]+)\]$/.exec(selector);
+    return Boolean(attr) && this.getAttribute(attr[1]) !== null;
+  }
+
+  querySelectorAll(selector) { return this.descendants().filter((el) => el.matches(selector)); }
+
+  querySelector(selector) { return this.querySelectorAll(selector)[0] ?? null; }
+
+  focus() { this.focused = true; }
+}
+
+class Select extends El {
+  constructor(attrs, options) {
+    super(attrs);
+    this.options = options;
+    this._value = '';
+  }
+
+  get value() { return this._value; }
+
+  set value(v) { this._value = String(v); }
+
+  /** -1 for a value that is not one of the rendered options, as in a browser. */
+  get selectedIndex() { return this.options.indexOf(this._value); }
+}
+
+/**
+ * Build a page and run src/assets/app.js against it.
+ *
+ * @param {object} opts
+ * @param {'en'|'zh'} opts.locale   which page set this page belongs to
+ * @param {string}    opts.base     deployment base path
+ * @param {string}    opts.route    build-relative route, e.g. "recipes/"
+ * @param {string}    opts.search   initial query string, including "?"
+ * @param {string}    opts.hash     initial fragment, including "#"
+ * @param {'ok'|'refused'|'absent'|'unreadable'} opts.storage
+ * @param {string|null} opts.stored persisted language preference
+ * @param {boolean}   opts.filters  render the gallery filter controls
+ */
+function runApp({
+  locale = 'en', base = '/', route = 'recipes/', search = '', hash = '',
+  storage = 'ok', stored = null, filters = true, switchBox = true,
+} = {}) {
+  const key = LOCALE_STORAGE_KEY;
+  const links = LOCALES.map((loc) => new El({
+    href: `${base}${loc.prefix}${route}`,
+    'data-locale-code': loc.code,
+  }));
+  const box = new El({
+    'data-locale-switch': '',
+    'data-locale-current': locale,
+    'data-locale-key': key,
+  }, links);
+
+  const searchInput = new El({ 'data-search': '' });
+  searchInput.value = '';
+  const region = new Select({ 'data-region': '' }, ['', 'East Asia', 'Mediterranean', 'West Asia']);
+  const status = new El({ 'data-status': '' });
+  const reset = new El({ 'data-reset': '' });
+  const form = new El({
+    'data-filters': '',
+    'data-status-all': 'Showing all {total} records.',
+    'data-status-some': 'Showing {shown} of {total} records.',
+    'data-status-none': 'No records match.',
+  }, [searchInput, region, status, reset]);
+  const cards = [
+    new El({ class: 'card', 'data-haystack': 'griddle flatbread west asia', 'data-region': 'West Asia' }),
+    new El({ class: 'card', 'data-haystack': 'rice porridge east asia', 'data-region': 'East Asia' }),
+    new El({ class: 'card', 'data-haystack': 'simmered bean soup mediterranean', 'data-region': 'Mediterranean' }),
+  ];
+  const grid = new El({ 'data-grid': '' }, cards);
+  const empty = new El({ 'data-empty': '' });
+  const inlineReset = new El({ 'data-reset-inline': '' });
+
+  const root = new El({}, [
+    ...(switchBox ? [box] : []),
+    ...(filters ? [form, grid, empty, inlineReset] : []),
+  ]);
+
+  const store = new Map();
+  if (stored !== null) store.set(key, stored);
+  const localStorage = {
+    getItem(name) {
+      if (storage === 'unreadable') throw new Error('read denied');
+      return store.has(name) ? store.get(name) : null;
+    },
+    setItem(name, value) {
+      if (storage === 'refused' || storage === 'unreadable') throw new Error('write denied');
+      store.set(name, String(value));
+    },
+    removeItem(name) {
+      if (storage === 'refused') throw new Error('write denied');
+      store.delete(name);
+    },
+  };
+
+  const replaced = [];
+  const pushed = [];
+  const location = {
+    pathname: `${base}${locale === 'en' ? '' : 'zh/'}${route}`,
+    search,
+    hash,
+    replace(url) { replaced.push(url); },
+  };
+  const history = {
+    replaceState(_state, _title, url) {
+      pushed.push(url);
+      let rest = String(url);
+      const h = rest.indexOf('#');
+      location.hash = h === -1 ? '' : rest.slice(h);
+      if (h !== -1) rest = rest.slice(0, h);
+      const q = rest.indexOf('?');
+      location.search = q === -1 ? '' : rest.slice(q);
+      if (q !== -1) rest = rest.slice(0, q);
+      if (rest) location.pathname = rest;
+    },
+  };
+
+  const window = { location, history, URLSearchParams };
+  if (storage === 'absent') {
+    Object.defineProperty(window, 'localStorage', {
+      get() { throw new Error('localStorage is not available in this document'); },
+    });
+  } else {
+    window.localStorage = localStorage;
+  }
+
+  const document = {
+    querySelector: (sel) => root.querySelector(sel),
+    querySelectorAll: (sel) => root.querySelectorAll(sel),
+  };
+
+  runInNewContext(APP_SRC, { window, document, URLSearchParams, console });
+
+  const linkFor = (code) => links.find((l) => l.getAttribute('data-locale-code') === code);
+  return {
+    links, linkFor, box, form, search: searchInput, region, status, reset, grid, empty,
+    inlineReset, cards, store, location, replaced, pushed,
+    href: (code) => linkFor(code).getAttribute('href'),
+    type(value) { searchInput.value = value; searchInput.fire('input'); },
+    pick(value) { region.value = value; region.fire('change'); },
+  };
+}
+
+test('the switch carries the live query and fragment, in both directions', () => {
+  const en = runApp({ locale: 'en', search: '?q=rice&region=East+Asia', hash: '#main' });
+  assert.equal(en.href('zh'), '/zh/recipes/?q=rice&region=East+Asia#main');
+  assert.equal(en.href('en'), '/recipes/?q=rice&region=East+Asia#main');
+
+  const zh = runApp({ locale: 'zh', search: '?q=rice&region=East+Asia', hash: '#main' });
+  assert.equal(zh.href('en'), '/recipes/?q=rice&region=East+Asia#main');
+  assert.equal(zh.href('zh'), '/zh/recipes/?q=rice&region=East+Asia#main');
+
+  // Nothing to carry: the emitted href is left exactly as the page wrote it.
+  const plain = runApp({ locale: 'en', route: '' });
+  assert.equal(plain.href('zh'), '/zh/');
+  assert.equal(plain.href('en'), '/');
+});
+
+test('choosing a language records the choice, in both directions', () => {
+  const en = runApp({ locale: 'en' });
+  en.linkFor('zh').fire('click');
+  assert.equal(en.store.get(LOCALE_STORAGE_KEY), 'zh');
+  assert.equal(en.replaced.length, 0, 'a click must navigate by following the link, not by scripted replace');
+
+  const zh = runApp({ locale: 'zh', stored: 'zh' });
+  zh.linkFor('en').fire('click');
+  assert.equal(zh.store.get(LOCALE_STORAGE_KEY), 'en', 'switching back must overwrite the stored preference');
+});
+
+test('a refused, unreadable, or absent storage never breaks the switch', () => {
+  for (const storage of ['refused', 'absent', 'unreadable']) {
+    const page = runApp({ locale: 'en', storage, search: '?q=bean', hash: '#main', stored: 'zh' });
+    assert.equal(page.href('zh'), '/zh/recipes/?q=bean#main', `${storage}: the switch stopped carrying state`);
+    assert.doesNotThrow(() => page.linkFor('zh').fire('click'), `${storage}: a click threw`);
+    assert.equal(page.replaced.length, 0, `${storage}: redirected on an unreadable preference`);
+    if (storage !== 'absent') {
+      assert.equal(page.store.get(LOCALE_STORAGE_KEY), storage === 'unreadable' ? 'zh' : 'zh',
+        `${storage}: the preference must not be silently rewritten`);
+    }
+    // Filtering still works with no storage at all.
+    page.type('bean');
+    assert.equal(page.cards.filter((c) => !c.hidden).length, 1);
+    assert.equal(page.href('zh'), '/zh/recipes/?q=bean#main');
+  }
+});
+
+test('a stored preference redirects once, to a page-emitted href, and never loops', () => {
+  const en = runApp({ locale: 'en', stored: 'zh', search: '?q=rice', hash: '#main' });
+  assert.deepEqual(en.replaced, ['/zh/recipes/?q=rice#main']);
+
+  const already = runApp({ locale: 'zh', stored: 'zh', search: '?q=rice' });
+  assert.deepEqual(already.replaced, [], 'the target page must not redirect to itself');
+
+  const back = runApp({ locale: 'zh', stored: 'en' });
+  assert.deepEqual(back.replaced, ['/recipes/'], 'the preference must also send a reader back to English');
+
+  for (const stored of ['fr', '', 'zh-hant']) {
+    assert.deepEqual(runApp({ locale: 'en', stored }).replaced, [],
+      `an unknown stored value ("${stored}") must not invent a route`);
+  }
+
+  const sub = runApp({ locale: 'en', base: '/library-preview/', stored: 'zh', search: '?region=East+Asia' });
+  assert.deepEqual(sub.replaced, ['/library-preview/zh/recipes/?region=East+Asia'],
+    'the redirect must stay under the configured base path');
+});
+
+test('filtering after load keeps the switch pointed at the current view', () => {
+  const page = runApp({ locale: 'en' });
+  assert.equal(page.href('zh'), '/zh/recipes/');
+
+  page.type('bean');
+  assert.equal(page.location.search, '?q=bean');
+  assert.equal(page.href('zh'), '/zh/recipes/?q=bean',
+    'the switch href was computed once at load and never followed the filter');
+
+  page.pick('Mediterranean');
+  assert.equal(page.href('zh'), '/zh/recipes/?q=bean&region=Mediterranean');
+
+  page.type('');
+  assert.equal(page.href('zh'), '/zh/recipes/?region=Mediterranean');
+
+  page.reset.fire('click');
+  assert.equal(page.location.search, '');
+  assert.equal(page.href('zh'), '/zh/recipes/', 'clearing the filters must clear the carried query too');
+  assert.equal(page.href('en'), '/recipes/');
+
+  // And the href a click actually follows is the current one.
+  page.type('rice');
+  page.linkFor('zh').fire('click');
+  assert.equal(page.href('zh'), '/zh/recipes/?q=rice');
+});
+
+test('the fragment survives filtering and a fragment set after load still travels', () => {
+  const page = runApp({ locale: 'en', hash: '#main' });
+  page.type('rice');
+  assert.equal(page.pushed.at(-1), '?q=rice#main', 'the filter dropped the fragment from the URL');
+  assert.equal(page.location.hash, '#main');
+  assert.equal(page.href('zh'), '/zh/recipes/?q=rice#main');
+
+  page.type('');
+  assert.equal(page.pushed.at(-1), '/recipes/#main', 'clearing the query must not drop the fragment either');
+  assert.equal(page.href('zh'), '/zh/recipes/#main');
+
+  // A fragment the reader lands on later — an in-page anchor — is picked up at
+  // click time rather than being frozen at load.
+  const later = runApp({ locale: 'en' });
+  later.location.hash = '#method';
+  later.linkFor('zh').fire('click');
+  assert.equal(later.href('zh'), '/zh/recipes/#method');
+});
+
+test('the switch works on a subpath deployment and on a page with no filters', () => {
+  const sub = runApp({ locale: 'zh', base: '/library-preview/', route: 'recipes/wr-fixture-rice-porridge/', hash: '#method' });
+  assert.equal(sub.href('en'), '/library-preview/recipes/wr-fixture-rice-porridge/#method');
+  assert.equal(sub.href('zh'), '/library-preview/zh/recipes/wr-fixture-rice-porridge/#method');
+
+  const detail = runApp({ locale: 'en', route: 'about/', filters: false, hash: '#main' });
+  assert.equal(detail.href('zh'), '/zh/about/#main');
+  detail.linkFor('zh').fire('click');
+  assert.equal(detail.store.get(LOCALE_STORAGE_KEY), 'zh');
+
+  // A page with filters but no switch must still filter, and must not throw.
+  const noSwitch = runApp({ locale: 'en', switchBox: false });
+  noSwitch.type('rice');
+  assert.equal(noSwitch.cards.filter((c) => !c.hidden).length, 1);
+  assert.equal(noSwitch.location.search, '?q=rice');
+});
+
+test('the filter reads the URL on load, and drops a region that is not on offer', () => {
+  const page = runApp({ locale: 'zh', search: '?q=rice&region=East+Asia' });
+  assert.equal(page.search.value, 'rice');
+  assert.equal(page.region.value, 'East Asia');
+  assert.equal(page.cards.filter((c) => !c.hidden).length, 1);
+  assert.equal(page.status.textContent, 'Showing 1 of 3 records.');
+  assert.equal(page.reset.hidden, false);
+
+  const bogus = runApp({ locale: 'en', search: '?region=Atlantis' });
+  assert.equal(bogus.region.value, '', 'a region that is not an option must not stay selected');
+  assert.equal(bogus.cards.filter((c) => !c.hidden).length, 3);
+  assert.equal(bogus.location.search, '', 'the bogus region must be dropped from the URL');
+  assert.equal(bogus.href('zh'), '/zh/recipes/');
+
+  const none = runApp({ locale: 'en', search: '?q=zzz' });
+  assert.equal(none.status.textContent, 'No records match.');
+  assert.equal(none.grid.hidden, true);
+  assert.equal(none.empty.hidden, false);
+  assert.equal(none.href('zh'), '/zh/recipes/?q=zzz');
+
+  const all = runApp({ locale: 'en' });
+  assert.equal(all.status.textContent, 'Showing all 3 records.');
+  assert.equal(all.reset.hidden, true);
+  assert.equal(all.empty.hidden, true);
+});

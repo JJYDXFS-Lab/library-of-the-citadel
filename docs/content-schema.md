@@ -32,6 +32,34 @@ A file under `content/items/` must be named for its `item_id`.
 Collection manifests carry the same provenance, version, and rights fields, plus
 `title`, `description`, `scope_note`, and `item_ids` (membership by id only).
 
+## Translation overlays
+
+Base records under `content/items/` and `content/collections/` stay canonical
+English and byte-identical. A translation is an additive overlay file:
+
+```
+content/locales/ui/<code>.json                    interface dictionary
+content/locales/items/<code>/<item_id>.json       record translation
+content/locales/collections/<code>/<id>.json      manifest translation
+```
+
+An overlay keys its text by the record's own stable identifiers — `item_id` by
+filename, `variant_id`, `method` step number, `change_history` version, and
+ingredient rows by their canonical English `item` text, since the schema gives
+those rows no id of their own. No id, field set, or part of the data contract
+moves: a localized record is a drop-in view of the canonical one, and the
+machine-readable facets (`tags`, `region.label_basis`, review states, `sources`)
+stay canonical rather than being translated.
+
+Overlays are not schema-validated and are not required. A missing file is the
+untranslated state; an unfilled field keeps its English original and the page
+says so with a visible notice. `name.alt` and `title.alt` legitimately keep
+cross-language aliases — "Rice Porridge" alongside 米粥 — which is what lets a
+search typed in either language find the record.
+
+Translating a fixture does not promote it. All three records remain
+`record_class: fixture`, unsourced, and not publication-ready in every locale.
+
 ## The validated subset
 
 `src/schema-validate.mjs` interprets exactly these keywords:
@@ -67,6 +95,10 @@ These are gates, not documentation: a violation fails `npm run check` and
 1. Write `content/items/<item_id>.json`.
 2. Add `<item_id>` to the collection manifest's `item_ids`, in editorial order.
 3. Run `npm run check`.
+
+A translation is optional and is added the same way: write
+`content/locales/items/<code>/<item_id>.json`. Until it exists, the record
+renders in English under an untranslated notice.
 
 Promoting a fixture to `sourced` requires real source URLs, a rights review, and
 a new `change_history` entry — the rules refuse the half-step.

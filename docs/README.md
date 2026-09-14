@@ -14,7 +14,7 @@ they mean this project's framework layer, never Atom-KB's.
 
 Start with the project [README](../README.md) for commands and layout.
 
-Two conventions run through all three documents:
+Three conventions run through these documents:
 
 1. **Content is portable.** A record under `content/` is readable and usable
    with none of the Library of the Citadel presentation code. Nothing in `src/templates/`
@@ -22,3 +22,7 @@ Two conventions run through all three documents:
 2. **Honesty is enforced, not just documented.** A fixture cannot quietly
    acquire sources, a completed review, or publication-ready status —
    `src/rules.mjs` fails the build instead.
+3. **Language is additive.** English is the default locale and the canonical
+   record text; Chinese is an overlay under `content/locales/` and a `zh/` page
+   set. No translation moves an id, and an untranslated field falls back to
+   English behind a visible notice rather than disappearing.

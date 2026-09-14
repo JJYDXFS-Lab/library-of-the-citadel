@@ -214,15 +214,19 @@ test('the official display name is the configured value and the built-in default
     'a build with no overrides must carry the official name, not a generic "Library"');
 });
 
+// The official name is a proper noun: it is not translated, so every page in
+// every locale carries the same <title> suffix, wordmark, and hall title.
 test('every generated page titles and wordmarks the official name', () => {
   const r = rootBuild();
-  for (const page of PAGES) {
+  for (const page of ALL_PAGES) {
     const html = read(r, page);
     assert.match(html, new RegExp(`<title>[^<]* · ${OFFICIAL_NAME}</title>`), `${page}: wrong <title> suffix`);
     assert.ok(html.includes(`<span class="wordmark__name">${OFFICIAL_NAME}</span>`), `${page}: wrong header wordmark`);
   }
-  const hall = read(r, 'index.html');
-  assert.match(hall, new RegExp(`<h1 id="hall-title" class="hall__title">${OFFICIAL_NAME}`), 'the hall title is not the official name');
+  for (const hallPage of ['index.html', 'zh/index.html']) {
+    assert.match(read(r, hallPage), new RegExp(`<h1 id="hall-title" class="hall__title">${OFFICIAL_NAME}`),
+      `${hallPage}: the hall title is not the official name`);
+  }
 });
 
 test('the build states that this is not Atom-KB\'s Library', () => {
@@ -241,25 +245,36 @@ test('esc neutralizes every character that could break out of markup', () => {
 
 // ------------------------------------------------------------- builds
 
+// The default-locale page set, at the output root.
 const PAGES = ['index.html', 'recipes/index.html', 'about/index.html',
   ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`)];
-const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll', 'data/world-recipes.json'];
+// One full page set per non-default locale, under its own route prefix, with
+// the same slugs and the same record IDs. tests/locale.mjs covers what is
+// inside them; this file covers that the output is exactly this set of files.
+const ZH_PAGES = PAGES.map((rel) => `zh/${rel}`);
+const ALL_PAGES = [...PAGES, ...ZH_PAGES];
+const PAGE_LANG = new Map([
+  ...PAGES.map((rel) => [rel, 'en']),
+  ...ZH_PAGES.map((rel) => [rel, 'zh-Hans']),
+]);
+const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll',
+  'data/world-recipes.json', 'data/world-recipes.zh.json'];
 
 for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
   test(`the ${label} build emits every page, asset, and data file`, () => {
     const r = run();
     assert.equal(r.cfg.basePath, base);
     assert.equal(r.itemCount, 3);
-    for (const rel of [...PAGES, ...ASSETS]) {
+    for (const rel of [...ALL_PAGES, ...ASSETS]) {
       assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel} in the ${label} build`);
     }
-    assert.deepEqual(walk(r.outDir), [...PAGES, ...ASSETS].sort(), `unexpected file set in the ${label} build`);
+    assert.deepEqual(walk(r.outDir), [...ALL_PAGES, ...ASSETS].sort(), `unexpected file set in the ${label} build`);
     assert.ok(r.bytes > 0);
   });
 
   test(`every generated link in the ${label} build is rooted at its configured base path`, () => {
     const r = run();
-    for (const page of PAGES) {
+    for (const page of ALL_PAGES) {
       for (const link of linksIn(read(r, page))) {
         if (!link.startsWith('/')) continue; // "#main" and relative links are fine as-is.
         assert.ok(link.startsWith(base), `${page}: link "${link}" is not under base "${base}"`);
@@ -304,7 +319,7 @@ test('detail pages carry prev/next navigation in manifest order, with no danglin
 test('every internal link in the root build resolves to a file that was actually written', () => {
   const r = rootBuild();
   const emitted = new Set(walk(r.outDir).map((f) => `/${f.split(path.sep).join('/')}`));
-  for (const page of PAGES) {
+  for (const page of ALL_PAGES) {
     for (const link of linksIn(read(r, page))) {
       if (!link.startsWith('/')) continue;
       const target = link.endsWith('/') ? `${link}index.html` : link;
@@ -345,19 +360,24 @@ test('hiding a grid actually hides it: the stylesheet overrides its own display 
 
 test('the hall and every page carry the accessibility landmarks', () => {
   const r = rootBuild();
-  for (const page of PAGES) {
+  for (const page of ALL_PAGES) {
     const html = read(r, page);
     assert.match(html, /^<!DOCTYPE html>/);
-    assert.match(html, /<html lang="en">/);
+    // Each page set declares its own language: the default locale at the root,
+    // every other locale under its route prefix.
+    assert.match(html, new RegExp(`<html lang="${PAGE_LANG.get(page)}">`), `${page}: wrong lang attribute`);
     assert.match(html, /<meta name="viewport" content="width=device-width, initial-scale=1">/);
     assert.match(html, /<a class="skip-link" href="#main">/, `${page}: no skip link`);
     assert.match(html, /<main id="main">/, `${page}: no main landmark`);
-    assert.equal([...html.matchAll(/<h1[ >]/g)].length, page === 'index.html' ? 1 : 1, `${page}: needs exactly one h1`);
+    assert.equal([...html.matchAll(/<h1[ >]/g)].length, 1, `${page}: needs exactly one h1`);
     assert.ok(html.includes('fixture-banner'), `${page}: the fixture notice must appear on every page`);
   }
-  const hall = read(r, 'index.html');
-  assert.ok(hall.includes('href="/recipes/"'), 'the hall does not open the collection');
-  assert.ok(hall.includes('aria-hidden="true"'), 'the decorative vault must be hidden from assistive tech');
+  // The hall of each locale opens that locale's own collection.
+  for (const [hallPage, collectionHref] of [['index.html', '/recipes/'], ['zh/index.html', '/zh/recipes/']]) {
+    const hall = read(r, hallPage);
+    assert.ok(hall.includes(`href="${collectionHref}"`), `${hallPage} does not open the collection`);
+    assert.ok(hall.includes('aria-hidden="true"'), `${hallPage}: the decorative vault must be hidden from assistive tech`);
+  }
 });
 
 // ----------------------------------------------------- nothing leaks

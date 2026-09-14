@@ -1,18 +1,35 @@
 // HTML page templates. Plain template literals — no framework, no dependency.
 //
-// Every internal link goes through cfg.withBase(), so the same templates emit a
-// correct site at "/" and at "/any-subpath/". Detail pages are generated as real
-// directories with index.html, which is what makes deep links and browser reload
-// work on GitHub Pages without a server or a router.
+// Every internal link goes through the locale's path helper, which composes
+// cfg.withBase() with the locale's route prefix. The same templates therefore
+// emit a correct site at "/", at "/any-subpath/", and in every locale. Detail
+// pages are generated as real directories with index.html, which is what makes
+// deep links and browser reload work on GitHub Pages without a server or a
+// router.
+
+import { LOCALES, LOCALE_STORAGE_KEY } from '../i18n.mjs';
 
 const AMP = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 export const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => AMP[c]);
 
+/**
+ * Localized string with HTML fragments substituted into its placeholders. The
+ * translated text is escaped first and the fragments are inserted afterwards,
+ * so a dictionary value can never inject markup.
+ */
+const fill = (template, fragments) => esc(template).replace(/\{(\w+)\}/g, (match, name) => (
+  Object.prototype.hasOwnProperty.call(fragments, name) ? fragments[name] : match
+));
+
+const code = (value) => `<code>${esc(value)}</code>`;
+
 const itemPath = (item) => `recipes/${item.item_id}/`;
 
-function head(cfg, { title, description, extraCss = '' }) {
+const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
+
+function head(cfg, L, { title, description }) {
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${esc(L.htmlLang)}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,54 +37,93 @@ function head(cfg, { title, description, extraCss = '' }) {
 <meta name="description" content="${esc(description)}">
 <meta name="robots" content="index, follow">
 <link rel="stylesheet" href="${cfg.withBase('assets/site.css')}">
-${extraCss}</head>`;
+</head>`;
 }
 
-function citadelLink(cfg) {
+function citadelLink(cfg, L) {
   if (!cfg.citadel.url) {
     // No invented destination. The slot is visible but inert until configured.
-    return `<span class="citadel-link citadel-link--unset" title="${esc(cfg.citadel.note)}">${esc(cfg.citadel.label)} link not configured</span>`;
+    return `<span class="citadel-link citadel-link--unset" title="${esc(L.site.citadelNote)}">${esc(cfg.citadel.label)} ${esc(L.t('citadel.unset_suffix'))}</span>`;
   }
   return `<a class="citadel-link" href="${esc(cfg.citadel.url)}" rel="noopener">${esc(cfg.citadel.label)} →</a>`;
 }
 
-function chrome(cfg, current) {
+/**
+ * The language switch. Real links to the counterpart page, both locales always
+ * present, so it works with scripting disabled. Script only appends the current
+ * query string and fragment, and records the choice.
+ */
+function localeSwitch(L, route) {
+  const links = LOCALES.map((loc) => {
+    const active = loc.code === L.code;
+    return `    <a href="${L.pathIn(loc.code, route)}" lang="${esc(loc.htmlLang)}" hreflang="${esc(loc.htmlLang)}" data-locale-code="${esc(loc.code)}"${active ? ' aria-current="true"' : ''}>${esc(loc.endonym)}</a>`;
+  }).join('\n');
+
+  return `<nav class="locale-switch" aria-label="${esc(L.t('locale.group_label'))}" title="${esc(L.t('locale.switch_hint'))}" data-locale-switch data-locale-current="${esc(L.code)}" data-locale-key="${esc(LOCALE_STORAGE_KEY)}">
+  <span class="locale-switch__label" aria-hidden="true">${esc(L.t('locale.group_label'))}</span>
+${links}
+</nav>`;
+}
+
+function chrome(cfg, L, { nav: current, route }) {
   const nav = [
-    ['', 'Hall'],
-    ['recipes/', 'World Recipes'],
-    ['about/', 'About this build'],
+    ['', L.t('nav.hall')],
+    ['recipes/', L.collectionTitle],
+    ['about/', L.t('nav.about')],
   ];
-  return `<a class="skip-link" href="#main">Skip to content</a>
+  return `<a class="skip-link" href="#main">${esc(L.t('skip_link'))}</a>
 <header class="masthead">
-<a class="wordmark" href="${cfg.withBase('')}">
+<a class="wordmark" href="${L.path('')}">
   <span class="wordmark__name">${esc(cfg.siteName)}</span>
   ${cfg.siteNameAlt ? `<span class="wordmark__alt">${esc(cfg.siteNameAlt)}</span>` : ''}
 </a>
 <nav class="masthead__nav">
-${nav.map(([href, label]) => `  <a href="${cfg.withBase(href)}"${href === current ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('\n')}
+${nav.map(([href, label]) => `  <a href="${L.path(href)}"${href === current ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('\n')}
 </nav>
-${citadelLink(cfg)}
+${localeSwitch(L, route)}
+${citadelLink(cfg, L)}
 </header>`;
 }
 
-function foot(cfg) {
+function foot(cfg, L) {
   return `<footer class="colophon">
-<p class="colophon__notice">${esc(cfg.buildNotice)}</p>
-<p>${esc(cfg.footerNote)}</p>
-<p class="colophon__meta">Served from base path <code>${esc(cfg.basePath)}</code>.</p>
+<p class="colophon__notice">${esc(L.site.buildNotice)}</p>
+<p>${esc(L.site.footerNote)}</p>
+<p class="colophon__meta">${fill(L.t.raw('footer.base_path'), { basePath: code(cfg.basePath) })}</p>
 </footer>
+<script src="${cfg.withBase('assets/app.js')}" defer></script>
 </body>
 </html>`;
 }
 
-const fixtureBanner = (text) => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">Fixture</span> ${esc(text)}</p>`;
+const fixtureBanner = (L, text) => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t('fixture.tag'))}</span> ${esc(text)}</p>`;
+
+/**
+ * Record text that has no translation for this locale renders its English
+ * original behind a visible notice rather than a blank or a raw key.
+ */
+function translationNotice(L, state) {
+  if (state === 'source' || state === 'complete') return '';
+  const key = state === 'none' ? 'translation.missing_notice' : 'translation.partial_notice';
+  return `<p class="translation-notice" role="note" lang="${esc(L.htmlLang)}">${esc(L.t(key))}</p>`;
+}
+
+/**
+ * A locale context carries the collection title it needs for the nav label, so
+ * chrome() does not have to be handed the collection on every page.
+ */
+export function withCollectionTitle(L, collection) {
+  return { ...L, collectionTitle: collection.title.primary };
+}
 
 // ---------------------------------------------------------------- hall
 
-export function hallPage(cfg, { collection, items }) {
-  return `${head(cfg, { title: 'Hall', description: `${cfg.siteName} — ${cfg.tagline}` })}
+export function hallPage(cfg, L, view) {
+  const collection = view.collection.record;
+  const items = view.entries.map((e) => e.record);
+  return `${head(cfg, L, { title: L.t('page.title.hall'), description: L.t('meta.hall', { siteName: cfg.siteName, tagline: L.site.tagline }) })}
 <body class="page page--hall">
-${chrome(cfg, '')}
+${chrome(cfg, L, { nav: '', route: '' })}
 <main id="main">
   <section class="hall" aria-labelledby="hall-title">
     <div class="hall__vault" aria-hidden="true">
@@ -75,109 +131,126 @@ ${chrome(cfg, '')}
     </div>
     <div class="hall__plaque">
       <h1 id="hall-title" class="hall__title">${esc(cfg.siteName)}${cfg.siteNameAlt ? `<span class="hall__title-alt">${esc(cfg.siteNameAlt)}</span>` : ''}</h1>
-      <p class="hall__tagline">${esc(cfg.tagline)}</p>
+      <p class="hall__tagline">${esc(L.site.tagline)}</p>
     </div>
   </section>
 
-  ${fixtureBanner(cfg.buildNotice)}
+  ${fixtureBanner(L, L.site.buildNotice)}
 
   <section class="shelves" aria-labelledby="shelves-title">
-    <h2 id="shelves-title" class="section-title">Collections</h2>
+    <h2 id="shelves-title" class="section-title">${esc(L.t('hall.collections_title'))}</h2>
     <ul class="shelf-list">
       <li class="shelf">
-        <a class="shelf__link" href="${cfg.withBase('recipes/')}">
+        <a class="shelf__link" href="${L.path('recipes/')}">
           <span class="shelf__spine" aria-hidden="true"></span>
           <span class="shelf__body">
             <span class="shelf__title">${esc(collection.title.primary)}${(collection.title.alt ?? []).length ? `<span class="shelf__alt">${esc(collection.title.alt[0])}</span>` : ''}</span>
             <span class="shelf__desc">${esc(collection.description)}</span>
-            <span class="shelf__count">${items.length} fixture record${items.length === 1 ? '' : 's'}</span>
+            <span class="shelf__count">${esc(plural(L, 'hall.count', items.length))}</span>
           </span>
         </a>
       </li>
       <li class="shelf shelf--empty" aria-disabled="true">
         <span class="shelf__spine" aria-hidden="true"></span>
         <span class="shelf__body">
-          <span class="shelf__title">Further collections</span>
-          <span class="shelf__desc">The hall is built to hold more than one collection. None are seeded yet, and none are implied.</span>
+          <span class="shelf__title">${esc(L.t('hall.further_title'))}</span>
+          <span class="shelf__desc">${esc(L.t('hall.further_desc'))}</span>
         </span>
       </li>
     </ul>
   </section>
 
   <section class="reading-room" aria-labelledby="reading-room-title">
-    <h2 id="reading-room-title" class="section-title">What this build is</h2>
-    <p>${esc(cfg.siteName)} is an independent, statically built Library framework: a hall, a collection gallery with search and a region filter, and one generated page per record. There is no backend and no runtime server requirement for browsing the deployed output.</p>
-    <p><a class="text-link" href="${cfg.withBase('about/')}">Read the full build notes →</a></p>
+    <h2 id="reading-room-title" class="section-title">${esc(L.t('hall.what_title'))}</h2>
+    <p>${esc(L.t('hall.what_body', { siteName: cfg.siteName }))}</p>
+    <p><a class="text-link" href="${L.path('about/')}">${esc(L.t('hall.what_link'))}</a></p>
   </section>
 </main>
-${foot(cfg)}`;
+${foot(cfg, L)}`;
 }
 
 // ------------------------------------------------------------- gallery
 
-function card(cfg, item) {
-  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(item.region.label)}" data-haystack="${esc([item.name.primary, ...(item.name.alt ?? []), item.region.label, item.region.cuisine_label, item.summary, ...(item.tags ?? []), ...item.variants.map((v) => v.label)].join(' ').toLowerCase())}">
-  <a class="card__link" href="${cfg.withBase(itemPath(item))}">
+function card(L, entry) {
+  const item = entry.record;
+  const en = entry.english;
+  // The haystack carries the localized text and the English original, so a
+  // search typed in either language finds the record.
+  const terms = [
+    item.name.primary, ...(item.name.alt ?? []), item.region.label, item.region.cuisine_label, item.summary,
+    en.name.primary, ...(en.name.alt ?? []), en.region.label, en.region.cuisine_label, en.summary,
+    ...(item.tags ?? []), ...item.variants.map((v) => v.label), ...en.variants.map((v) => v.label),
+  ];
+  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}" data-haystack="${esc([...new Set(terms)].join(' ').toLowerCase())}">
+  <a class="card__link" href="${L.path(itemPath(item))}">
     <span class="card__marks">
       <span class="card__region">${esc(item.region.label)}</span>
-      <span class="card__class">fixture</span>
+      <span class="card__class">${esc(L.t('card.fixture'))}</span>
+      ${entry.state === 'none' ? `<span class="card__untranslated">${esc(L.t('card.untranslated'))}</span>` : ''}
     </span>
     <h3 class="card__title">${esc(item.name.primary)}</h3>
     <p class="card__summary">${esc(item.summary)}</p>
     <span class="card__meta">
       <span>${esc(item.region.cuisine_label)}</span>
-      <span>${item.variants.length} variant${item.variants.length === 1 ? '' : 's'}</span>
+      <span>${esc(plural(L, 'card.variants', item.variants.length))}</span>
       <span>v${esc(item.record_version)}</span>
     </span>
   </a>
 </li>`;
 }
 
-export function galleryPage(cfg, { collection, items, regions }) {
-  return `${head(cfg, { title: collection.title.primary, description: collection.description })}
+export function galleryPage(cfg, L, view, { regions }) {
+  const collection = view.collection.record;
+  const total = view.entries.length;
+  return `${head(cfg, L, { title: collection.title.primary, description: collection.description })}
 <body class="page page--gallery">
-${chrome(cfg, 'recipes/')}
+${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
 <main id="main">
   <header class="collection-head">
-    <p class="crumb"><a href="${cfg.withBase('')}">Hall</a> <span aria-hidden="true">/</span> ${esc(collection.title.primary)}</p>
+    <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> ${esc(collection.title.primary)}</p>
     <h1>${esc(collection.title.primary)}${(collection.title.alt ?? []).length ? `<span class="collection-head__alt">${esc(collection.title.alt[0])}</span>` : ''}</h1>
     <p class="collection-head__desc">${esc(collection.description)}</p>
   </header>
 
-  ${fixtureBanner(collection.record_notice)}
+  ${fixtureBanner(L, collection.record_notice)}
+  ${translationNotice(L, view.collection.state)}
 
-  <form class="filters" role="search" aria-label="Filter recipes" data-filters>
+  <form class="filters" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
+    data-status-all="${esc(L.t.raw('gallery.status_all'))}"
+    data-status-some="${esc(L.t.raw('gallery.status_some'))}"
+    data-status-none="${esc(L.t.raw('gallery.status_none'))}">
     <div class="filters__field">
-      <label for="q">Search</label>
-      <input type="search" id="q" name="q" autocomplete="off" placeholder="name, region, ingredient tag…" data-search>
+      <label for="q">${esc(L.t('gallery.search_label'))}</label>
+      <input type="search" id="q" name="q" autocomplete="off" placeholder="${esc(L.t('gallery.search_placeholder'))}" data-search>
     </div>
     <div class="filters__field">
-      <label for="region">Region</label>
+      <label for="region">${esc(L.t('gallery.region_label'))}</label>
       <select id="region" name="region" data-region>
-        <option value="">All regions</option>
-${regions.map((r) => `        <option value="${esc(r)}">${esc(r)}</option>`).join('\n')}
+        <option value="">${esc(L.t('gallery.region_all'))}</option>
+${regions.map((r) => `        <option value="${esc(r.value)}">${esc(r.label)}</option>`).join('\n')}
       </select>
     </div>
-    <button type="button" class="filters__reset" data-reset hidden>Clear</button>
-    <p class="filters__status" aria-live="polite" data-status>Showing all ${items.length} records.</p>
+    <button type="button" class="filters__reset" data-reset hidden>${esc(L.t('gallery.clear'))}</button>
+    <p class="filters__status" aria-live="polite" data-status>${esc(L.t('gallery.status_all', { total }))}</p>
   </form>
 
   <ul class="card-grid" data-grid>
-${items.map((item) => card(cfg, item)).join('\n')}
+${view.entries.map((entry) => card(L, entry)).join('\n')}
   </ul>
 
   <div class="empty-state" data-empty hidden>
-    <p class="empty-state__title">No records match that.</p>
-    <p>This collection holds only ${items.length} illustrative fixture records, so most searches will come up empty. That is the collection being small, not the search being broken.</p>
-    <p class="empty-state__hint">Try clearing the region filter, searching a shorter word, or <button type="button" class="text-link" data-reset-inline>reset both filters</button>.</p>
+    <p class="empty-state__title">${esc(L.t('gallery.empty_title'))}</p>
+    <p>${esc(L.t('gallery.empty_body', { total }))}</p>
+    <p class="empty-state__hint">${fill(L.t.raw('gallery.empty_hint'), {
+      reset: `<button type="button" class="text-link" data-reset-inline>${esc(L.t('gallery.reset_both'))}</button>`,
+    })}</p>
   </div>
 
   <noscript>
-    <p class="noscript-note">Search and filtering need JavaScript. Every record below is still reachable as its own page, and every link on this site works with scripting disabled.</p>
+    <p class="noscript-note">${esc(L.t('gallery.noscript'))}</p>
   </noscript>
 </main>
-<script src="${cfg.withBase('assets/app.js')}" defer></script>
-${foot(cfg)}`;
+${foot(cfg, L)}`;
 }
 
 // -------------------------------------------------------------- detail
@@ -186,30 +259,40 @@ const defList = (rows) => `<dl class="facts">
 ${rows.map(([k, v]) => `  <div class="facts__row"><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('\n')}
 </dl>`;
 
-export function detailPage(cfg, { collection, item, neighbours }) {
+const TRANSLATION_FACT = {
+  source: 'facts.translation_source',
+  complete: 'facts.translation_complete',
+  partial: 'facts.translation_partial',
+  none: 'facts.translation_none',
+};
+
+export function detailPage(cfg, L, view, { entry, neighbours }) {
+  const item = entry.record;
+  const collection = view.collection.record;
   const sources = item.sources.length
-    ? `<ul class="sources">${item.sources.map((s) => `<li><a href="${esc(s.url)}" rel="noopener">${esc(s.title)}</a> <span class="sources__date">accessed ${esc(s.accessed_at)}</span>${s.note ? `<p class="sources__note">${esc(s.note)}</p>` : ''}</li>`).join('')}</ul>`
-    : `<p class="sources sources--none">No sources recorded. <span class="muted">${esc(item.provenance_note)}</span></p>`;
+    ? `<ul class="sources">${item.sources.map((s) => `<li><a href="${esc(s.url)}" rel="noopener">${esc(s.title)}</a> <span class="sources__date">${esc(L.t('sources.accessed', { date: s.accessed_at }))}</span>${s.note ? `<p class="sources__note">${esc(s.note)}</p>` : ''}</li>`).join('')}</ul>`
+    : `<p class="sources sources--none">${esc(L.t('sources.none'))} <span class="muted">${esc(item.provenance_note)}</span></p>`;
 
-  return `${head(cfg, { title: item.name.primary, description: item.summary })}
+  return `${head(cfg, L, { title: item.name.primary, description: item.summary })}
 <body class="page page--detail">
-${chrome(cfg, 'recipes/')}
+${chrome(cfg, L, { nav: 'recipes/', route: itemPath(item) })}
 <main id="main">
-  <p class="crumb"><a href="${cfg.withBase('')}">Hall</a> <span aria-hidden="true">/</span> <a href="${cfg.withBase('recipes/')}">${esc(collection.title.primary)}</a> <span aria-hidden="true">/</span> ${esc(item.name.primary)}</p>
+  <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> <a href="${L.path('recipes/')}">${esc(collection.title.primary)}</a> <span aria-hidden="true">/</span> ${esc(item.name.primary)}</p>
 
-  ${fixtureBanner(item.record_notice)}
+  ${fixtureBanner(L, item.record_notice)}
+  ${translationNotice(L, entry.state)}
 
   <article class="record">
     <header class="record__head">
-      <p class="record__marks"><span class="card__region">${esc(item.region.label)}</span> <span class="card__class">fixture</span></p>
+      <p class="record__marks"><span class="card__region">${esc(item.region.label)}</span> <span class="card__class">${esc(L.t('card.fixture'))}</span></p>
       <h1>${esc(item.name.primary)}</h1>
       ${(item.name.alt ?? []).length ? `<p class="record__alt">${esc(item.name.alt.join(' · '))}</p>` : ''}
       <p class="record__summary">${esc(item.summary)}</p>
     </header>
 
     <section class="record__block" aria-labelledby="h-variants">
-      <h2 id="h-variants">Regional variants</h2>
-      <p class="block-note">Variants are held side by side. The record does not nominate one of them as the definitive version.</p>
+      <h2 id="h-variants">${esc(L.t('detail.variants_title'))}</h2>
+      <p class="block-note">${esc(L.t('detail.variants_note'))}</p>
       <ul class="variants">
 ${item.variants.map((v) => `        <li class="variant"><p class="variant__label">${esc(v.label)}</p><p class="variant__region">${esc(v.region_label)}</p><p>${esc(v.difference_note)}</p></li>`).join('\n')}
       </ul>
@@ -217,15 +300,15 @@ ${item.variants.map((v) => `        <li class="variant"><p class="variant__label
 
     <div class="record__columns">
       <section class="record__block" aria-labelledby="h-ingredients">
-        <h2 id="h-ingredients">Ingredients</h2>
+        <h2 id="h-ingredients">${esc(L.t('detail.ingredients_title'))}</h2>
         <ul class="ingredients">
 ${item.ingredients.map((g) => `          <li><span class="ingredients__qty">${esc(g.quantity ?? '')}</span> <span class="ingredients__item">${esc(g.item)}</span>${g.note ? `<span class="ingredients__note">${esc(g.note)}</span>` : ''}</li>`).join('\n')}
         </ul>
-        ${item.yield_note ? `<p class="yield">Yield: ${esc(item.yield_note)}</p>` : ''}
+        ${item.yield_note ? `<p class="yield">${esc(L.t('detail.yield', { yield: item.yield_note }))}</p>` : ''}
       </section>
 
       <section class="record__block" aria-labelledby="h-method">
-        <h2 id="h-method">Method</h2>
+        <h2 id="h-method">${esc(L.t('detail.method_title'))}</h2>
         <ol class="method">
 ${item.method.map((m) => `          <li>${esc(m.instruction)}</li>`).join('\n')}
         </ol>
@@ -233,83 +316,96 @@ ${item.method.map((m) => `          <li>${esc(m.instruction)}</li>`).join('\n')}
     </div>
 
     <section class="record__block record__block--caution" aria-labelledby="h-safety">
-      <h2 id="h-safety">Safety caveats</h2>
+      <h2 id="h-safety">${esc(L.t('detail.safety_title'))}</h2>
       <ul class="caveats">${item.safety.caveats.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
-      <p class="block-note">Safety review state: <code>${esc(item.safety.review_state)}</code></p>
+      <p class="block-note">${fill(L.t.raw('detail.safety_state'), { state: code(item.safety.review_state) })}</p>
     </section>
 
     <section class="record__block record__block--provenance" aria-labelledby="h-provenance">
-      <h2 id="h-provenance">Provenance, version and rights</h2>
+      <h2 id="h-provenance">${esc(L.t('detail.provenance_title'))}</h2>
       ${defList([
-        ['Item ID', `<code>${esc(item.item_id)}</code>`],
-        ['Collection', `<code>${esc(item.collection_id)}</code>`],
-        ['Record class', `<code>${esc(item.record_class)}</code> — ${item.publication_ready ? 'publication-ready' : 'not publication-ready'}`],
-        ['Region label basis', `<code>${esc(item.region.label_basis)}</code> — a presentation facet, not an attribution claim`],
-        ['Sources', sources],
-        ['Source state', `<code>${esc(item.source_state)}</code>`],
-        ['Reviewed', esc(item.reviewed_at)],
-        ['Record version', `<code>${esc(item.record_version)}</code>`],
-        ['Content licence', `${esc(item.rights.content_license)} <span class="muted">(review state <code>${esc(item.rights.license_review_state)}</code>)</span>`],
-        ['Image rights', `<code>${esc(item.rights.image_rights_review_state)}</code> — ${item.rights.images.length} image(s) in record`],
+        [L.t('facts.item_id'), code(item.item_id)],
+        [L.t('facts.collection'), code(item.collection_id)],
+        [L.t('facts.record_class'), `${code(item.record_class)} — ${esc(L.t(item.publication_ready ? 'facts.publication_ready' : 'facts.not_publication_ready'))}`],
+        [L.t('facts.region_basis'), `${code(item.region.label_basis)} — ${esc(L.t('facts.region_basis_note'))}`],
+        [L.t('facts.sources'), sources],
+        [L.t('facts.source_state'), code(item.source_state)],
+        [L.t('facts.reviewed'), esc(item.reviewed_at)],
+        [L.t('facts.record_version'), code(item.record_version)],
+        [L.t('facts.content_license'), `${esc(item.rights.content_license)} <span class="muted">${fill(L.t.raw('facts.license_review'), { state: code(item.rights.license_review_state) })}</span>`],
+        [L.t('facts.image_rights'), `${code(item.rights.image_rights_review_state)} — ${esc(L.t('facts.images_count', { count: item.rights.images.length }))}`],
+        [L.t('facts.translation'), `<span lang="${esc(L.htmlLang)}">${esc(L.t(TRANSLATION_FACT[entry.state]))}</span>`],
       ])}
-      <h3 class="subhead">Change history</h3>
+      <h3 class="subhead">${esc(L.t('detail.history_title'))}</h3>
       <ol class="history">
-${item.change_history.map((h) => `        <li><span class="history__version">v${esc(h.version)}</span> <span class="history__date">${esc(h.date)}</span><p>${esc(h.change)}</p><p class="muted">Supersedes: ${h.supersedes ? `v${esc(h.supersedes)}` : 'nothing — initial entry'}</p></li>`).join('\n')}
+${item.change_history.map((h) => `        <li><span class="history__version">v${esc(h.version)}</span> <span class="history__date">${esc(h.date)}</span><p>${esc(h.change)}</p><p class="muted">${esc(L.t('history.supersedes', { what: h.supersedes ? `v${h.supersedes}` : L.t('history.supersedes_none') }))}</p></li>`).join('\n')}
       </ol>
     </section>
   </article>
 
-  <nav class="record-nav" aria-label="Other records in this collection">
-    ${neighbours.prev ? `<a class="record-nav__prev" href="${cfg.withBase(itemPath(neighbours.prev))}"><span>Previous</span>${esc(neighbours.prev.name.primary)}</a>` : '<span></span>'}
-    <a class="record-nav__index" href="${cfg.withBase('recipes/')}">All records</a>
-    ${neighbours.next ? `<a class="record-nav__next" href="${cfg.withBase(itemPath(neighbours.next))}"><span>Next</span>${esc(neighbours.next.name.primary)}</a>` : '<span></span>'}
+  <nav class="record-nav" aria-label="${esc(L.t('record_nav.label'))}">
+    ${neighbours.prev ? `<a class="record-nav__prev" href="${L.path(itemPath(neighbours.prev))}"><span>${esc(L.t('record_nav.prev'))}</span>${esc(neighbours.prev.name.primary)}</a>` : '<span></span>'}
+    <a class="record-nav__index" href="${L.path('recipes/')}">${esc(L.t('record_nav.index'))}</a>
+    ${neighbours.next ? `<a class="record-nav__next" href="${L.path(itemPath(neighbours.next))}"><span>${esc(L.t('record_nav.next'))}</span>${esc(neighbours.next.name.primary)}</a>` : '<span></span>'}
   </nav>
 </main>
-${foot(cfg)}`;
+${foot(cfg, L)}`;
 }
 
 // --------------------------------------------------------------- about
 
-export function aboutPage(cfg, { collection, items }) {
-  return `${head(cfg, { title: 'About this build', description: `How this ${cfg.siteName} build is configured and what its content status is.` })}
+export function aboutPage(cfg, L, view) {
+  const collection = view.collection.record;
+  const items = view.entries;
+  const languages = LOCALES.map((loc) => `${loc.endonym} (${loc.englishName}, ${loc.prefix === '' ? cfg.basePath : `${cfg.basePath}${loc.prefix}`})`).join('; ');
+
+  return `${head(cfg, L, { title: L.t('page.title.about'), description: L.t('meta.about', { siteName: cfg.siteName }) })}
 <body class="page page--about">
-${chrome(cfg, 'about/')}
+${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
 <main id="main">
   <header class="collection-head">
-    <p class="crumb"><a href="${cfg.withBase('')}">Hall</a> <span aria-hidden="true">/</span> About this build</p>
-    <h1>About this build</h1>
+    <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> ${esc(L.t('page.title.about'))}</p>
+    <h1>${esc(L.t('page.title.about'))}</h1>
   </header>
 
-  ${fixtureBanner(cfg.buildNotice)}
+  ${fixtureBanner(L, L.site.buildNotice)}
 
   <section class="prose">
-    <h2>Name</h2>
-    <p>The official name of this project is <strong>${esc(cfg.siteName)}</strong>. It is a distinct project from
-      Atom-KB's separate Library: the two hold different content in different stores, and this build neither
-      mirrors, syncs, nor supersedes Atom-KB's. A link between them, if one is ever configured, is a pointer and
-      not a source-of-truth relationship.</p>
+    <h2>${esc(L.t('about.name_title'))}</h2>
+    <p>${fill(L.t.raw('about.name_body'), { siteName: `<strong>${esc(cfg.siteName)}</strong>` })}</p>
 
-    <h2>Content status</h2>
-    <p>This deployment contains ${items.length} records in ${esc(collection.title.primary)}, all of record class <code>fixture</code>. ${esc(collection.scope_note)}</p>
+    <h2>${esc(L.t('about.status_title'))}</h2>
+    <p>${fill(L.t.raw('about.status_body'), {
+      count: String(items.length),
+      collection: esc(collection.title.primary),
+      class: code('fixture'),
+    })} ${esc(collection.scope_note)}</p>
 
-    <h2>What a fixture record is not</h2>
+    <h2>${esc(L.t('about.notfixture_title'))}</h2>
     <ul>
-      <li>It is not researched, and it carries no source URLs. The source list is empty rather than filled with a placeholder.</li>
-      <li>It makes no claim about the history, origin, authenticity, or regional ownership of any dish.</li>
-      <li>It has not been cooked or tested, and no outcome is reported.</li>
-      <li>It contains no images, and its image-rights review state says so explicitly.</li>
-      <li>Region and cuisine labels on fixture records exist to exercise the filter interface. Their <code>label_basis</code> field records that they are illustrative.</li>
+      <li>${esc(L.t('about.notfixture.sources'))}</li>
+      <li>${esc(L.t('about.notfixture.claims'))}</li>
+      <li>${esc(L.t('about.notfixture.tested'))}</li>
+      <li>${esc(L.t('about.notfixture.images'))}</li>
+      <li>${fill(L.t.raw('about.notfixture.labels'), { basis: code('label_basis') })}</li>
+      <li>${esc(L.t('about.notfixture.translation'))}</li>
     </ul>
 
-    <h2>Deployment configuration</h2>
+    <h2>${esc(L.t('about.languages_title'))}</h2>
+    <p>${fill(L.t.raw('about.languages_body'), { langAttr: code('lang') })}</p>
+    <p>${fill(L.t.raw('about.languages_persistence'), { storage: code('localStorage'), key: code(LOCALE_STORAGE_KEY) })}</p>
+    <p>${esc(L.t('about.languages_fallback'))}</p>
+
+    <h2>${esc(L.t('about.deploy_title'))}</h2>
     ${defList([
-      ['Base path', `<code>${esc(cfg.basePath)}</code>`],
-      ['Citadel link', cfg.citadel.url ? `<code>${esc(cfg.citadel.url)}</code>` : 'not configured — the header slot renders inert'],
-      ['Backend', 'none; the deployed site is static files only'],
-      ['External requests', 'none; no fonts, images, analytics, or third-party scripts are fetched'],
+      [L.t('about.base_path'), code(cfg.basePath)],
+      [L.t('about.languages_fact'), esc(languages)],
+      [L.t('about.citadel'), cfg.citadel.url ? code(cfg.citadel.url) : esc(L.t('about.citadel_unset'))],
+      [L.t('about.backend'), esc(L.t('about.backend_value'))],
+      [L.t('about.external'), esc(L.t('about.external_value'))],
     ])}
-    <p>The base path and the Citadel link are set in <code>config/site.config.json</code>, and either can be overridden by environment variable at build time. No repository name or host is compiled into the source.</p>
+    <p>${fill(L.t.raw('about.config_note'), { file: code('config/site.config.json') })}</p>
   </section>
 </main>
-${foot(cfg)}`;
+${foot(cfg, L)}`;
 }
