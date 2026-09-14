@@ -24,10 +24,10 @@ fragment. The switch is a real link and works with scripting disabled.
 **Live fixture site:** <https://jjydxfs-lab.github.io/library-of-the-citadel/> —
 public repository and GitHub Actions deployment verified on 2026-09-13.
 
-> **Mixed build.** Five records, of two kinds, every one of them translated into
+> **Mixed build.** Nine records, of two kinds, every one of them translated into
 > Chinese and labelled with which kind it is.
 >
-> - **Two sourced** beginner oven recipes. Each cites the page its quantities,
+> - **Six sourced** beginner oven recipes. Each cites the page its quantities,
 >   oven temperature and timings come from, with the date that page was read,
 >   and cites the food-safety authority behind any temperature threshold it
 >   states. The directions are written here in this project's own words; no

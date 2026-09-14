@@ -3,23 +3,33 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection. Two records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites, and neither has been kitchen-tested here or given a professional food-safety review. The other three are fixtures, authored for this repository to exercise the content contract, and are not knowledge records at all. Every record says which it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "Mixed collection. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites, and none has been kitchen-tested here or given a professional food-safety review. The other three are fixtures, authored for this repository to exercise the content contract, and are not knowledge records at all. Every record says which it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains five records of two kinds. Two are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
+  "scope_note": "Contains nine records of two kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
+    "wr-oven-chicken-thigh-traybake",
+    "wr-oven-salmon-traybake",
+    "wr-oven-halloumi-chickpea-traybake",
+    "wr-oven-root-veg-traybake",
     "wr-fixture-griddle-flatbread",
     "wr-fixture-rice-porridge",
     "wr-fixture-simmered-bean-soup"
   ],
   "reviewed_at": "2026-09-14",
-  "record_version": "1.1.0",
+  "record_version": "1.2.0",
   "change_history": [
+    {
+      "version": "1.2.0",
+      "date": "2026-09-14",
+      "change": "Added four further sourced beginner oven recipes — chicken thigh, salmon, halloumi and chickpea, and root vegetable — after the two already released and before the three fixtures. The three fixtures and the two earlier sourced records are unchanged in substance.",
+      "supersedes": "1.1.0"
+    },
     {
       "version": "1.1.0",
       "date": "2026-09-14",

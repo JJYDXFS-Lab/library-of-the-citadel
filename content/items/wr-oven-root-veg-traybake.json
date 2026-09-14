@@ -1,0 +1,91 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-root-veg-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review.",
+
+  "name": {
+    "primary": "Roasted Root Vegetable Traybake",
+    "alt": ["Roasted Root Veg Traybake", "烤根茎蔬菜盘"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Oven traybakes",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "A kilo of carrots, parsnips and swede roasted in one tin with new potatoes and whole garlic cloves, then dressed with the softened garlic, lemon and parsley and finished with feta and nuts. The simplest record in this set: one tin, one 50-minute roast, and a dressing stirred together at the end.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Mixed root vegetables — carrots, parsnips, swede — cut into batons and halved", "quantity": "1 kg" },
+    { "item": "New potatoes, halved", "quantity": "220 g" },
+    { "item": "Garlic cloves, skin left on", "quantity": "3" },
+    { "item": "Rosemary sprigs", "quantity": "4" },
+    { "item": "Thyme sprigs", "quantity": "4" },
+    { "item": "Olive oil for roasting", "quantity": "2 tablespoons" },
+    { "item": "Olive oil for the dressing", "quantity": "2 tablespoons" },
+    { "item": "Mixed snacking nuts or seeds", "quantity": "50 g pack", "note": "Tree nuts and/or peanuts unless you choose a seed-only pack." },
+    { "item": "Vegetarian feta", "quantity": "45 g", "note": "Milk." },
+    { "item": "Parsley, finely chopped", "quantity": "1 small pack" },
+    { "item": "Lemon, juiced", "quantity": "1" },
+    { "item": "Salt and pepper", "quantity": "The source seasons the tin to taste and gives no weight." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan. The source prints gas mark 5 alongside those figures; all three are recorded as written and none is a conversion made here." },
+    { "step": 2, "instruction": "Put the prepared roots, new potatoes and whole garlic cloves into a large roasting tin and tuck the rosemary and thyme sprigs among them." },
+    { "step": 3, "instruction": "Drizzle over 2 tablespoons of the olive oil, toss until everything is evenly coated, and season." },
+    { "step": 4, "instruction": "Roast for 50 minutes, until the vegetables are tender." },
+    { "step": 5, "instruction": "Squeeze the softened garlic out of its skin and combine it with the lemon juice, chopped parsley and the remaining 2 tablespoons of olive oil, either blended or whisked in a bowl." },
+    { "step": 6, "instruction": "Pour the dressing over the roasted vegetables and toss, then scatter the nuts and crumbled feta over the top to serve." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 50 minutes roasting within 65 minutes in total, with no separate preparation time listed. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://love2feed.me/recipe/roasted-root-veg-traybake/",
+      "title": "Roasted Root Veg Traybake",
+      "accessed_at": "2026-09-14",
+      "note": "No named author; published by Love2Feed. Quantities, oven temperature and the 50-minute roast are taken from this page."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Love2Feed's page, accessed 2026-09-14. The source prints '200C/180C fan/gas 5'; that gas figure sits a mark below the pairing most British recipes print for 200°C, and it is reproduced here as written rather than corrected, because correcting it would be this project asserting a temperature the source does not. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here. The source lists no separate preparation time; only the 50-minute roast and a 65-minute total are stated.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "No meat, poultry or fish is involved, so no internal-temperature threshold applies. The endpoint is texture: the roots should be tender after the 50-minute roast.",
+      "Allergens: milk in the feta, and nuts in the topping. A mixed snacking pack may contain peanuts as well as tree nuts; a seed-only pack avoids both.",
+      "Whole garlic cloves roast in their skins and come out very hot; let them cool before squeezing them out.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["vegetarian", "root-vegetables", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

@@ -28,14 +28,10 @@ const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-simmered-bean-soup',
 ];
 const EXPECTED_SOURCED_IDS = [
-  'wr-oven-lamb-kofta-traybake',
-  'wr-oven-lamb-potato-bake',
-];
-// Recipes drafted but not released. They must not be loadable, must not appear
-// in any page or data file, and must not reach a published commit.
-const UNRELEASED_DRAFT_IDS = [
   'wr-oven-chicken-thigh-traybake',
   'wr-oven-halloumi-chickpea-traybake',
+  'wr-oven-lamb-kofta-traybake',
+  'wr-oven-lamb-potato-bake',
   'wr-oven-root-veg-traybake',
   'wr-oven-salmon-traybake',
 ];
@@ -87,9 +83,9 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds five records in one collection: two sourced, three fixtures', () => {
+test('the repository holds nine records in one collection: six sourced, three fixtures', () => {
   const { items, collections } = loadContent();
-  assert.equal(items.length, 5);
+  assert.equal(items.length, 9);
   assert.equal(collections.length, 1);
   const idsOfClass = (cls) => items.filter((i) => i.record_class === cls).map((i) => i.item_id).sort();
   assert.deepEqual(idsOfClass('fixture'), EXPECTED_FIXTURE_IDS);
@@ -117,7 +113,7 @@ test('the fixture gates still hold: no fixture has grown a source or a review', 
 test('every sourced record carries its provenance and claims no review it has not had', () => {
   const { items } = loadContent();
   const sourced = items.filter((i) => i.record_class === 'sourced');
-  assert.equal(sourced.length, 2);
+  assert.equal(sourced.length, 6);
 
   for (const item of sourced) {
     const where = item.item_id;
@@ -319,7 +315,7 @@ for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewB
   test(`the ${label} build emits every page, asset, and data file`, () => {
     const r = run();
     assert.equal(r.cfg.basePath, base);
-    assert.equal(r.itemCount, 5);
+    assert.equal(r.itemCount, 9);
     for (const rel of [...ALL_PAGES, ...ASSETS]) {
       assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel} in the ${label} build`);
     }
@@ -396,8 +392,8 @@ test('the gallery exposes the search, filter, and empty-state hooks the script b
   for (const region of regionsOf(loadContent().items)) {
     assert.ok(html.includes(`<option value="${region}">`), `no filter option for region "${region}"`);
   }
-  assert.equal([...html.matchAll(/data-haystack="/g)].length, 5, 'every card needs a search haystack');
-  assert.equal([...html.matchAll(/class="card"/g)].length, 5);
+  assert.equal([...html.matchAll(/data-haystack="/g)].length, 9, 'every card needs a search haystack');
+  assert.equal([...html.matchAll(/class="card"/g)].length, 9);
 
   const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
   for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
@@ -437,30 +433,15 @@ test('the hall and every page carry the accessibility landmarks', () => {
 
 // ----------------------------------------------------- nothing leaks
 
-test('no unreleased draft recipe is loadable or present anywhere in the output', () => {
-  // Four further oven recipes were drafted and are not part of this release.
-  // They are kept outside the repository's content tree, so the loader cannot
-  // see them; this test is what stops one reappearing by accident.
-  const { items } = loadContent();
-  for (const id of UNRELEASED_DRAFT_IDS) {
-    assert.ok(!items.some((i) => i.item_id === id), `${id} is loadable but is not in this release`);
-    assert.ok(!existsSync(path.join(repoRoot, 'content', 'items', `${id}.json`)),
-      `${id} is still under content/items/`);
-    assert.ok(!existsSync(path.join(repoRoot, 'content', 'locales', 'items', 'zh', `${id}.json`)),
-      `${id}: its zh overlay is still under content/locales/`);
-  }
-
-  // Both the IDs and text distinctive to those drafts, in every emitted file.
-  const DRAFT_TERMS = ['Cajun', '卡真', 'Halloumi', 'halloumi', '哈罗米', 'Salmon', 'salmon', '三文鱼',
-    'parsnip', '欧防风', 'chickpea', '鹰嘴豆'];
-  for (const r of [rootBuild(), previewBuild()]) {
-    for (const rel of walk(r.outDir)) {
-      const body = readFileSync(path.join(r.outDir, rel), 'utf8');
-      for (const needle of [...UNRELEASED_DRAFT_IDS, ...DRAFT_TERMS]) {
-        assert.ok(!body.includes(needle), `${rel} carries unreleased draft content "${needle}"`);
-      }
-    }
-  }
+test('the content tree holds exactly the released records, with a zh overlay each', () => {
+  // The release is defined by the manifest, not by whatever happens to be on
+  // disk. Every expected record has an English file and a Chinese overlay, and
+  // nothing else is sitting in either directory waiting to be picked up.
+  const itemFiles = readdirSync(path.join(repoRoot, 'content', 'items')).sort();
+  const zhFiles = readdirSync(path.join(repoRoot, 'content', 'locales', 'items', 'zh')).sort();
+  const expected = EXPECTED_ITEM_IDS.map((id) => `${id}.json`).sort();
+  assert.deepEqual(itemFiles, expected, 'content/items/ does not hold exactly the released records');
+  assert.deepEqual(zhFiles, expected, 'every released record needs exactly one zh overlay');
 });
 
 test('only the released recipe routes are emitted', () => {
@@ -469,7 +450,7 @@ test('only the released recipe routes are emitted', () => {
       .filter((rel) => /^(zh\/)?recipes\/[^/]+\/index\.html$/.test(rel))
       .map((rel) => rel.replace(/^(zh\/)?recipes\//, '').replace(/\/index\.html$/, ''))
       .sort();
-    // Five records, two page sets.
+    // Nine records, two page sets.
     assert.deepEqual(detailRoutes, [...EXPECTED_ITEM_IDS, ...EXPECTED_ITEM_IDS].sort(),
       'the emitted detail routes are not exactly the released records, once per locale');
   }
@@ -497,10 +478,10 @@ test('the build output contains no run receipts, secrets, or local paths', () =>
 test('the published data file is presentation-free content and nothing else', () => {
   const r = rootBuild();
   const data = JSON.parse(read(r, 'data/world-recipes.json'));
-  assert.equal(data.items.length, 5);
+  assert.equal(data.items.length, 9);
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
-  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 2);
+  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 6);
   assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
   for (const item of data.items) assert.equal(item.publication_ready, false);
 });

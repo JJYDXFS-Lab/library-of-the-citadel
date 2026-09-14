@@ -1,0 +1,91 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-halloumi-chickpea-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review.",
+
+  "name": {
+    "primary": "Halloumi, Aubergine and Chickpea Traybake",
+    "alt": ["哈罗米芝士鹰嘴豆烤盘菜"]
+  },
+
+  "region": {
+    "label": "Mediterranean",
+    "cuisine_label": "Vegetable and pulse traybakes with brined cheese",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Aubergine, sweet potato, pepper and chickpeas roasted under harissa, with slices of halloumi laid on for the last stretch and a garlic yoghurt stirred together while it bakes. The hearty vegetarian main of this set: the tin of chickpeas carries it, and nothing needs timing to the minute.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Aubergine", "quantity": "1" },
+    { "item": "Large sweet potato", "quantity": "1, about 500 g" },
+    { "item": "Red pepper", "quantity": "1" },
+    { "item": "Tinned chickpeas, drained", "quantity": "400 g tin" },
+    { "item": "Halloumi", "quantity": "225 g pack", "note": "Milk. The source cuts it into 8 slices." },
+    { "item": "Harissa paste", "quantity": "45 g", "note": "Heat and ingredients vary widely between brands; read the jar." },
+    { "item": "Olive oil", "quantity": "1 tablespoon" },
+    { "item": "Natural fat-free yoghurt", "quantity": "2 tablespoons", "note": "Milk. For the dressing." },
+    { "item": "Chopped garlic", "quantity": "1 teaspoon", "note": "For the dressing." },
+    { "item": "Olive oil for the dressing", "quantity": "1 teaspoon" },
+    { "item": "Fresh parsley, chopped", "quantity": "The source scatters it to finish and gives no weight." },
+    { "item": "Salt and pepper", "quantity": "The source seasons the dressing to taste and gives no weight." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan (gas mark 6). Both figures are stated by the source; neither is a conversion made here. Line a baking tray with baking paper unless it is non-stick." },
+    { "step": 2, "instruction": "Cut the aubergine and sweet potato into rounds half an inch thick — about 1.3 cm, converted here by arithmetic rather than stated by the source — then quarter the rounds. Cut the pepper into large chunks." },
+    { "step": 3, "instruction": "Put the vegetables and the drained chickpeas in a bowl, add the tablespoon of oil and the harissa, and mix until everything is coated." },
+    { "step": 4, "instruction": "Tip onto the tray in a single layer and bake for 30 minutes." },
+    { "step": 5, "instruction": "Cut the halloumi into 8 slices, lay them over the vegetables and return the tray for a further 10 to 15 minutes, until the vegetables are cooked through — a knife should meet no resistance in the sweet potato." },
+    { "step": 6, "instruction": "Stir the yoghurt, garlic, teaspoon of oil, salt and pepper together, spoon over the finished tray and scatter with parsley." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 40 minutes cooking, 45 minutes in total. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.theglutenfreeblogger.com/halloumi-aubergine-traybake/",
+      "title": "Halloumi, Aubergine and Chickpea Traybake",
+      "accessed_at": "2026-09-14",
+      "note": "Author: Sarah Howells. Publisher: The Gluten Free Blogger. Quantities, piece sizes, oven temperature and step timings are taken from this page."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Sarah Howells' page at The Gluten Free Blogger, accessed 2026-09-14. Two notes on what is and is not claimed here. The source gives its piece size in inches; the centimetre figure above is plain arithmetic and is labelled as such. The source publishes in a gluten-free context, but this record makes no gluten-free claim: harissa pastes and halloumi brands differ, and only the packet in your hand can answer that. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "No meat, poultry or fish is involved, so no internal-temperature threshold applies. The endpoint is texture: the sweet potato should take a knife without resistance.",
+      "Allergens: milk, in both the halloumi and the yoghurt. Harissa recipes vary between brands and some contain additional allergens.",
+      "Halloumi is a brined cheese and already salty; the source adds no salt to the tray itself.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["vegetarian", "chickpeas", "halloumi", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

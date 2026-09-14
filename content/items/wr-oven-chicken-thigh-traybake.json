@@ -1,0 +1,95 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-chicken-thigh-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Chicken Thigh Traybake",
+    "alt": ["Easy Chicken Thigh Traybake", "鸡腿肉烤盘菜"]
+  },
+
+  "region": {
+    "label": "Americas",
+    "cuisine_label": "Traybakes seasoned with Cajun spice",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Bone-in chicken thighs roasted on top of sweet potato, peppers and onion so the skin crisps while the vegetables take the fat. Skin-on, bone-in thighs are the forgiving cut here: they tolerate a few extra minutes without drying, and there is no jointing or carving.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Chicken thighs, skin on and bone in", "quantity": "8 small, roughly 125 g each" },
+    { "item": "Sweet potato, cut into 1 cm cubes", "quantity": "400 g", "note": "The source does not peel them." },
+    { "item": "Bell peppers, cut into pieces about 2 cm by 2 cm", "quantity": "3" },
+    { "item": "Small red onions, peeled and cut into 6 to 8 wedges each", "quantity": "2" },
+    { "item": "Olive oil", "quantity": "2 tablespoons", "note": "Used as 1 tablespoon on the vegetables and 1 tablespoon on the chicken skin." },
+    { "item": "Cajun seasoning", "quantity": "3 teaspoons", "note": "2 teaspoons go on the vegetables and the remainder on the chicken skin. Cajun blends vary; check the jar for allergens." },
+    { "item": "Thyme sprigs", "quantity": "6 small" },
+    { "item": "Salt and pepper", "quantity": "The source seasons the vegetables to taste and gives no weight." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 220°C conventional, or 200°C fan (gas mark 7). Both figures are stated by the source; neither is a conversion made here." },
+    { "step": 2, "instruction": "Spread the sweet potato, peppers and onion over a very large roasting tin in a single layer." },
+    { "step": 3, "instruction": "Drizzle 1 tablespoon of the oil over the vegetables, scatter over 2 teaspoons of the Cajun seasoning and all the thyme, season, and turn everything to coat." },
+    { "step": 4, "instruction": "Sit the thighs skin up on top of the vegetables, scatter the remaining Cajun seasoning over the skins, drizzle the second tablespoon of oil over them and rub it in." },
+    { "step": 5, "instruction": "Roast for 20 minutes." },
+    { "step": 6, "instruction": "Take the tin out, lift the thighs onto a plate, stir the vegetables and spread them back into a single layer, then return the thighs on top." },
+    { "step": 7, "instruction": "Roast for a further 15 minutes, then check the thickest thigh at the centre, clear of the bone. Chicken pieces are safe at an internal 74°C (Health Canada, Safe cooking temperatures); the elapsed time is not the test." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 10 minutes preparation and 35 minutes cooking. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.easypeasyfoodie.com/easy-chicken-thigh-traybake/",
+      "title": "Easy Chicken Thigh Traybake",
+      "accessed_at": "2026-09-14",
+      "note": "Author: Eb Gargano. Publisher: Easy Peasy Foodie. Quantities, piece sizes, oven temperature and step timings are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-09-14",
+      "note": "Health Canada. Source of the 74°C poultry-pieces threshold used above."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. One inconsistency in the source is left unresolved rather than silently corrected: its ingredient list gives 3 teaspoons of Cajun seasoning and its method puts 2 teaspoons on the vegetables, but the later step calls the remainder a tablespoon. This record says only 'the remaining seasoning'. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here. Spoon volumes differ by country: a tablespoon defined as 15 mL holds a quarter less than one defined as 20 mL, so measure with a single spoon set rather than mixing them.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Poultry is the strictest case in this collection. The UK Food Standards Agency states that poultry can carry bacteria all the way through and must be cooked all the way through; Health Canada gives 74°C internal for poultry pieces. Pink juice near the bone is common in thighs and is not by itself a reliable test — measure.",
+      "Raw chicken contaminates everything it touches. Wash hands, board and knife after handling, and never put the cooked thighs back on the plate that held them raw.",
+      "The thighs are moved to a plate midway through step 6; use a clean plate, not the one the raw chicken came on.",
+      "Allergens depend on the Cajun blend you buy; the jar's label is the authority, not this record.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["chicken", "poultry", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-salmon-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Salmon and Roasted Vegetable Traybake",
+    "alt": ["Easy Salmon Traybake", "三文鱼蔬菜烤盘菜"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Oven traybakes",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Salmon fillets laid among sweet potato, peppers and onion for the last ten minutes of a vegetable roast. The fish goes in whole and untouched — no turning, no skinning, no pan work — which is what makes it a reasonable first fish dish.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Salmon fillets", "quantity": "4, roughly 130 g each", "note": "Fish allergen. The source leaves the skin on and sets it against the pan." },
+    { "item": "Sweet potato, cut into 1 cm cubes", "quantity": "500 g" },
+    { "item": "Bell peppers, cut into pieces about 2 cm by 2 cm", "quantity": "3" },
+    { "item": "Small red onions, peeled and cut into wedges", "quantity": "2" },
+    { "item": "Olive oil", "quantity": "2 tablespoons", "note": "For the vegetables. The source drizzles a little extra over the salmon and marks that as optional." },
+    { "item": "Thyme sprigs", "quantity": "6 small" },
+    { "item": "Salt and pepper", "quantity": "The source seasons to taste and gives no weight." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 220°C conventional, or 200°C fan (gas mark 7). Both figures are stated by the source; neither is a conversion made here." },
+    { "step": 2, "instruction": "Spread the sweet potato, peppers and onion over a very large roasting pan in a single layer." },
+    { "step": 3, "instruction": "Drizzle over the 2 tablespoons of oil, scatter the thyme, season, and turn everything to coat before spreading it flat again." },
+    { "step": 4, "instruction": "Roast the vegetables for 15 minutes." },
+    { "step": 5, "instruction": "Take the pan out, stir the vegetables and spread them flat, then settle the four fillets among them with the skin against the pan. Drizzle with a little oil if you are using it, and season." },
+    { "step": 6, "instruction": "Roast for a further 10 minutes. The source's endpoint is whatever doneness you prefer, which is not a usable test on its own; for a cooked-through fillet Health Canada gives 70°C internal, measured at the thickest part. The source states no fillet thickness, only the 130 g weight, so go by the thermometer rather than by the clock." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 25 minutes cooking. The source gives no resting time, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.easypeasyfoodie.com/easy-salmon-traybake/",
+      "title": "Easy Salmon Traybake",
+      "accessed_at": "2026-09-14",
+      "note": "Author: Eb Gargano. Publisher: Easy Peasy Foodie. Quantities, fillet weight, oven temperature and step timings are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-09-14",
+      "note": "Health Canada. Source of the 70°C fish threshold used above."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. The source's only endpoint for the fish is cooking it to your liking, which is not a usable instruction for a beginner on its own, so Health Canada's 70°C is given beside it and attributed. No fillet thickness is stated by the source; only the 130 g weight is. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here.",
+
+  "reviewed_at": "2026-09-14",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-14",
+      "change": "Record created from the cited source as part of the first sourced oven set.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Fish has its own threshold, separate from the meat records in this collection: Health Canada gives 70°C internal for fish. Salmon is often served less cooked than that by choice; this record states the safe figure rather than a preference.",
+      "Raw fish and its packaging contaminate surfaces. Wash hands, board and knife after handling, and do not rest cooked fillets where the raw ones sat.",
+      "Allergen: fish. The dish contains no gluten or dairy as written, but check any seasoning you add.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["fish", "salmon", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

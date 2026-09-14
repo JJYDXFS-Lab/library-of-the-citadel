@@ -33,6 +33,10 @@ const EXPECTED_FIXTURE_IDS = [
 const EXPECTED_SOURCED_IDS = [
   'wr-oven-lamb-kofta-traybake',
   'wr-oven-lamb-potato-bake',
+  'wr-oven-chicken-thigh-traybake',
+  'wr-oven-salmon-traybake',
+  'wr-oven-halloumi-chickpea-traybake',
+  'wr-oven-root-veg-traybake',
 ];
 const EXPECTED_ITEM_IDS = [...EXPECTED_SOURCED_IDS, ...EXPECTED_FIXTURE_IDS];
 

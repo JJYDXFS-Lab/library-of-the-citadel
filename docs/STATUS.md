@@ -40,9 +40,9 @@ Updated: 2026-09-14 (Australia/Canberra)
   backlink placeholder remains intentional; do not invent a destination.
 - Fixture records require provenance, licensing/rights, safety, and editorial
   review before any promotion to sourced/publication-ready content.
-- Two sourced oven recipes are prepared for release; see the milestone section
-  below. Further oven recipes were drafted but are not part of this release and
-  are not present in the repository.
+- Six sourced oven recipes are now prepared; see the milestone section below.
+  The first two are already published; the other four are complete locally and
+  awaiting release.
 
 ## Local footer milestone — written, not verified, not published
 
@@ -61,28 +61,32 @@ covers both lines.
 environment, so the new test and the build output are unverified here and must
 be validated independently before this is relied on.
 
-## Sourced oven recipes — two prepared for release
+## Sourced oven recipes — six prepared, two already published
 
-Two sourced beginner oven recipes are prepared for release, in English with full
-Chinese translations, alongside the three existing fixtures, which are
-unchanged. The collection is now mixed — five records — and its manifest, notice
-and scope note say so.
+Six sourced beginner oven recipes are now prepared, in English with full Chinese
+translations, alongside the three existing fixtures, which are unchanged. The
+collection is mixed — nine records — and its manifest, notice and scope note say
+so.
 
-- The two: a lamb kofta meatball traybake and a lamb chop and potato bake. Each
-  is one tray or dish with no pan-searing, no carving and no judged degree of
-  doneness.
-- Further oven recipes were drafted and are **not** part of this release. They
-  are not in the repository, do not load, and appear in no page, data file or
-  search payload; a test asserts that. They will be finished under their own
-  review before any of them is released.
+- The first two were published earlier: a lamb kofta meatball traybake and a
+  lamb chop and potato bake.
+- Four more are now complete and integrated after them: a chicken thigh
+  traybake, a salmon and roasted vegetable traybake, a halloumi, aubergine and
+  chickpea traybake, and a roasted root vegetable traybake. Each is one tray or
+  dish with no pan-searing, no carving and no judged degree of doneness.
+- None of the six sources states a resting time. Each record says so rather than
+  inventing a duration.
 - Each record names the page its quantities, oven temperature and timings come
   from, the author or publisher, and the access date 2026-09-14. Oven
   temperatures and fan/conventional modes are reproduced exactly as the source
   states them; no temperature conversion was invented.
 - Safe internal temperatures are attributed to Health Canada, and the
-  whole-cut/minced/poultry distinction to the UK Food Standards Agency. Minced
-  lamb and an intact lamb cut are treated as the different cases they are: 71°C
-  for the mince, 63°C medium-rare or 71°C medium for the chop.
+  whole-cut/minced/poultry distinction to the UK Food Standards Agency. Poultry,
+  minced lamb, an intact lamb cut and fish are treated as the different cases
+  they are: 74°C for chicken pieces, 71°C for minced lamb, 63°C medium-rare or
+  71°C medium for a lamb chop, and 70°C for fish. The two vegetarian records
+  state that no internal-temperature threshold applies and give a texture
+  endpoint instead.
 - Every record is `publication_ready: false`, `safety.review_state:
   not-reviewed`, and `license_review_state: not-reviewed`. Editorial checking
   against a source is not a professional food-safety review, and nothing here
@@ -92,13 +96,15 @@ and scope note say so.
   mark, honesty banner tag and About page now distinguish sourced from fixture
   in both locales; the detail template omits the variants block when a record
   has none.
-- Tests were updated and extended: five-record counts, separate fixture and
+- Tests were updated and extended: nine-record counts, separate fixture and
   sourced gates, source provenance, per-record class marking, a field-by-field
-  EN/ZH numeric parity check, and a release-scope test asserting that the
-  unreleased drafts are neither loadable nor present anywhere in the output.
+  EN/ZH numeric parity check, a route check that the emitted detail pages are
+  exactly the manifest's records once per locale, and a content-tree check that
+  `content/items/` and the Chinese overlay directory hold exactly those records
+  and nothing waiting to be picked up.
 - Verified locally on 2026-09-14: `npm run check` **70 of 70 passed, 0 failed,
   none skipped**; `npm run build`, `npm run build:preview` and a build at the
-  deployment base path each emitted **21 files, 5 records, locales en and zh**.
+  deployment base path each emitted **29 files, 9 records, locales en and zh**.
   Generated output stays untracked. Live publication is still to be verified
   independently after any deployment.
 
