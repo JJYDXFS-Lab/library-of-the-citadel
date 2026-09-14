@@ -85,6 +85,24 @@ ${citadelLink(cfg, L)}
 </header>`;
 }
 
+/**
+ * The holders line, with any holder that has a URL in `copyright.links`
+ * rendered as a link to it. The string is escaped first and the anchor wrapped
+ * around the already-escaped name, so the visible text is the same whether or
+ * not a URL is configured and no configured value reaches the page unescaped.
+ * Only http(s) URLs are linked; anything else stays plain text rather than
+ * emitting a surprising scheme.
+ */
+function holdersHtml(cfg) {
+  let html = esc(cfg.copyright.holders);
+  for (const [name, url] of Object.entries(cfg.copyright.links ?? {})) {
+    const safeName = esc(name);
+    if (!safeName.trim() || !/^https?:\/\//i.test(String(url))) continue;
+    html = html.split(safeName).join(`<a href="${esc(url)}">${safeName}</a>`);
+  }
+  return html;
+}
+
 function foot(cfg, L) {
   // The copyright line covers this site's own presentation and editorial work
   // and is written the same way in every locale, the way a name is. The rights
@@ -92,7 +110,7 @@ function foot(cfg, L) {
   // anything about third-party material beyond leaving its rights where they
   // are. An unconfigured holder renders no line rather than a guessed one.
   const copyright = String(cfg.copyright.holders).trim()
-    ? `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${esc(cfg.copyright.holders)}.</p>`
+    ? `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${holdersHtml(cfg)}.</p>`
     : '';
   return `<footer class="colophon">
 <p class="colophon__notice">${esc(L.site.buildNotice)}</p>

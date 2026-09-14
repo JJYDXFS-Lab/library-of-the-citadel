@@ -17,6 +17,7 @@ default**. Nothing in `src/` knows a repository name, a remote URL, or a host.
 | `footerNote` | — | Colophon line. |
 | `copyright.year` | — | Year in the footer copyright line. |
 | `copyright.holders` | — | Who is named in that line. Empty renders no line. |
+| `copyright.links` | — | Optional map of a name inside `holders` to a URL for that name alone. Only `http(s)` URLs are linked; a holder with no entry stays plain text. |
 | — | `LIBRARY_OUT_DIR` | Output directory, relative to the repository. Default `dist`. |
 
 ## Base paths

@@ -411,7 +411,10 @@ test('every page in both locales carries the shared footer line and its own righ
   // the rights note beside it is prose, so each locale shows its own.
   assert.equal(cfg.copyright.year, 2026);
   assert.equal(cfg.copyright.holders, 'Atom & Claude');
-  const line = `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${esc(cfg.copyright.holders)}.</p>`;
+  assert.equal(cfg.copyright.links.Atom, 'https://atom-of-jjydxfs.github.io/');
+  // Only the name is linked; the rest of the line, including the "&" and the
+  // Claude credit, stays plain text.
+  const ATOM_LINK = '<a href="https://atom-of-jjydxfs.github.io/">Atom</a>';
 
   for (const loc of LOCALES) {
     const other = LOCALES.find((l) => l.code !== loc.code);
@@ -419,7 +422,14 @@ test('every page in both locales carries the shared footer line and its own righ
     const foreign = esc(dicts.get(other.code)['footer.rights_note']);
     for (const rel of pagesFor(loc)) {
       const html = read(r, rel);
-      assert.ok(html.includes(line), `${rel}: the shared footer line is missing or not identical`);
+      const line = /<p class="colophon__copyright">([\s\S]*?)<\/p>/.exec(html);
+      assert.ok(line, `${rel}: no copyright line`);
+      assert.ok(line[1].includes(ATOM_LINK), `${rel}: "Atom" is not linked to the configured URL`);
+      assert.ok(!line[1].includes('>Claude</a>'), `${rel}: only "Atom" should be a link`);
+      // Markup removed and entities decoded: what a reader actually sees. The
+      // link must not change one character of it.
+      const visible = line[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
+      assert.equal(visible, '© 2026 Atom & Claude.', `${rel}: the visible copyright text changed`);
       assert.ok(html.includes(`<p class="colophon__rights">${note}</p>`), `${rel}: no ${loc.code} rights note`);
       assert.ok(!html.includes(foreign), `${rel}: shows the ${other.code} rights note instead of its own`);
     }

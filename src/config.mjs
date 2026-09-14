@@ -26,7 +26,9 @@ const DEFAULTS = {
   // Attribution for this site's own presentation and editorial work. Empty by
   // default: the build states a holder only where one is configured, exactly as
   // it refuses to invent a Citadel destination.
-  copyright: { year: '', holders: '' },
+  // `links` maps a name inside `holders` to a URL for that name alone; a holder
+  // with no entry stays plain text.
+  copyright: { year: '', holders: '', links: {} },
 };
 
 /**
