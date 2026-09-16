@@ -22,6 +22,7 @@
 
   "section.count.one": "{count} 条记录",
   "section.count.other": "{count} 条记录",
+  "section.action": "在目录中只看这 {count} 条",
 
   "page.title.hall": "大厅",
   "page.title.about": "关于本次构建",
@@ -36,6 +37,7 @@
   "hall.what_title": "这个构建是什么",
   "hall.what_body": "{siteName} 是一个独立的、静态构建的 Library 框架：一座大厅、一个带搜索与地区筛选的合集画廊，以及为每条记录生成的独立页面。它没有后端，浏览已部署的输出也不需要运行任何服务器。",
   "hall.what_link": "阅读完整的构建说明 →",
+  "hall.shared_note": "它是一座共用的图书馆，而不是一份出版物：由两个人慢慢往里添东西，每条记录都标明自己是什么、从哪里来，因此别人打开它时同样读得懂。",
 
   "gallery.filters_label": "筛选食谱记录",
   "gallery.search_label": "搜索",
@@ -50,7 +52,7 @@
   "gallery.empty_body": "本合集只有 {total} 条记录，因此大多数搜索都会没有结果。这是合集本身很小，而不是搜索坏了。",
   "gallery.empty_hint": "可以试着清除地区筛选、换一个更短的词，或者{reset}。",
   "gallery.reset_both": "重置这两个筛选条件",
-  "gallery.noscript": "搜索与筛选需要 JavaScript。即便如此，下面每条记录仍然有自己的独立页面，本站的每个链接在禁用脚本时也都可用。",
+  "gallery.noscript": "搜索、筛选与合集视角都需要 JavaScript。没有它时，下面的目录只是把本合集的每条记录依次列出，每条记录仍然有自己的独立页面，本站的每个链接在禁用脚本时也都可用。",
 
   "card.fixture": "示例",
   "card.sourced": "有来源",

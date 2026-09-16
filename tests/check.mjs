@@ -69,6 +69,9 @@ function linksIn(html) {
   return [...html.matchAll(/(?:href|src)="([^"]*)"/g)].map((m) => m[1]);
 }
 
+/** The file a link asks for: its query string and fragment are not part of it. */
+const routeOf = (link) => link.split('#')[0].split('?')[0];
+
 /** Build once per base path and cache, so the suite does not rebuild per assertion. */
 const builds = new Map();
 function buildOnce(key, env) {
@@ -203,8 +206,9 @@ test('the practical-note gate holds: original notes cite nothing and claim nothi
 });
 
 test('the air-fryer section keeps vegetarian options visible, and marks them', () => {
-  // Five of the seven are vegetarian. That is a browsing promise the section
-  // intro makes, so it is checked rather than left to the prose.
+  // Five of the seven are vegetarian. The section's lens copy says so, and the
+  // facet a reader filters and skims by is the cuisine label on the card, so
+  // both are checked rather than left to the prose.
   const { items } = loadContent();
   const byId = new Map(items.map((i) => [i.item_id, i]));
   const VEGETARIAN = [
@@ -219,7 +223,7 @@ test('the air-fryer section keeps vegetarian options visible, and marks them', (
   const tagged = EXPECTED_PRACTICAL_IDS.filter((id) => byId.get(id).tags.includes('vegetarian'));
   assert.deepEqual(tagged, VEGETARIAN, 'the vegetarian tagging of the section has drifted');
   for (const id of VEGETARIAN) {
-    // The facet a reader actually sees on the card and in the mini-section.
+    // The facet a reader actually sees on the card.
     assert.match(byId.get(id).region.cuisine_label, /vegetarian/i,
       `${id}: the cuisine label does not surface that it is vegetarian`);
   }
@@ -595,40 +599,128 @@ for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewB
   });
 }
 
-test('the gallery renders the Quick Air-Fryer mini-section, and it links locally at every base', () => {
+/** Every `<li class="card">` block in a gallery page, in document order. */
+const cardBlocks = (html) => [...html.matchAll(/<li class="card"[\s\S]*?<\/li>/g)].map((m) => m[0]);
+
+/** The id each card block is keyed by. */
+const cardIds = (html) => [...html.matchAll(/<li class="card" data-item-id="([^"]+)"/g)].map((m) => m[1]);
+
+/** The sections a gallery page says a record belongs to, keyed by item_id. */
+function cardSections(html) {
+  const map = new Map();
+  for (const block of cardBlocks(html)) {
+    const id = /data-item-id="([^"]+)"/.exec(block)[1];
+    const sections = /data-sections="([^"]*)"/.exec(block);
+    map.set(id, sections ? sections[1].split(' ').filter(Boolean) : []);
+  }
+  return map;
+}
+
+test('every record has exactly one canonical card in the one catalogue', () => {
+  for (const [label, run] of [['root', rootBuild], ['subpath', previewBuild]]) {
+    const gallery = read(run(), 'recipes/index.html');
+    const ids = cardIds(gallery);
+
+    assert.equal(ids.length, TOTAL_RECORDS, `${label}: the catalogue does not hold one card per record`);
+    assert.deepEqual([...ids].sort(), EXPECTED_ITEM_IDS, `${label}: the catalogue's card set is not the record set`);
+    for (const id of EXPECTED_ITEM_IDS) {
+      assert.equal(ids.filter((seen) => seen === id).length, 1, `${label}: ${id} is rendered as more than one card`);
+    }
+    // The seven section members are the case this guards: they used to be
+    // rendered once as a full section list and again as cards.
+    for (const id of EXPECTED_PRACTICAL_IDS) {
+      assert.equal(ids.filter((seen) => seen === id).length, 1,
+        `${label}: the section member ${id} has more than one canonical card`);
+      assert.equal([...gallery.matchAll(new RegExp(`href="[^"]*recipes/${id}/"`, 'g'))].length, 1,
+        `${label}: ${id} is linked from the gallery more than once`);
+    }
+    assert.equal([...gallery.matchAll(/class="card"/g)].length, TOTAL_RECORDS,
+      `${label}: the number of card elements is not the number of records`);
+  }
+});
+
+test('a collection section renders as a lens over the catalogue, not as a second list', () => {
   for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
     const r = run();
     const gallery = read(r, 'recipes/index.html');
-    const section = /<section class="mini-section"[\s\S]*?<\/section>/.exec(gallery);
-    assert.ok(section, `${label}: the gallery renders no mini-section`);
-    const html = section[0];
+    const lenses = [...gallery.matchAll(/<section class="lens"[\s\S]*?<\/section>/g)].map((m) => m[0]);
+    assert.equal(lenses.length, 1, `${label}: the gallery should render one lens per declared section`);
+    const html = lenses[0];
 
-    assert.ok(html.includes(`data-section="${QUICK_AIR_FRYER}"`), `${label}: the section carries no stable id`);
+    assert.ok(html.includes(`data-lens="${QUICK_AIR_FRYER}"`), `${label}: the lens carries no stable section id`);
     assert.ok(html.includes(`aria-labelledby="section-${QUICK_AIR_FRYER}"`),
-      `${label}: the section is not labelled by its own heading`);
-    assert.match(html, /<h2 id="section-quick-air-fryer"[^>]*>Quick Air-Fryer /, `${label}: wrong section heading`);
-    assert.match(html, /7 records/, `${label}: the section does not count its own members`);
+      `${label}: the lens is not labelled by its own heading`);
+    assert.match(html, /<h2 id="section-quick-air-fryer"[^>]*>Quick Air-Fryer /, `${label}: wrong lens heading`);
+    assert.match(html, /7 records/, `${label}: the lens does not count its own members`);
 
-    // Discovery: every member is reachable from the section, at this base path.
-    const links = [...html.matchAll(/class="mini-section__link" href="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(links, EXPECTED_PRACTICAL_IDS.map((id) => `${base}recipes/${id}/`),
-      `${label}: the section does not link its seven members in order at base "${base}"`);
-    for (const link of links) {
-      assert.ok(link.startsWith(base), `${label}: section link "${link}" is not under base "${base}"`);
-      assert.ok(existsSync(path.join(r.outDir, link.slice(base.length), 'index.html')),
-        `${label}: section link "${link}" has no page behind it`);
-    }
-
-    // It is a second view, not a second index: the members are still ordinary
-    // cards in the grid, so search and the region filter keep covering them.
+    // Compact by construction: context and one affordance, no member list and
+    // no per-member link.
+    assert.ok(!/<ul|<li/.test(html), `${label}: the lens renders a list of its members again`);
     for (const id of EXPECTED_PRACTICAL_IDS) {
-      assert.ok(gallery.includes(`data-item-id="${id}"`), `${label}: ${id} lost its card in the grid`);
+      assert.ok(!html.includes(`recipes/${id}/`), `${label}: the lens links ${id} outside the catalogue`);
     }
-    // And no other page grows one.
+
+    // The affordance is a real link into this page's own catalogue, carrying
+    // the section in the query, so it works before any script runs.
+    const links = [...html.matchAll(/<a class="lens__action" href="([^"]+)" data-lens-filter="([^"]+)"/g)];
+    assert.equal(links.length, 1, `${label}: the lens has no single affordance`);
+    const [href, target] = links[0].slice(1);
+    assert.equal(target, QUICK_AIR_FRYER, `${label}: the affordance names the wrong section`);
+    assert.equal(href, `${base}recipes/?section=${QUICK_AIR_FRYER}#catalogue`,
+      `${label}: the affordance does not point at this locale's catalogue under base "${base}"`);
+    assert.ok(gallery.includes('<form class="filters" id="catalogue"'),
+      `${label}: the catalogue has no fragment target for the affordance to reach`);
+    assert.ok(html.includes(`aria-describedby="section-${QUICK_AIR_FRYER}"`),
+      `${label}: the affordance is not described by its own lens heading`);
+
+    // The affordance targets exactly the section's seven members, through the
+    // membership facet on the cards rather than through anything in the copy.
+    const sections = cardSections(gallery);
+    const members = [...sections.entries()].filter(([, ids]) => ids.includes(target)).map(([id]) => id);
+    assert.deepEqual(members, EXPECTED_PRACTICAL_IDS,
+      `${label}: the cards the lens targets are not the seven section members, in order`);
+    for (const [id, ids] of sections) {
+      if (!EXPECTED_PRACTICAL_IDS.includes(id)) {
+        assert.deepEqual(ids, [], `${label}: ${id} claims a section it is not a member of`);
+      }
+    }
+
+    // No other page grows a lens.
     for (const page of ALL_PAGES.filter((p) => !p.endsWith('recipes/index.html'))) {
-      assert.ok(!read(r, page).includes('class="mini-section"'),
-        `${label}: ${page} should not carry the gallery's section`);
+      assert.ok(!read(r, page).includes('class="lens"'),
+        `${label}: ${page} should not carry the gallery's lens`);
     }
+  }
+});
+
+test('the lens mechanism is generic: no source file knows this section exists', () => {
+  // A collection section is a content decision. The templates, the script and
+  // the stylesheet may only know that sections exist at all.
+  for (const rel of [['src', 'templates', 'pages.mjs'], ['src', 'assets', 'app.js'],
+    ['src', 'assets', 'site.css'], ['src', 'i18n.mjs'], ['src', 'rules.mjs']]) {
+    const source = readFileSync(path.join(repoRoot, ...rel), 'utf8');
+    assert.ok(!source.includes(QUICK_AIR_FRYER), `${rel.join('/')} hard-codes the "${QUICK_AIR_FRYER}" section id`);
+    assert.doesNotMatch(source, /air.fryer/i, `${rel.join('/')} branches on air-fryer content`);
+  }
+  for (const [code, value] of Object.entries(JSON.parse(
+    readFileSync(path.join(repoRoot, 'content', 'locales', 'ui', 'en.json'), 'utf8')))) {
+    assert.doesNotMatch(`${code} ${value}`, /air.fryer/i, 'an interface string names one collection section');
+  }
+});
+
+test('the lens membership facet is exactly the validated manifest section', () => {
+  // The lens is a view of the manifest, not a parallel grouping: what the page
+  // marks on a card is what checkCollection() already validated.
+  const { collections } = loadContent();
+  const declared = new Map(collections[0].sections.map((s) => [s.section_id, s.item_ids]));
+  const gallery = read(rootBuild(), 'recipes/index.html');
+  const rendered = new Map();
+  for (const [id, sections] of cardSections(gallery)) {
+    for (const sectionId of sections) rendered.set(sectionId, [...(rendered.get(sectionId) ?? []), id]);
+  }
+  assert.deepEqual([...rendered.keys()], [...declared.keys()]);
+  for (const [sectionId, ids] of declared) {
+    assert.deepEqual(rendered.get(sectionId), ids, `section "${sectionId}": rendered membership drifted`);
   }
 });
 
@@ -662,7 +754,10 @@ test('every internal link in the root build resolves to a file that was actually
   for (const page of ALL_PAGES) {
     for (const link of linksIn(read(r, page))) {
       if (!link.startsWith('/')) continue;
-      const target = link.endsWith('/') ? `${link}index.html` : link;
+      // A lens affordance links to a route plus a query and a fragment; the
+      // file it resolves to is the route.
+      const route = routeOf(link);
+      const target = route.endsWith('/') ? `${route}index.html` : route;
       assert.ok(emitted.has(target), `${page}: link "${link}" has no file at "${target}"`);
     }
   }
@@ -671,7 +766,7 @@ test('every internal link in the root build resolves to a file that was actually
 test('the gallery exposes the search, filter, and empty-state hooks the script binds to', () => {
   const html = read(rootBuild(), 'recipes/index.html');
   for (const hook of ['data-filters', 'data-search', 'data-region', 'data-status',
-    'data-reset', 'data-grid', 'data-empty', 'data-reset-inline']) {
+    'data-reset', 'data-grid', 'data-empty', 'data-reset-inline', 'data-lens-filter', 'data-sections']) {
     assert.ok(html.includes(hook), `gallery is missing the "${hook}" hook`);
   }
   assert.match(html, /<p class="filters__status" aria-live="polite"/);
@@ -687,7 +782,7 @@ test('the gallery exposes the search, filter, and empty-state hooks the script b
 
   const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
   for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
-    '[data-reset]', '[data-grid]', '[data-empty]', '[data-reset-inline]']) {
+    '[data-reset]', '[data-grid]', '[data-empty]', '[data-reset-inline]', '[data-lens-filter]']) {
     assert.ok(app.includes(hook), `app.js never queries "${hook}"`);
   }
 });

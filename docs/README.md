@@ -14,6 +14,17 @@ they mean this project's framework layer, never Atom-KB's.
 
 Start with the project [README](../README.md) for commands and layout.
 
+## Ownership and stewardship
+
+**Atom is the project owner of Library of the Citadel.** Atom owns its product
+direction, curation, information architecture, and maintenance judgment. The
+Library is being built as a small shared library for 小Z and Atom.
+
+This project ownership does not imply ownership of 小Z's underlying personal
+data, identity, copyrights, or external accounts. Record-level provenance,
+third-party rights, and project IP attribution remain explicit and travel with
+the relevant content and artifacts.
+
 Three conventions run through these documents:
 
 1. **Content is portable.** A record under `content/` is readable and usable

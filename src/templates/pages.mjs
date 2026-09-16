@@ -25,6 +25,14 @@ const code = (value) => `<code>${esc(value)}</code>`;
 
 const itemPath = (item) => `recipes/${item.item_id}/`;
 
+/**
+ * The gallery's one canonical catalogue: the filter controls and the grid of
+ * record cards beneath them. A curated lens links here with its own section in
+ * the query, so the affordance is a real link before any script runs.
+ */
+const CATALOGUE_ID = 'catalogue';
+const SECTION_PARAM = 'section';
+
 const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
 
 function head(cfg, L, { title, description }) {
@@ -203,6 +211,7 @@ ${chrome(cfg, L, { nav: '', route: '' })}
   <section class="reading-room" aria-labelledby="reading-room-title">
     <h2 id="reading-room-title" class="section-title">${esc(L.t('hall.what_title'))}</h2>
     <p>${esc(L.t('hall.what_body', { siteName: cfg.siteName }))}</p>
+    <p class="reading-room__shared">${esc(L.t('hall.shared_note'))}</p>
     <p><a class="text-link" href="${L.path('about/')}">${esc(L.t('hall.what_link'))}</a></p>
   </section>
 </main>
@@ -211,7 +220,7 @@ ${foot(cfg, L)}`;
 
 // ------------------------------------------------------------- gallery
 
-function card(L, entry) {
+function card(L, entry, sectionIds = []) {
   const item = entry.record;
   const en = entry.english;
   // The haystack carries the localized text and the English original, so a
@@ -221,7 +230,11 @@ function card(L, entry) {
     en.name.primary, ...(en.name.alt ?? []), en.region.label, en.region.cuisine_label, en.summary,
     ...(item.tags ?? []), ...item.variants.map((v) => v.label), ...en.variants.map((v) => v.label),
   ];
-  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}" data-haystack="${esc([...new Set(terms)].join(' ').toLowerCase())}">
+  // Section membership rides on the card as a machine facet, keyed by
+  // section_id. That is what a lens filters on, so the lens mechanism is data
+  // driven and works for any section the manifest declares.
+  const sections = sectionIds.length ? ` data-sections="${esc(sectionIds.join(' '))}"` : '';
+  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}"${sections} data-haystack="${esc([...new Set(terms)].join(' ').toLowerCase())}">
   <a class="card__link" href="${L.path(itemPath(item))}">
     <span class="card__marks">
       <span class="card__region">${esc(item.region.label)}</span>
@@ -240,25 +253,45 @@ function card(L, entry) {
 }
 
 /**
- * An editorial section: a titled, introduced group of records the collection
- * already holds. It is discovery, not a second index — every record in it is
- * also a normal card in the grid below, so the search and the region filter
- * keep working over the whole collection untouched.
+ * Which sections of the collection each record belongs to, keyed by item_id.
+ * The rules refuse a record claimed by two sections, but the facet is a list so
+ * the presentation does not depend on that rule holding.
  */
-function miniSections(L, view) {
+function sectionsByItem(collection) {
+  const map = new Map();
+  for (const section of collection.sections ?? []) {
+    for (const id of section.item_ids) {
+      map.set(id, [...(map.get(id) ?? []), section.section_id]);
+    }
+  }
+  return map;
+}
+
+/**
+ * The collection's curated lenses: a compact heading, its count, the short
+ * context the manifest gives it, and one affordance that narrows the catalogue
+ * below to that section's records.
+ *
+ * A lens never renders its members a second time. Every record has exactly one
+ * card, in the one canonical catalogue, so the search and the region filter
+ * keep covering the whole collection and a reader with scripting disabled still
+ * sees every record and every link. The affordance is a real link carrying
+ * `?section=` and the catalogue's fragment, so it works from the keyboard and
+ * can be shared; the script turns that link into an in-page filter.
+ */
+function collectionLenses(L, view) {
   const sections = view.collection.record.sections ?? [];
   if (sections.length === 0) return '';
-  const byId = new Map(view.entries.map((e) => [e.record.item_id, e.record]));
+  const held = new Set(view.entries.map((e) => e.record.item_id));
 
   return sections.map((section) => {
-    const members = section.item_ids.map((id) => byId.get(id)).filter(Boolean);
+    const count = section.item_ids.filter((id) => held.has(id)).length;
     const headingId = `section-${section.section_id}`;
-    return `  <section class="mini-section" aria-labelledby="${esc(headingId)}" data-section="${esc(section.section_id)}">
-    <h2 id="${esc(headingId)}" class="mini-section__title">${esc(section.title)} <span class="mini-section__count">${esc(plural(L, 'section.count', members.length))}</span></h2>
-    <p class="mini-section__intro">${esc(section.intro)}</p>
-    <ul class="mini-section__list">
-${members.map((item) => `      <li><a class="mini-section__link" href="${L.path(itemPath(item))}"><span class="mini-section__name">${esc(item.name.primary)}</span><span class="mini-section__note">${esc(item.region.cuisine_label)}</span></a></li>`).join('\n')}
-    </ul>
+    const href = `${L.path('recipes/')}?${SECTION_PARAM}=${encodeURIComponent(section.section_id)}#${CATALOGUE_ID}`;
+    return `  <section class="lens" aria-labelledby="${esc(headingId)}" data-lens="${esc(section.section_id)}">
+    <h2 id="${esc(headingId)}" class="lens__title">${esc(section.title)} <span class="lens__count">${esc(plural(L, 'section.count', count))}</span></h2>
+    <p class="lens__intro">${esc(section.intro)}</p>
+    <p class="lens__actions"><a class="lens__action" href="${esc(href)}" data-lens-filter="${esc(section.section_id)}" aria-describedby="${esc(headingId)}">${esc(L.t('section.action', { count }))}</a></p>
   </section>`;
   }).join('\n');
 }
@@ -266,6 +299,7 @@ ${members.map((item) => `      <li><a class="mini-section__link" href="${L.path(
 export function galleryPage(cfg, L, view, { regions }) {
   const collection = view.collection.record;
   const total = view.entries.length;
+  const sections = sectionsByItem(collection);
   return `${head(cfg, L, { title: collection.title.primary, description: collection.description })}
 <body class="page page--gallery">
 ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
@@ -279,9 +313,9 @@ ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
   ${noticeBanner(L, collection.record_notice)}
   ${translationNotice(L, view.collection.state)}
 
-${miniSections(L, view)}
+${collectionLenses(L, view)}
 
-  <form class="filters" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
+  <form class="filters" id="${CATALOGUE_ID}" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
     data-status-all="${esc(L.t.raw('gallery.status_all'))}"
     data-status-some="${esc(L.t.raw('gallery.status_some'))}"
     data-status-none="${esc(L.t.raw('gallery.status_none'))}">
@@ -301,7 +335,7 @@ ${regions.map((r) => `        <option value="${esc(r.value)}">${esc(r.label)}</o
   </form>
 
   <ul class="card-grid" data-grid>
-${view.entries.map((entry) => card(L, entry)).join('\n')}
+${view.entries.map((entry) => card(L, entry, sections.get(entry.record.item_id) ?? [])).join('\n')}
   </ul>
 
   <div class="empty-state" data-empty hidden>

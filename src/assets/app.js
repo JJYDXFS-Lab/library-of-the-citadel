@@ -1,6 +1,7 @@
-// Gallery search/region filter, and the language switch. Progressive
+// Gallery search/region/section filter, and the language switch. Progressive
 // enhancement only: with this script absent, every card is still rendered,
-// every link still resolves, and the language switch is still two real links.
+// every link still resolves, the collection lenses are still real links to the
+// catalogue, and the language switch is still two real links.
 (function () {
   'use strict';
 
@@ -95,6 +96,25 @@
   var empty = document.querySelector('[data-empty]');
   var cards = Array.prototype.slice.call(grid.querySelectorAll('.card'));
 
+  // Curated lenses. Each affordance names the section_id it narrows to; the
+  // cards carry their own membership. Nothing here knows which sections the
+  // collection happens to declare.
+  var lensLinks = Array.prototype.slice.call(document.querySelectorAll('[data-lens-filter]'));
+  var lensIds = lensLinks.map(function (link) { return link.getAttribute('data-lens-filter'); });
+  var section = '';
+
+  function memberOf(card, id) {
+    var own = (card.getAttribute('data-sections') || '').split(/\s+/);
+    return own.indexOf(id) !== -1;
+  }
+
+  function markLenses() {
+    lensLinks.forEach(function (link) {
+      if (link.getAttribute('data-lens-filter') === section) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
   // Status templates come from the page, so their language matches the page's.
   var STATUS_ALL = form.getAttribute('data-status-all');
   var STATUS_SOME = form.getAttribute('data-status-some');
@@ -107,12 +127,17 @@
     search.value = params.get('q') || '';
     region.value = params.get('region') || '';
     if (region.selectedIndex < 0) region.value = '';
+    // A section this page does not offer is dropped, the same way a region that
+    // is not an option is, rather than silently hiding every card.
+    section = params.get('section') || '';
+    if (lensIds.indexOf(section) === -1) section = '';
   }
 
   function writeUrl() {
     var params = new URLSearchParams();
     if (search.value.trim()) params.set('q', search.value.trim());
     if (region.value) params.set('region', region.value);
+    if (section) params.set('section', section);
     var qs = params.toString();
     // The fragment is not ours to drop: it may be a skip-link target or an
     // in-page anchor the reader arrived on, and losing it on the first
@@ -131,12 +156,14 @@
     cards.forEach(function (card) {
       var matchesQuery = !q || card.getAttribute('data-haystack').indexOf(q) !== -1;
       var matchesRegion = !r || card.getAttribute('data-region') === r;
-      var visible = matchesQuery && matchesRegion;
+      var matchesSection = !section || memberOf(card, section);
+      var visible = matchesQuery && matchesRegion && matchesSection;
       card.hidden = !visible;
       if (visible) shown += 1;
     });
 
-    var filtering = Boolean(q || r);
+    markLenses();
+    var filtering = Boolean(q || r || section);
     empty.hidden = shown !== 0;
     grid.hidden = shown === 0;
     reset.hidden = !filtering;
@@ -155,6 +182,7 @@
   function clearAll() {
     search.value = '';
     region.value = '';
+    section = '';
     apply();
     search.focus();
   }
@@ -163,6 +191,20 @@
   search.addEventListener('input', apply);
   region.addEventListener('change', apply);
   reset.addEventListener('click', clearAll);
+
+  // The lens link already points at this page with its section in the query, so
+  // it works with no script at all. With the script, the same activation is
+  // handled in place: the catalogue narrows, the query is rewritten, and the
+  // live status line announces the new count. The reset control clears it along
+  // with the other two filters.
+  lensLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      section = link.getAttribute('data-lens-filter');
+      apply();
+      if (typeof form.scrollIntoView === 'function') form.scrollIntoView();
+    });
+  });
 
   var inlineReset = document.querySelector('[data-reset-inline]');
   if (inlineReset) inlineReset.addEventListener('click', clearAll);

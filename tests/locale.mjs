@@ -591,7 +591,10 @@ test('every zh link stays inside the zh page set, and every link resolves to a f
     for (const link of [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1])) {
       if (!link.startsWith('/')) continue;
       if (link.startsWith('/assets/')) continue;
-      const target = link.endsWith('/') ? `${link}index.html` : link;
+      // A lens affordance carries a query and a fragment; the file it resolves
+      // to is the route in front of them.
+      const route = link.split('#')[0].split('?')[0];
+      const target = route.endsWith('/') ? `${route}index.html` : route;
       assert.ok(emitted.has(target), `${rel}: link "${link}" has no file at "${target}"`);
       // The one link that legitimately leaves the zh tree is the switch back to
       // English; everything else must stay under /zh/.
@@ -792,42 +795,75 @@ test('the section is translated heading and intro only — membership never move
   assert.deepEqual(baseCollection(), collection, 'localizing the collection mutated the base manifest');
 });
 
-test('each locale gallery renders its own section heading, intro, and local links', () => {
+/** The cards of a gallery page, keyed by item_id, in document order. */
+function cardsOf(html) {
+  const map = new Map();
+  for (const block of html.match(/<li class="card"[\s\S]*?<\/li>/g) ?? []) {
+    map.set(/data-item-id="([^"]+)"/.exec(block)[1], block);
+  }
+  return map;
+}
+
+test('each locale gallery renders its own lens heading, context, and affordance', () => {
   const r = localeBuild();
   const en_ = baseCollection().sections[0];
   const zh_ = loadOverlay('collections', 'zh', 'world-recipes').sections[QUICK_AIR_FRYER];
   const expected = { en: en_, zh: zh_ };
+  const labels = {};
 
   for (const loc of LOCALES) {
     const gallery = read(r, `${loc.prefix}recipes/index.html`);
-    const section = /<section class="mini-section"[\s\S]*?<\/section>/.exec(gallery);
-    assert.ok(section, `${loc.code}: the gallery renders no mini-section`);
-    const html = section[0];
+    const lenses = [...gallery.matchAll(/<section class="lens"[\s\S]*?<\/section>/g)].map((m) => m[0]);
+    assert.equal(lenses.length, 1, `${loc.code}: the gallery should render one lens per declared section`);
+    const html = lenses[0];
 
-    assert.ok(html.includes(esc(expected[loc.code].title)), `${loc.code}: wrong section title`);
-    assert.ok(html.includes(esc(expected[loc.code].intro)), `${loc.code}: wrong section intro`);
+    assert.ok(html.includes(esc(expected[loc.code].title)), `${loc.code}: wrong lens title`);
+    assert.ok(html.includes(esc(expected[loc.code].intro)), `${loc.code}: wrong lens context`);
     const foreign = loc.code === 'en' ? zh_ : en_;
     assert.ok(!html.includes(esc(foreign.intro)), `${loc.code}: the other locale's section intro leaked in`);
 
-    // Links stay inside this locale's page set and point at real pages.
-    const links = [...html.matchAll(/class="mini-section__link" href="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(links, EXPECTED_PRACTICAL_IDS.map((id) => `/${loc.prefix}recipes/${id}/`),
-      `${loc.code}: the section does not link its seven members inside its own page set`);
-    for (const link of links) {
-      assert.ok(existsSync(path.join(r.outDir, `${link.slice(1)}index.html`)),
-        `${loc.code}: section link "${link}" has no page behind it`);
-    }
+    // The affordance points at this locale's own catalogue, carries the
+    // untranslated section_id, and is labelled in this locale's language.
+    const action = /<a class="lens__action" href="([^"]+)" data-lens-filter="([^"]+)"[^>]*>([^<]*)<\/a>/.exec(html);
+    assert.ok(action, `${loc.code}: the lens has no affordance`);
+    const [href, target, label] = action.slice(1);
+    assert.equal(target, QUICK_AIR_FRYER, 'a section_id must never be translated');
+    assert.equal(href, `/${loc.prefix}recipes/?section=${QUICK_AIR_FRYER}#catalogue`,
+      `${loc.code}: the affordance leaves this locale's page set`);
+    assert.ok(existsSync(path.join(r.outDir, `${loc.prefix}recipes/index.html`)),
+      `${loc.code}: the affordance has no page behind it`);
+    assert.ok(gallery.includes('<form class="filters" id="catalogue"'),
+      `${loc.code}: the catalogue has no fragment target`);
+    labels[loc.code] = label;
 
-    // The member names in the section are this locale's names.
-    const names = [...html.matchAll(/class="mini-section__name">([^<]*)</g)].map((m) => m[1]);
-    const expectedNames = EXPECTED_PRACTICAL_IDS.map((id) => (loc.code === 'en'
-      ? baseItem(id).name.primary
-      : loadOverlay('items', 'zh', id).name.primary));
-    assert.deepEqual(names, expectedNames.map((n) => esc(n)), `${loc.code}: section member names are not localized`);
+    // The lens never lists its members: they exist once each, as cards.
+    const cards = cardsOf(gallery);
+    for (const id of EXPECTED_PRACTICAL_IDS) {
+      assert.ok(!html.includes(id), `${loc.code}: the lens names ${id} instead of leaving it to the catalogue`);
+      assert.ok(cards.has(id), `${loc.code}: ${id} lost its canonical card`);
+      assert.equal([...gallery.matchAll(new RegExp(`data-item-id="${id}"`, 'g'))].length, 1,
+        `${loc.code}: ${id} is rendered as more than one card`);
+    }
+    assert.equal(cards.size, EXPECTED_ITEM_IDS.length, `${loc.code}: the catalogue is not one card per record`);
+
+    // Membership is marked on the cards, so the affordance targets all seven
+    // members in this locale without depending on one word of the copy.
+    const targeted = [...cards.entries()]
+      .filter(([, block]) => (/data-sections="([^"]*)"/.exec(block)?.[1] ?? '').split(' ').includes(target))
+      .map(([id]) => id);
+    assert.deepEqual(targeted, EXPECTED_PRACTICAL_IDS,
+      `${loc.code}: the affordance does not target exactly the seven section members`);
   }
+
+  // The label is interface text, so each locale carries its own.
+  assert.notEqual(labels.zh, labels.en, 'the zh lens affordance was never translated');
+  assert.match(labels.zh, HAN, 'the zh lens affordance still reads as English');
+  assert.doesNotMatch(labels.zh, /[A-Za-z]/, 'the zh lens affordance still carries English words');
+  assert.match(labels.en, /7/, 'the en lens affordance does not say how many records it shows');
+  assert.match(labels.zh, /7/, 'the zh lens affordance does not say how many records it shows');
 });
 
-test('the zh section surfaces the vegetarian options the way the English one does', () => {
+test('the catalogue surfaces the vegetarian options in both locales', () => {
   const r = localeBuild();
   const VEGETARIAN = [
     'wr-airfryer-crispy-tofu',
@@ -836,18 +872,21 @@ test('the zh section surfaces the vegetarian options the way the English one doe
     'wr-airfryer-bean-cheese-quesadilla',
     'wr-airfryer-frozen-veg-dumplings',
   ];
-  const notes = ((html) => [...html.matchAll(/class="mini-section__note">([^<]*)</g)].map((m) => m[1]));
+  const enCards = cardsOf(read(r, 'recipes/index.html'));
+  const zhCards = cardsOf(read(r, 'zh/recipes/index.html'));
+  // The cuisine facet the card shows, which is the one a reader skims by.
+  const cuisineOf = (block) => {
+    const label = /<span class="card__meta">\s*<span>([^<]*)<\/span>/.exec(block);
+    assert.ok(label, 'a card shows no cuisine label');
+    return label[1];
+  };
 
-  const enNotes = notes(read(r, 'recipes/index.html'));
-  const zhNotes = notes(read(r, 'zh/recipes/index.html'));
-  assert.equal(enNotes.length, 7);
-  assert.equal(zhNotes.length, 7);
-
-  EXPECTED_PRACTICAL_IDS.forEach((id, i) => {
+  for (const id of EXPECTED_PRACTICAL_IDS) {
     const vegetarian = VEGETARIAN.includes(id);
-    assert.equal(/vegetarian/i.test(enNotes[i]), vegetarian, `en: ${id} is labelled wrongly`);
-    assert.equal(/素/.test(zhNotes[i]), vegetarian, `zh: ${id} is labelled wrongly`);
-  });
+    assert.equal(/vegetarian/i.test(cuisineOf(enCards.get(id))), vegetarian,
+      `en: ${id} is labelled wrongly on its card`);
+    assert.equal(/素/.test(cuisineOf(zhCards.get(id))), vegetarian, `zh: ${id} is labelled wrongly on its card`);
+  }
 });
 
 // ================================================ the browser-side switch
@@ -869,6 +908,8 @@ class El {
   }
 
   setAttribute(name, value) { this.attrs[name] = String(value); }
+
+  removeAttribute(name) { delete this.attrs[name]; }
 
   addEventListener(type, fn) {
     if (!this.listeners.has(type)) this.listeners.set(type, []);
@@ -928,10 +969,11 @@ class Select extends El {
  * @param {'ok'|'refused'|'absent'|'unreadable'} opts.storage
  * @param {string|null} opts.stored persisted language preference
  * @param {boolean}   opts.filters  render the gallery filter controls
+ * @param {boolean}   opts.lens     render a curated lens over two of the cards
  */
 function runApp({
   locale = 'en', base = '/', route = 'recipes/', search = '', hash = '',
-  storage = 'ok', stored = null, filters = true, switchBox = true,
+  storage = 'ok', stored = null, filters = true, switchBox = true, lens = true,
 } = {}) {
   const key = LOCALE_STORAGE_KEY;
   const links = LOCALES.map((loc) => new El({
@@ -955,17 +997,31 @@ function runApp({
     'data-status-some': 'Showing {shown} of {total} records.',
     'data-status-none': 'No records match.',
   }, [searchInput, region, status, reset]);
+  // Two of the three cards belong to a section, so a lens can be distinguished
+  // from "everything" and from a single record.
   const cards = [
-    new El({ class: 'card', 'data-haystack': 'griddle flatbread west asia', 'data-region': 'West Asia' }),
+    new El({
+      class: 'card', 'data-haystack': 'griddle flatbread west asia', 'data-region': 'West Asia',
+      'data-sections': 'quick-things',
+    }),
     new El({ class: 'card', 'data-haystack': 'rice porridge east asia', 'data-region': 'East Asia' }),
-    new El({ class: 'card', 'data-haystack': 'simmered bean soup mediterranean', 'data-region': 'Mediterranean' }),
+    new El({
+      class: 'card', 'data-haystack': 'simmered bean soup mediterranean', 'data-region': 'Mediterranean',
+      'data-sections': 'quick-things',
+    }),
   ];
   const grid = new El({ 'data-grid': '' }, cards);
   const empty = new El({ 'data-empty': '' });
   const inlineReset = new El({ 'data-reset-inline': '' });
+  const lensLink = new El({
+    class: 'lens__action',
+    'data-lens-filter': 'quick-things',
+    href: `${base}${locale === 'en' ? '' : 'zh/'}recipes/?section=quick-things#catalogue`,
+  });
 
   const root = new El({}, [
     ...(switchBox ? [box] : []),
+    ...(lens ? [lensLink] : []),
     ...(filters ? [form, grid, empty, inlineReset] : []),
   ]);
 
@@ -1027,7 +1083,8 @@ function runApp({
   const linkFor = (code) => links.find((l) => l.getAttribute('data-locale-code') === code);
   return {
     links, linkFor, box, form, search: searchInput, region, status, reset, grid, empty,
-    inlineReset, cards, store, location, replaced, pushed,
+    inlineReset, cards, store, location, replaced, pushed, lensLink,
+    shown: () => cards.filter((c) => !c.hidden).length,
     href: (code) => linkFor(code).getAttribute('href'),
     type(value) { searchInput.value = value; searchInput.fire('input'); },
     pick(value) { region.value = value; region.fire('change'); },
@@ -1183,4 +1240,51 @@ test('the filter reads the URL on load, and drops a region that is not on offer'
   assert.equal(all.status.textContent, 'Showing all 3 records.');
   assert.equal(all.reset.hidden, true);
   assert.equal(all.empty.hidden, true);
+});
+
+test('a lens narrows the one catalogue instead of navigating to a second one', () => {
+  const page = runApp({ locale: 'en' });
+  assert.equal(page.shown(), 3);
+  assert.equal(page.lensLink.getAttribute('aria-current'), null, 'no lens is active on an unfiltered view');
+
+  const click = page.lensLink.fire('click');
+  assert.equal(click.defaultPrevented, true, 'the lens should filter in place rather than reload the page');
+  assert.equal(page.shown(), 2, 'the lens does not show exactly its own members');
+  assert.equal(page.cards[1].hidden, true, 'a record outside the section stayed visible');
+  assert.equal(page.location.search, '?section=quick-things', 'the lens state is not in the query string');
+  assert.equal(page.status.textContent, 'Showing 2 of 3 records.');
+  assert.equal(page.reset.hidden, false, 'a lens is a filter, so the reset control must be offered');
+  assert.equal(page.lensLink.getAttribute('aria-current'), 'true', 'the active lens is not marked');
+
+  // It composes with the other two filters rather than replacing them.
+  page.type('bean');
+  assert.equal(page.shown(), 1);
+  assert.equal(page.location.search, '?q=bean&section=quick-things');
+  page.pick('East Asia');
+  assert.equal(page.shown(), 0, 'the three filters must intersect');
+  assert.equal(page.empty.hidden, false);
+
+  page.reset.fire('click');
+  assert.equal(page.shown(), 3, 'reset must clear the lens along with the search and the region');
+  assert.equal(page.location.search, '');
+  assert.equal(page.lensLink.getAttribute('aria-current'), null, 'the cleared lens is still marked active');
+});
+
+test('a shared lens URL restores the view, and an unknown section is dropped', () => {
+  const shared = runApp({ locale: 'zh', search: '?section=quick-things' });
+  assert.equal(shared.shown(), 2, 'a shared lens link does not restore its view on load');
+  assert.equal(shared.status.textContent, 'Showing 2 of 3 records.');
+  assert.equal(shared.lensLink.getAttribute('aria-current'), 'true');
+  // The lens travels with a language switch, the same way q and region do.
+  assert.equal(shared.href('en'), '/recipes/?section=quick-things');
+
+  const bogus = runApp({ locale: 'en', search: '?section=no-such-section' });
+  assert.equal(bogus.shown(), 3, 'an unknown section must not hide every record');
+  assert.equal(bogus.location.search, '', 'the unknown section must be dropped from the URL');
+  assert.equal(bogus.lensLink.getAttribute('aria-current'), null);
+
+  // A gallery with no lens at all still filters, and ignores a section query.
+  const none = runApp({ locale: 'en', lens: false, search: '?section=quick-things&q=rice' });
+  assert.equal(none.shown(), 1);
+  assert.equal(none.location.search, '?q=rice');
 });

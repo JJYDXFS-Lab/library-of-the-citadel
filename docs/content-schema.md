@@ -37,7 +37,13 @@ each entry has a stable `section_id`, a `title`, an `intro`, and its own
 `item_ids`. A section is a presentation and discovery facet, never a second
 membership list — every member is still a full member of the collection and
 still an ordinary card in the gallery grid, and the manifest reads correctly
-with `sections` ignored entirely. `src/rules.mjs` requires every section member
+with `sections` ignored entirely. The gallery renders a section as a *curated
+lens*: its title, its count, its `intro`, and one affordance that narrows the
+single catalogue to that section's records. It never lists the members a second
+time, so each record has exactly one card on the page. Membership reaches the
+browser as a `data-sections` facet on each card, keyed by `section_id`, and the
+affordance is a real link carrying `?section=<section_id>` — so the lens is
+shareable, keyboard-operable, and inert rather than broken without scripting. `src/rules.mjs` requires every section member
 to be listed in `item_ids`, rejects a duplicate `section_id`, rejects a record
 listed twice inside one section, and refuses a record claimed by two sections.
 This build declares one section, `quick-air-fryer`, holding the seven practical

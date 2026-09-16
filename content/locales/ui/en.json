@@ -17,6 +17,7 @@
 
   "section.count.one": "{count} record",
   "section.count.other": "{count} records",
+  "section.action": "Show these {count} in the catalogue",
 
   "page.title.hall": "Hall",
   "page.title.about": "About this build",
@@ -31,6 +32,7 @@
   "hall.what_title": "What this build is",
   "hall.what_body": "{siteName} is an independent, statically built Library framework: a hall, a collection gallery with search and a region filter, and one generated page per record. There is no backend and no runtime server requirement for browsing the deployed output.",
   "hall.what_link": "Read the full build notes →",
+  "hall.shared_note": "It is kept as a shared library rather than a publication: two people add to it slowly, and each record stays labelled with what it is and where it came from, so it is still legible to anyone else who opens it.",
 
   "gallery.filters_label": "Filter recipes",
   "gallery.search_label": "Search",
@@ -45,7 +47,7 @@
   "gallery.empty_body": "This collection holds only {total} records, so most searches will come up empty. That is the collection being small, not the search being broken.",
   "gallery.empty_hint": "Try clearing the region filter, searching a shorter word, or {reset}.",
   "gallery.reset_both": "reset both filters",
-  "gallery.noscript": "Search and filtering need JavaScript. Every record below is still reachable as its own page, and every link on this site works with scripting disabled.",
+  "gallery.noscript": "Search, filtering, and the collection lenses need JavaScript. Without it the catalogue below simply lists every record in the collection, each one still reachable as its own page, and every link on this site works with scripting disabled.",
 
   "card.fixture": "fixture",
   "card.sourced": "sourced",

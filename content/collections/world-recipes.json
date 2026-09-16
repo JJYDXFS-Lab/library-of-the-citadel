@@ -32,7 +32,7 @@
     {
       "section_id": "quick-air-fryer",
       "title": "Quick Air-Fryer",
-      "intro": "Seven original practical notes for one small air fryer and an ordinary supermarket shop: a vegetarian protein, chicken, fish, vegetables, wedges, a tortilla snack, and a bag from the freezer aisle. Most run 10 to 25 minutes from bench to plate — the wedges are the one that does not, and the record says so plainly. Every note gives a temperature in Celsius, a time, the single check that actually decides when the food is done, and a substitution or a cleanup tip. None of them has been cooked in a test kitchen or reviewed by a food-safety professional, and none of them cites a source, because none of them is claiming one.",
+      "intro": "Seven original practical notes for one small air fryer and an ordinary supermarket shop, five of them vegetarian. Each gives a temperature in Celsius, a time, and the single check that actually decides when the food is done. None has been cooked in a test kitchen or reviewed by a food-safety professional, and none cites a source, because none is claiming one.",
       "item_ids": [
         "wr-airfryer-crispy-tofu",
         "wr-airfryer-chicken-thigh-bites",
@@ -45,8 +45,14 @@
     }
   ],
   "reviewed_at": "2026-09-16",
-  "record_version": "1.3.0",
+  "record_version": "1.4.0",
   "change_history": [
+    {
+      "version": "1.4.0",
+      "date": "2026-09-16",
+      "change": "Shortened the Quick Air-Fryer section introduction to the context a reader needs at a glance, dropping the dish-by-dish enumeration and the timing generalization while keeping every disclaimer. The section is now presented as a lens over the single catalogue rather than as a second list of its members. Membership, order, record classes, sources, and rights are unchanged.",
+      "supersedes": "1.3.0"
+    },
     {
       "version": "1.3.0",
       "date": "2026-09-16",

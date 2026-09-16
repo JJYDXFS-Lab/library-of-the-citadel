@@ -105,7 +105,9 @@ it is a source constant, not a configuration key.
   says so. The script binds to `data-*` hooks, never to presentational classes.
 - **Filter state lives in the query string** via `replaceState`, so a filtered
   view can be shared and survives reload without one history entry per
-  keystroke.
+  keystroke. The search, the region and the curated lens are three filters over
+  one catalogue; `?section=` names a lens, an unknown value is dropped the same
+  way an unknown region is, and the single reset clears all three.
 - **Nothing is fetched.** The "hall" look is gradients, rules, and type; there
   are no web fonts, images, or third-party scripts.
 - **Responsive and accessible by construction:** a skip link on every page, one
@@ -120,8 +122,9 @@ it is a source constant, not a configuration key.
 official display name on every generated page, content
 integrity and the sixteen-record, three-class census (six sourced, seven
 original practical notes, three fixtures), the honesty rules for each class
-under tampering — including the practical-note gate and the section rules — the
-Quick Air-Fryer mini-section and its local links at both base paths,
+under tampering — including the practical-note gate and the section rules — one
+canonical card per record in the catalogue, the curated-lens rendering of a
+collection section and its affordance at both base paths,
 base-path normalization, the output-directory guard, both the root and subpath
 builds, generated link/base-path correctness, detail prev/next navigation, the
 search/filter/empty-state hooks, build stability, and the exclusion of run
@@ -130,8 +133,8 @@ receipts, secrets, and local paths from the output.
 `tests/locale.mjs` covers the localization layer on the same terms: dictionary
 parity and its fail-closed behavior, overlay fallback and the `none`/`partial`/
 `complete` states, the per-locale page sets and data files, the switch targets
-on every route, the translated section heading and intro against untranslated
-section membership, EN/ZH numeric parity for the sourced records and the
+on every route, the translated lens heading, context and affordance label
+against untranslated section membership, the browser-side lens filter, EN/ZH numeric parity for the sourced records and the
 practical notes alike, the Celsius-only and 75°C poultry wording in both
 languages, and — by running `src/assets/app.js` in a `node:vm` context
 against a hand-built DOM — the browser-side switch under refused, unreadable,
