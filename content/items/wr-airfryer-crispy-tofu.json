@@ -1,0 +1,76 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-crispy-tofu",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+
+  "name": {
+    "primary": "Crispy Air-Fryer Tofu",
+    "alt": ["Crispy Tofu (vegetarian)", "空气炸锅脆皮豆腐"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer tofu — vegetarian",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vegetarian. Firm tofu, cubed and dusted with cornflour, cooked until the outside is dry and crisp while the middle stays soft. About 20 minutes end to end, and the washing-up is one bowl and the basket.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Firm or extra-firm tofu, drained", "quantity": "400 g block", "note": "Silken tofu collapses here. Firm or extra-firm is the one to buy." },
+    { "item": "Cornflour", "quantity": "1 tablespoon", "note": "Plain flour works and gives a softer crust; rice flour crisps hardest." },
+    { "item": "Neutral oil", "quantity": "1 tablespoon" },
+    { "item": "Soy sauce", "quantity": "1 tablespoon", "note": "Contains soy, and wheat unless the bottle says gluten free." },
+    { "item": "Garlic powder, smoked paprika or five-spice", "quantity": "1 teaspoon", "note": "Whichever jar is already in the cupboard; the method does not change." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Pat the tofu dry with a clean tea towel, cut it into cubes of about 2 cm, and toss it in a bowl with the soy sauce first, then the oil, then the cornflour and spice, in that order so the coating sticks instead of clumping." },
+    { "step": 2, "instruction": "Set the air fryer to 200°C. Preheat only if your appliance manual tells you to; many models do not need it." },
+    { "step": 3, "instruction": "Spread the cubes in the basket in a single layer with a little space around each one. Baskets differ in size, so if yours is full, cook in two batches rather than piling the tofu up." },
+    { "step": 4, "instruction": "Cook for 12 to 14 minutes, shaking the basket once at about 7 minutes. It is ready when the edges are dry, firm and golden. Tofu is sold ready to eat, so this is a texture judgement rather than a safety one." },
+    { "step": 5, "instruction": "Let the basket cool for a few minutes before washing it. Cornflour lifts off with a soapy sponge once the metal has stopped being hot; scrubbing it straight away only smears the starch around." }
+  ],
+
+  "yield_note": "Two servings as a main with rice, or four as a side. Preparation and cooking together take about 20 minutes.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Tofu is sold ready to eat, so there is no temperature to cook it to. Keep an opened block in the fridge and use it within the time printed on the packet.",
+      "The basket and the drawer stay hot for several minutes after the machine stops, and the air leaving them is hotter than an oven's. Set them down on a heatproof surface.",
+      "Allergens: soy in the tofu and in the soy sauce, plus wheat in most soy sauce. Your own bottle is the authority.",
+      "These are practical notes, not tested or safety-reviewed. This project has not cooked this recipe, and the timings are a starting point for your own machine rather than a verified result."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["tofu", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
+}

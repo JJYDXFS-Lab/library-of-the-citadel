@@ -1,0 +1,76 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-broccoli-mixed-veg",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+
+  "name": {
+    "primary": "Air-Fryer Broccoli and Mixed Vegetables",
+    "alt": ["Mixed Vegetables (vegetarian)", "空气炸锅西兰花杂蔬"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer vegetables — vegetarian",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vegetarian. Broccoli florets and whatever else is left in the crisper drawer, cooked hot enough to brown at the edges instead of going soft and grey. Under 15 minutes, and one bowl to wash.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Broccoli, cut into small florets", "quantity": "300 g, about one head", "note": "Frozen florets work: add 3 minutes and do not thaw them first." },
+    { "item": "Capsicum, red onion or zucchini, cut into 2 cm pieces", "quantity": "200 g in total", "note": "Any firm vegetable of a similar size. Keep the pieces as big as the florets so everything finishes together." },
+    { "item": "Olive oil", "quantity": "1 tablespoon" },
+    { "item": "Salt, pepper and garlic powder", "quantity": "1 teaspoon in total" },
+    { "item": "Grated hard cheese or a squeeze of lemon, to finish", "quantity": "optional", "note": "For a vegetarian kitchen, buy a hard cheese whose label says it is made without animal rennet, or use the lemon instead." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Toss the broccoli and the other vegetables with the oil and the seasoning in a bowl until every piece is lightly coated. Dry patches are what scorch." },
+    { "step": 2, "instruction": "Set the air fryer to 190°C, preheating only if your appliance manual requires it." },
+    { "step": 3, "instruction": "Tip the vegetables into the basket in as close to a single layer as you can manage. A crowded basket steams broccoli instead of browning it, and two quick batches beat one slow one." },
+    { "step": 4, "instruction": "Cook for 8 to 10 minutes, shaking the basket at about 5 minutes. They are ready when the thickest stems give under a fork and the floret tips have browned. Vegetables have no temperature to reach, so this is a texture judgement — a few dark tips are flavour, an evenly black floret is not." },
+    { "step": 5, "instruction": "Finish with the cheese or the lemon off the heat. The bowl is the only extra washing-up, and the basket wipes clean while it is still warm." }
+  ],
+
+  "yield_note": "A side for two, or a lunch bowl for one with rice or noodles. About 15 minutes in total.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Vegetables have no safety threshold to hit. This is a texture and browning judgement, not a food-safety one.",
+      "Light, dry pieces can be picked up by the fan on some models and blown against the element. Coating everything in oil and keeping the basket no more than loosely full is what prevents it.",
+      "The basket and drawer stay hot well after the machine stops. Set them down on a heatproof surface, not on a bench or a chopping board.",
+      "These are practical notes. Nothing here has been kitchen-tested by this project or given a professional food-safety review."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["broccoli", "vegetables", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
+}

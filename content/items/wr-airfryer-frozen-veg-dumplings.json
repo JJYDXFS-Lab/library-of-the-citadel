@@ -1,0 +1,75 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-frozen-veg-dumplings",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. For a packaged frozen product the manufacturer's own instructions come first; these notes only describe how the basket handles it.",
+
+  "name": {
+    "primary": "Air-Fryer Frozen Vegetable Dumplings",
+    "alt": ["Freezer-Aisle Gyoza (vegetarian)", "空气炸锅冷冻素饺"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer freezer food — vegetarian",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vegetarian, if the packet says so. A bag of frozen vegetable dumplings from the freezer aisle, straight into the basket with a little oil. No thawing, no chopping, nothing to wash but the basket — the recipe for a night with no energy left for cooking.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Frozen vegetable dumplings or gyoza", "quantity": "12, straight from the freezer", "note": "Read the packet: vegetable fillings vary, and some contain egg, dairy or seafood. Do not swap in a frozen meat dumpling and follow these times." },
+    { "item": "Neutral oil, brushed or sprayed on", "quantity": "2 teaspoons", "note": "Without it the wrappers dry out and go brittle instead of crisp." },
+    { "item": "Soy sauce, black vinegar and chilli oil, to dip", "quantity": "a spoonful of each", "note": "Any two of the three make a dipping sauce. Soy sauce usually contains wheat." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Brush or spray the frozen dumplings all over with the oil. Do not thaw them first: thawed wrappers tear, stick to the basket and collapse." },
+    { "step": 2, "instruction": "Set the air fryer to 180°C, preheating only if your appliance manual requires it." },
+    { "step": 3, "instruction": "Arrange the dumplings in a single layer, flat side down and not touching. Twelve fits most baskets; anything more than that is a second batch, because dumplings that touch fuse into one." },
+    { "step": 4, "instruction": "Cook for 9 to 12 minutes, shaking or turning them at about 6 minutes, until the wrappers are golden and crisp at the edges and the filling is steaming hot the whole way through. The packet's own instructions are the authority for the product you actually bought; if one is still cool inside, give them 2 more minutes." },
+    { "step": 5, "instruction": "Nothing sticks if the dumplings were oiled, so the basket takes a rinse. Any wrapper that did catch will lift off after a few minutes of soaking." }
+  ],
+
+  "yield_note": "Twelve dumplings — a light meal for one, or a snack shared between two. About 12 minutes from freezer to plate.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. No brand, product or manufacturer's instruction sheet is quoted or summarized here; the record points the reader at the packet in their own freezer instead.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph, recipe page or product packaging is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "The packet is the authority for the product in your freezer. Fillings, wrapper thickness and pack sizes differ, and the manufacturer's instructions override anything written here.",
+      "Cook them from frozen and eat them hot. Do not part-cook dumplings and finish them off later.",
+      "These notes are written for vegetable dumplings. Meat and seafood fillings have their own requirements and their own packet instructions, and nothing here is guidance for them.",
+      "Allergens: wheat in the wrappers, and often soy, egg or sesame in the filling and the dipping sauce. All of it is on the packet.",
+      "These are practical notes: untested by this project, with no professional food-safety review."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["dumplings", "gyoza", "frozen", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
+}

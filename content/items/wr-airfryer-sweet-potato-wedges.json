@@ -1,0 +1,75 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-sweet-potato-wedges",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+
+  "name": {
+    "primary": "Air-Fryer Sweet Potato Wedges",
+    "alt": ["Potato Wedges (vegetarian)", "空气炸锅红薯角"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer potato wedges — vegetarian",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vegetarian. Sweet potato in wedges, cooked until the edges crisp and the inside goes soft. This is the long one in the section — about half an hour end to end rather than under 25 minutes — and still the least work of any of them.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Sweet potato, scrubbed and left unpeeled", "quantity": "500 g, about 2 medium", "note": "Ordinary potatoes work the same way: they want about 5 minutes longer and they crisp harder." },
+    { "item": "Olive or neutral oil", "quantity": "1 tablespoon" },
+    { "item": "Smoked paprika, salt and pepper", "quantity": "1 teaspoon in total", "note": "Ground cumin, or any supermarket chip seasoning, does the job just as well." },
+    { "item": "Cornflour", "quantity": "2 teaspoons", "note": "Optional, and the whole difference between soft wedges and crisp ones." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Cut each sweet potato in half lengthways, then into wedges about 2 cm thick along the outside edge, and toss them with the oil, the cornflour and the seasoning." },
+    { "step": 2, "instruction": "Set the air fryer to 200°C, preheating only if your appliance manual says to." },
+    { "step": 3, "instruction": "Lay the wedges in one layer, skin down where you can. Sweet potato in a heap turns to mash, so if they will not fit in a single layer, cook them in two batches." },
+    { "step": 4, "instruction": "Cook for 18 to 22 minutes, turning them once at about 10 minutes. They are done when a fork slides in with no resistance and the edges have caught colour; thick wedges can want a further 3 or 4 minutes. There is no temperature to reach — a vegetable is a texture judgement." },
+    { "step": 5, "instruction": "Sweet potato sugars caramelise onto the metal. Fill the basket with hot soapy water while it is still warm and it will need no scrubbing at all." }
+  ],
+
+  "yield_note": "Serves two as a side. About 30 minutes in total — the longest in this section, and the only one that does not fit inside 25 minutes.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "No safety threshold applies to a vegetable. Cook the wedges until a fork goes through easily, and stop when they look right rather than when the timer says so.",
+      "Sweet potato is sugary and scorches faster than it looks. If your machine runs hot, check at 15 minutes and turn them earlier when the edges start to darken.",
+      "Hot sugar sticks to skin. Tip the wedges out of the basket rather than picking them out by hand.",
+      "These are practical notes, untested by this project and never given a professional food-safety review."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["sweet-potato", "potato", "wedges", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
+}

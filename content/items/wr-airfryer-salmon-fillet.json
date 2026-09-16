@@ -1,0 +1,76 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-salmon-fillet",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, and none of it has had a professional food-safety review. This record gives a visual and texture endpoint for the fish and deliberately states no temperature threshold of its own.",
+
+  "name": {
+    "primary": "Air-Fryer Salmon Fillet",
+    "alt": ["Ten-Minute Salmon", "空气炸锅三文鱼柳"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer fish",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Two salmon fillets, skin down, cooked until they flake. Nothing to turn and nothing to watch, and the fish is out of the basket before the rice has finished. About ten minutes, give or take the thickness of the fillet.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Salmon fillets, skin on", "quantity": "2, about 130 g each and 2.5 cm at the thickest point", "note": "Fish allergen. Thickness matters more than weight here: a thin tail piece is done several minutes sooner than a centre cut." },
+    { "item": "Olive oil", "quantity": "2 teaspoons" },
+    { "item": "Lemon", "quantity": "half, to squeeze over at the end", "note": "Lime, or a spoonful of soy sauce, does the same job." },
+    { "item": "Salt and pepper", "quantity": "a pinch of each" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Pat the fillets dry, rub them with the oil and season them. Leave the skin on; it keeps the fish from welding itself to the basket." },
+    { "step": 2, "instruction": "Set the air fryer to 180°C, preheating only if your appliance manual says your model needs it." },
+    { "step": 3, "instruction": "Lay the fillets skin down in a single layer, not touching. Two fillets fit most baskets and four usually do not, and crowded fish steams rather than roasts." },
+    { "step": 4, "instruction": "Cook for 8 to 11 minutes, depending on thickness. Look for fish that has turned from glassy to opaque the whole way through and that separates into flakes under gentle pressure from a fork at the thickest part. Time alone is not a doneness test, and the outside tells you nothing about the middle. If you would rather cook fish to a temperature, use the figure your own food-safety authority publishes and measure with a probe held clear of the basket — this record cites no source and makes no universal claim of its own." },
+    { "step": 5, "instruction": "Squeeze the lemon over off the heat. The skin usually stays behind in the basket: lift it out while it is still warm and the basket needs nothing more than hot water." }
+  ],
+
+  "yield_note": "Two fillets, serving two. About 15 minutes from fridge to plate.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Guidance on fish differs between countries and this record names no authority, so it gives a cautious visual and texture endpoint and sends any reader who wants a number to the authority published where they live.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "This is the recipe here where the endpoint is a judgement. These notes give a visual and texture endpoint — opaque the whole way through, flaking under a fork at the thickest part — and no temperature claim of their own. Follow the fish guidance your own food-safety authority publishes, and your appliance manual for the machine.",
+      "Elapsed time is not a safety control. A thick centre-cut fillet and a thin tail piece will never be done at the same minute, so check the thickest part of each one.",
+      "Raw fish and its packaging contaminate surfaces. Wash hands, board and knife, and do not put cooked fillets back on the plate that held them raw.",
+      "Allergen: fish. As written the recipe contains no gluten or dairy, but anything you add alongside is yours to check.",
+      "These are practical notes: this project has not cooked this recipe and it has had no professional food-safety review."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["salmon", "fish", "air-fryer", "quick", "student", "practical-note"]
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-chicken-thigh-bites",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Chicken is the one recipe in this section with a temperature you must measure rather than judge by eye.",
+
+  "name": {
+    "primary": "Air-Fryer Chicken Thigh Bites",
+    "alt": ["Quick Chicken Bites", "空气炸锅鸡腿肉粒"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer chicken",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Boneless chicken thigh cut into bite-sized pieces and cooked hot until the outsides colour. Thigh is the forgiving cut — an extra minute will not dry it out — but this is the recipe here where the thermometer, not the clock, decides when it is done.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Boneless, skinless chicken thigh", "quantity": "500 g", "note": "Breast fillet works if that is what is in the fridge; cut it a little larger and start checking it earlier, because it dries out faster." },
+    { "item": "Neutral oil", "quantity": "1 tablespoon" },
+    { "item": "Paprika, garlic powder, dried oregano, salt and pepper", "quantity": "2 teaspoons in total", "note": "Any supermarket seasoning blend does the same job. Check the jar for allergens." },
+    { "item": "Lemon, to squeeze over", "quantity": "half", "note": "Optional, and worth it: it lifts the whole plate." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Cut the thigh into pieces of about 3 cm on a board you will wash straight afterwards, then toss them in a bowl with the oil and the seasoning until every piece is coated." },
+    { "step": 2, "instruction": "Set the air fryer to 200°C. Preheat only if your appliance manual calls for it." },
+    { "step": 3, "instruction": "Spread the pieces in the basket in a single layer with gaps between them. If the basket is crowded, cook in two batches: piled-up chicken steams instead of browning, and it heats unevenly, which is a safety problem and not just a texture one." },
+    { "step": 4, "instruction": "Cook for 12 to 15 minutes, shaking the basket at about 7 minutes, then measure the thickest piece with a probe thermometer. Chicken needs to reach 75°C in the centre — that is the figure these notes are written to, and because this record cites no source you should confirm it against the guidance your own food-safety authority publishes. Keep the probe in the meat and clear of the basket and any metal, which read hotter than the food. Colour and elapsed time are not tests: if it reads under 75°C, cook for another 2 minutes and measure again." },
+    { "step": 5, "instruction": "Keep the raw chicken away from everything else: wash hands, board, knife and the mixing bowl before they touch a plate, bread or salad, and never tip the cooked pieces back into the bowl the raw meat came out of. Wash the basket while it is still warm, because chicken fat sets hard once it is cold." }
+  ],
+
+  "yield_note": "Serves two to three with rice, bread or a salad. About 20 minutes from board to plate, plus a few minutes more if you cook in two batches.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. The 75°C figure is stated as the number these notes cook to and is explicitly handed back to the reader's own food-safety authority rather than attributed to one here, because attributing it without a checked citation would be inventing provenance.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "This is the strictest recipe in the section. Cook the chicken until a probe thermometer reads 75°C at the centre of the thickest piece, with the probe clear of the basket and any metal. Time is not a control and neither is colour: chicken can look finished and not be.",
+      "If you have no thermometer, cut the thickest piece open and return it to the basket for a few more minutes when the centre is still glassy or pink. That is a fallback, not a test — a probe thermometer is the only actual check, and a cheap one is enough.",
+      "Raw chicken contaminates whatever it touches. Use a board you wash immediately, wash your hands, and keep cooked pieces away from anything the raw meat sat on.",
+      "Thaw frozen chicken fully before it goes in. A 500 g pile of part-frozen pieces will not heat evenly, and the outside will be done long before the middle.",
+      "These are practical notes, untested by this project and never given a professional food-safety review. They are not a substitute for the food-safety guidance published where you live."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["chicken", "poultry", "air-fryer", "quick", "student", "practical-note"]
+}

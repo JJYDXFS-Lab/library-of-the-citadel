@@ -52,6 +52,8 @@
    [hidden] { display: none }. Without this, hiding the grid does nothing. */
 [hidden] { display: none !important; }
 
+html, body { max-width: 100%; overflow-x: hidden; }
+
 body {
   margin: 0;
   font-family: var(--serif);
@@ -277,6 +279,18 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
   opacity: 0.9;
 }
 
+/* ------------------------- authored section inside a collection gallery */
+
+.mini-section { margin: 2rem 0 0; padding: 1.25rem 1.25rem 1.5rem; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--brass); border-radius: 2px; box-shadow: var(--shadow); }
+.mini-section__title { margin: 0; font-size: .8rem; font-family: var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); }
+.mini-section__count { letter-spacing: .08em; color: var(--brass); }
+.mini-section__intro { margin: .75rem 0 0; max-width: var(--measure); color: var(--ink-soft); font-size: .95rem; }
+.mini-section__list { list-style: none; padding: 0; margin: 1.25rem 0 0; display: grid; gap: .5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.mini-section__link { display: block; padding: .55rem .75rem; text-decoration: none; color: inherit; border: 1px solid var(--rule); border-radius: 2px; }
+.mini-section__link:hover, .mini-section__link:focus-visible { border-color: var(--brass); }
+.mini-section__name { display: block; font-size: 1rem; }
+.mini-section__note { display: block; margin-top: .15rem; font-family: var(--sans); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+
 .card__untranslated {
   font-size: 0.7rem;
   letter-spacing: 0.03em;
@@ -285,4 +299,19 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
   border: 1px dashed currentColor;
   border-radius: 3px;
   padding: 0 0.3rem;
+}
+
+/* Keep the long bilingual masthead and notices inside narrow phone viewports. */
+@media (max-width: 600px) {
+  main, .masthead, .colophon { padding-left: 1rem; padding-right: 1rem; }
+  .masthead { align-items: flex-start; gap: .8rem; }
+  .wordmark { width: 100%; flex-wrap: wrap; }
+  .wordmark__name { font-size: 1rem; letter-spacing: .12em; overflow-wrap: anywhere; }
+  .masthead__nav { width: 100%; margin-left: 0; gap: .7rem 1rem; flex-wrap: wrap; }
+  .citadel-link { max-width: 100%; overflow-wrap: anywhere; }
+  .collection-head, .fixture-banner, .mini-section { min-width: 0; }
+  .collection-head p, .fixture-banner, .mini-section, .mini-section__intro { overflow-wrap: anywhere; }
+  .fixture-banner { flex-direction: column; }
+  .filters input, .filters select { min-width: 0; width: 100%; }
+  .filters__field { flex: 1 1 100%; min-width: 0; }
 }

@@ -3,13 +3,13 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites, and none has been kitchen-tested here or given a professional food-safety review. The other three are fixtures, authored for this repository to exercise the content contract, and are not knowledge records at all. Every record says which it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "Mixed collection of three kinds. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Seven are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains nine records of two kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; the content rules in src/rules.mjs enforce that gate.",
+  "scope_note": "Contains sixteen records of three kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Seven are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
@@ -17,13 +17,42 @@
     "wr-oven-salmon-traybake",
     "wr-oven-halloumi-chickpea-traybake",
     "wr-oven-root-veg-traybake",
+    "wr-airfryer-crispy-tofu",
+    "wr-airfryer-chicken-thigh-bites",
+    "wr-airfryer-salmon-fillet",
+    "wr-airfryer-broccoli-mixed-veg",
+    "wr-airfryer-sweet-potato-wedges",
+    "wr-airfryer-bean-cheese-quesadilla",
+    "wr-airfryer-frozen-veg-dumplings",
     "wr-fixture-griddle-flatbread",
     "wr-fixture-rice-porridge",
     "wr-fixture-simmered-bean-soup"
   ],
-  "reviewed_at": "2026-09-14",
-  "record_version": "1.2.0",
+  "sections": [
+    {
+      "section_id": "quick-air-fryer",
+      "title": "Quick Air-Fryer",
+      "intro": "Seven original practical notes for one small air fryer and an ordinary supermarket shop: a vegetarian protein, chicken, fish, vegetables, wedges, a tortilla snack, and a bag from the freezer aisle. Most run 10 to 25 minutes from bench to plate — the wedges are the one that does not, and the record says so plainly. Every note gives a temperature in Celsius, a time, the single check that actually decides when the food is done, and a substitution or a cleanup tip. None of them has been cooked in a test kitchen or reviewed by a food-safety professional, and none of them cites a source, because none of them is claiming one.",
+      "item_ids": [
+        "wr-airfryer-crispy-tofu",
+        "wr-airfryer-chicken-thigh-bites",
+        "wr-airfryer-salmon-fillet",
+        "wr-airfryer-broccoli-mixed-veg",
+        "wr-airfryer-sweet-potato-wedges",
+        "wr-airfryer-bean-cheese-quesadilla",
+        "wr-airfryer-frozen-veg-dumplings"
+      ]
+    }
+  ],
+  "reviewed_at": "2026-09-16",
+  "record_version": "1.3.0",
   "change_history": [
+    {
+      "version": "1.3.0",
+      "date": "2026-09-16",
+      "change": "Added the Quick Air-Fryer section: seven original practical notes, a new record class that is neither sourced nor fixture, placed between the sourced oven set and the three fixtures. The collection gained its first editorial section, which groups those seven without changing anyone's membership. No existing record changed.",
+      "supersedes": "1.2.0"
+    },
     {
       "version": "1.2.0",
       "date": "2026-09-14",

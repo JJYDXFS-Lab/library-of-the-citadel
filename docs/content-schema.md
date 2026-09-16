@@ -18,19 +18,30 @@ A file under `content/items/` must be named for its `item_id`.
 | Field | Notes |
 | --- | --- |
 | `schema_version`, `item_id`, `collection_id` | Identity. `item_id` is stable: never reused, never renumbered. |
-| `record_class` | `fixture` (authored to demonstrate the contract) or `sourced` (derived from identified sources). |
-| `publication_ready` | Must be `false` for a fixture. |
+| `record_class` | `fixture` (authored to demonstrate the contract), `sourced` (derived from identified sources), or `practical-note` (original everyday cooking written here, citing nothing because it claims nothing). |
+| `publication_ready` | Must be `false` for a fixture and for a practical note. |
 | `record_notice` | Honesty banner rendered on every view of the record. |
 | `name`, `region`, `summary`, `tags` | Display and search facets. `region.label_basis` records how much weight the label carries — it is a filter facet, not an attribution claim. `source-attributed` means the cited page names the region itself; `editorial-facet` means this project assigned it for browsing and the source makes no such claim; `fixture-illustrative` is for demonstration records. |
 | `variants` | Regional variants held side by side. The framework never nominates one as definitive. |
 | `ingredients`, `method`, `yield_note` | `method` steps are numbered `1..n` in order. |
-| `sources`, `source_state`, `provenance_note` | Empty `sources` is legal and expected for a fixture; it is the honest state, not a placeholder. |
+| `sources`, `source_state`, `provenance_note` | Empty `sources` is legal and expected for a fixture and for a practical note; it is the honest state, not a placeholder. The two sourceless states are not interchangeable: `none-fixture-authored` belongs to `fixture`, `none-authored-here` to `practical-note`, and `src/rules.mjs` ties each to its class. |
 | `reviewed_at`, `record_version`, `change_history` | Newest history entry first; `supersedes` chains backwards and is `null` on the initial entry. |
 | `rights` | Licence and image-rights review state. Images may only be present once `image_rights_review_state` is `cleared`. |
 | `safety` | Caveats plus a review state. A fixture may not claim `reviewed`. |
 
 Collection manifests carry the same provenance, version, and rights fields, plus
 `title`, `description`, `scope_note`, and `item_ids` (membership by id only).
+
+An optional `sections` array holds editorial groupings inside one collection:
+each entry has a stable `section_id`, a `title`, an `intro`, and its own
+`item_ids`. A section is a presentation and discovery facet, never a second
+membership list — every member is still a full member of the collection and
+still an ordinary card in the gallery grid, and the manifest reads correctly
+with `sections` ignored entirely. `src/rules.mjs` requires every section member
+to be listed in `item_ids`, rejects a duplicate `section_id`, rejects a record
+listed twice inside one section, and refuses a record claimed by two sections.
+This build declares one section, `quick-air-fryer`, holding the seven practical
+notes.
 
 ## Sourced records
 
@@ -55,6 +66,28 @@ enforce them:
 Where a record states a safe internal temperature, it names the authority in the
 same step. Time is not a safety control, and poultry, minced meat, whole cuts
 and fish have different thresholds.
+
+## Original practical notes
+
+A `practical-note` is everyday cooking written directly for this repository. It
+is neither of the other two classes, and it has its own gate in `src/rules.mjs`:
+`sources` must be empty, `source_state` must be `none-authored-here`,
+`region.label_basis` must be `editorial-facet` (there is no source to attribute
+a region to), `safety.review_state` must be `not-reviewed`, it may not claim
+`fixture-original-text` licensing, it may not be `publication_ready`, and its
+`record_notice` must name it as a practical note.
+
+Its empty `sources` list is the honest state rather than a gap: the record makes
+no claim about any published recipe, so there is nothing to cite. A note that
+ever acquires real sources is promoted to `sourced` instead of being annotated
+after the fact.
+
+Because such a record cites nobody, a further rule applies to the one case where
+that matters. If the method names a cook-to-the-centre temperature in Celsius,
+it must also tell the reader to check that figure against the food-safety
+authority published where they live. A practical note never attributes a
+threshold to an authority it has not cited, and never presents elapsed time or
+colour as a doneness test.
 
 ## Translation overlays
 
@@ -107,15 +140,20 @@ the rule in `src/rules.mjs`.
 
 **Referential.** Every `item_ids` entry has a file; every file on disk is listed
 in the manifest; `collection_id` agrees both ways; no duplicate ids; the version
-history chains and has no duplicate versions.
+history chains and has no duplicate versions. Every section member is a member
+of the collection, no `section_id` repeats, and no record is claimed twice.
 
 **Honesty.** A `fixture` may not be `publication_ready`, may not carry sources,
 must use `source_state: none-fixture-authored` and
 `region.label_basis: fixture-illustrative`, may not claim a completed safety
 review, and its `record_notice` must name it as a fixture. A `sourced` record
-needs at least one identified source URL and may not claim fixture licensing.
-No free text or source URL may contain a placeholder-source marker
-(`example.com`, `placeholder`, `todo://`, and similar).
+needs at least one identified source URL, may not use either sourceless
+`source_state`, and may not claim fixture licensing. A `practical-note` is held
+to the gate described under *Original practical notes* above, including the
+cook-to-temperature rule. Neither sourceless `source_state` may be borrowed by
+the class it does not belong to. No free text or source URL may contain a
+placeholder-source marker (`example.com`, `placeholder`, `todo://`, and
+similar).
 
 These are gates, not documentation: a violation fails `npm run check` and
 `npm run build`.

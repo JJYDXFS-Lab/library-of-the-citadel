@@ -270,9 +270,21 @@ export function localizeItem(item, overlay, code) {
 export function localizeCollection(collection, overlay, code) {
   const o = overlay ?? {};
   const { count, pick, pickList } = tracker();
+  // Sections are keyed by their own stable section_id, the same way records are
+  // keyed by item_id. Membership is never translated — only the heading and the
+  // introduction a reader sees.
+  const sections = o.sections ?? {};
 
   const record = {
     ...collection,
+    ...(collection.sections
+      ? {
+        sections: collection.sections.map((s) => {
+          const ts = sections[s.section_id] ?? {};
+          return { ...s, title: pick(s.title, ts.title), intro: pick(s.intro, ts.intro) };
+        }),
+      }
+      : {}),
     record_notice: pick(collection.record_notice, o.record_notice),
     title: {
       ...collection.title,

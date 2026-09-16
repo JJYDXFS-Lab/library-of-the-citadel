@@ -131,9 +131,12 @@ ${copyright}
  */
 const noticeBanner = (L, text, tagKey = 'notice.tag') => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t(tagKey))}</span> ${esc(text)}</p>`;
 
-const classTag = (recordClass) => (recordClass === 'sourced' ? 'sourced.tag' : 'fixture.tag');
+const CLASS_TAG = { sourced: 'sourced.tag', 'practical-note': 'practical.tag', fixture: 'fixture.tag' };
+const CLASS_MARK = { sourced: 'card.sourced', 'practical-note': 'card.practical', fixture: 'card.fixture' };
 
-const classMark = (recordClass) => (recordClass === 'sourced' ? 'card.sourced' : 'card.fixture');
+const classTag = (recordClass) => CLASS_TAG[recordClass] ?? 'fixture.tag';
+
+const classMark = (recordClass) => CLASS_MARK[recordClass] ?? 'card.fixture';
 
 /**
  * Record text that has no translation for this locale renders its English
@@ -236,6 +239,30 @@ function card(L, entry) {
 </li>`;
 }
 
+/**
+ * An editorial section: a titled, introduced group of records the collection
+ * already holds. It is discovery, not a second index — every record in it is
+ * also a normal card in the grid below, so the search and the region filter
+ * keep working over the whole collection untouched.
+ */
+function miniSections(L, view) {
+  const sections = view.collection.record.sections ?? [];
+  if (sections.length === 0) return '';
+  const byId = new Map(view.entries.map((e) => [e.record.item_id, e.record]));
+
+  return sections.map((section) => {
+    const members = section.item_ids.map((id) => byId.get(id)).filter(Boolean);
+    const headingId = `section-${section.section_id}`;
+    return `  <section class="mini-section" aria-labelledby="${esc(headingId)}" data-section="${esc(section.section_id)}">
+    <h2 id="${esc(headingId)}" class="mini-section__title">${esc(section.title)} <span class="mini-section__count">${esc(plural(L, 'section.count', members.length))}</span></h2>
+    <p class="mini-section__intro">${esc(section.intro)}</p>
+    <ul class="mini-section__list">
+${members.map((item) => `      <li><a class="mini-section__link" href="${L.path(itemPath(item))}"><span class="mini-section__name">${esc(item.name.primary)}</span><span class="mini-section__note">${esc(item.region.cuisine_label)}</span></a></li>`).join('\n')}
+    </ul>
+  </section>`;
+  }).join('\n');
+}
+
 export function galleryPage(cfg, L, view, { regions }) {
   const collection = view.collection.record;
   const total = view.entries.length;
@@ -251,6 +278,8 @@ ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
 
   ${noticeBanner(L, collection.record_notice)}
   ${translationNotice(L, view.collection.state)}
+
+${miniSections(L, view)}
 
   <form class="filters" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
     data-status-all="${esc(L.t.raw('gallery.status_all'))}"
@@ -416,6 +445,7 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
       count: String(items.length),
       collection: esc(collection.title.primary),
       sourced: String(items.filter((e) => e.record.record_class === 'sourced').length),
+      practical: String(items.filter((e) => e.record.record_class === 'practical-note').length),
       fixture: String(items.filter((e) => e.record.record_class === 'fixture').length),
     })} ${esc(collection.scope_note)}</p>
 
@@ -424,6 +454,13 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
       <li>${esc(L.t('about.sourced.cites'))}</li>
       <li>${esc(L.t('about.sourced.paraphrase'))}</li>
       <li>${esc(L.t('about.sourced.untested'))}</li>
+    </ul>
+
+    <h2>${esc(L.t('about.practical_title'))}</h2>
+    <ul>
+      <li>${esc(L.t('about.practical.authored'))}</li>
+      <li>${esc(L.t('about.practical.nosources'))}</li>
+      <li>${esc(L.t('about.practical.untested'))}</li>
     </ul>
 
     <h2>${esc(L.t('about.notfixture_title'))}</h2>

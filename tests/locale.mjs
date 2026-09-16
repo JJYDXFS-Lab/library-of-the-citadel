@@ -38,7 +38,29 @@ const EXPECTED_SOURCED_IDS = [
   'wr-oven-halloumi-chickpea-traybake',
   'wr-oven-root-veg-traybake',
 ];
-const EXPECTED_ITEM_IDS = [...EXPECTED_SOURCED_IDS, ...EXPECTED_FIXTURE_IDS];
+// The Quick Air-Fryer section: original practical notes, a third record class
+// that is neither sourced nor fixture. In manifest order.
+const EXPECTED_PRACTICAL_IDS = [
+  'wr-airfryer-crispy-tofu',
+  'wr-airfryer-chicken-thigh-bites',
+  'wr-airfryer-salmon-fillet',
+  'wr-airfryer-broccoli-mixed-veg',
+  'wr-airfryer-sweet-potato-wedges',
+  'wr-airfryer-bean-cheese-quesadilla',
+  'wr-airfryer-frozen-veg-dumplings',
+];
+const QUICK_AIR_FRYER = 'quick-air-fryer';
+const EXPECTED_ITEM_IDS = [
+  ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS, ...EXPECTED_FIXTURE_IDS,
+];
+
+// Each class states what it is in its own words, in each language. A reader
+// must never have to guess which kind of record they are looking at.
+const ZH_CLASS_DISCLAIMER = {
+  sourced: /有来源的记录/,
+  'practical-note': /原创实用笔记/,
+  fixture: /示例记录/,
+};
 
 const readJson = (...parts) => JSON.parse(readFileSync(path.join(repoRoot, ...parts), 'utf8'));
 const baseItem = (id) => readJson('content', 'items', `${id}.json`);
@@ -260,8 +282,9 @@ test('every record is fully translated into zh, with no English left behind', ()
     // The disclaimer and the safety caveats are the two things a reader must
     // not have to read in a language they did not choose. Each class of record
     // has its own disclaimer, and the translated one must say the same thing:
-    // a fixture is a demonstration, a sourced record is checked but untested.
-    assert.match(record.record_notice, item.record_class === 'sourced' ? /有来源的记录/ : /示例记录/,
+    // a fixture is a demonstration, a sourced record is checked but untested,
+    // an original practical note was written here and cites nobody.
+    assert.match(record.record_notice, ZH_CLASS_DISCLAIMER[item.record_class],
       `${id}: the ${item.record_class} disclaimer is not in Chinese`);
     assert.equal(record.safety.caveats.length, item.safety.caveats.length, `${id}: a safety caveat was dropped`);
 
@@ -608,7 +631,22 @@ test('the per-locale data files are the same records with the same IDs', () => {
     assert.equal(item.publication_ready, false);
     assert.notEqual(item.safety.review_state, 'reviewed');
     if (item.record_class === 'fixture') assert.deepEqual(item.sources, []);
+    if (item.record_class === 'practical-note') {
+      assert.deepEqual(item.sources, [], `${item.item_id}: a translated practical note grew a source`);
+      assert.equal(item.source_state, 'none-authored-here');
+    }
   }
+  const classes = zh.items.map((i) => i.record_class);
+  assert.equal(classes.filter((c) => c === 'sourced').length, 6);
+  assert.equal(classes.filter((c) => c === 'practical-note').length, 7);
+  assert.equal(classes.filter((c) => c === 'fixture').length, 3);
+  assert.equal(zh.items.length, 16);
+  // The section travels into both data files, with untranslated membership.
+  for (const data of [en, zh]) {
+    assert.deepEqual(data.collection.sections.map((s) => s.section_id), [QUICK_AIR_FRYER]);
+    assert.deepEqual(data.collection.sections[0].item_ids, EXPECTED_PRACTICAL_IDS);
+  }
+  assert.notEqual(zh.collection.sections[0].title, en.collection.sections[0].title);
 });
 
 // ===================================== the sourced records, in both languages
@@ -618,18 +656,44 @@ const numbersIn = (s) => (String(s).match(/\d+(?:[.,]\d+)?/g) ?? [])
   .map((n) => n.replace(',', '.'))
   .sort();
 
-test('the zh translation of a sourced record repeats every number exactly', () => {
-  for (const id of EXPECTED_SOURCED_IDS) {
+test('the zh translation repeats every number exactly, in sourced records and practical notes alike', () => {
+  // A quantity, a temperature, a time or a cook-to threshold that drifts
+  // between languages is the one translation bug that could actually hurt
+  // someone, so it is checked field by field rather than by eye. The practical
+  // notes are held to it for the same reason the sourced records are: nothing
+  // about being written here rather than retrieved makes a drifted 75 safer.
+  for (const id of [...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS]) {
     const item = baseItem(id);
     const { record } = localizeItem(item, loadOverlay('items', 'zh', id), 'zh');
-    // A quantity, a temperature, a time or a safe internal threshold that drifts
-    // between languages is the one translation bug that could actually hurt
-    // someone, so it is checked field by field rather than by eye.
     for (const [field, english, localized] of translatablePairs(item, record)) {
       assert.deepEqual(numbersIn(localized), numbersIn(english),
         `${id}: ${field} — zh has ${JSON.stringify(numbersIn(localized))}, en has ${JSON.stringify(numbersIn(english))}`);
     }
   }
+});
+
+test('the zh air-fryer notes stay Celsius-only and keep the poultry figure at 75°C', () => {
+  for (const id of EXPECTED_PRACTICAL_IDS) {
+    const { record } = localizeItem(baseItem(id), loadOverlay('items', 'zh', id), 'zh');
+    const text = JSON.stringify(record);
+    assert.doesNotMatch(text, /°F|华氏/, `${id}: the zh overlay introduced a Fahrenheit figure`);
+    assert.match(text, /°C/, `${id}: the zh overlay lost its Celsius temperature`);
+  }
+
+  const chicken = localizeItem(
+    baseItem('wr-airfryer-chicken-thigh-bites'),
+    loadOverlay('items', 'zh', 'wr-airfryer-chicken-thigh-bites'), 'zh').record;
+  const zhText = `${chicken.method.map((m) => m.instruction).join(' ')} ${chicken.safety.caveats.join(' ')}`;
+  assert.match(zhText, /75°C/, 'the zh poultry note does not carry the 75°C figure');
+  assert.match(zhText, /最厚/, 'the zh poultry note does not tie the reading to the thickest part');
+  assert.match(zhText, /食品安全/, 'the zh poultry note does not hand the reader back to a food-safety authority');
+
+  const salmon = localizeItem(
+    baseItem('wr-airfryer-salmon-fillet'),
+    loadOverlay('items', 'zh', 'wr-airfryer-salmon-fillet'), 'zh').record;
+  const zhFish = `${salmon.method.map((m) => m.instruction).join(' ')} ${salmon.safety.caveats.join(' ')}`;
+  assert.deepEqual([...zhFish.matchAll(/(\d+)\s*°C/g)].map((m) => Number(m[1])), [180],
+    'the zh fish note states a temperature the English record deliberately does not');
 });
 
 test('every sourced record carries a source, an attribution and one access date', () => {
@@ -667,22 +731,123 @@ test('each record is marked with its own class, in each locale', () => {
   const r = localeBuild();
   const dicts = loadDictionaries();
   for (const loc of LOCALES) {
-    const sourcedMark = dicts.get(loc.code)['card.sourced'];
-    const fixtureMark = dicts.get(loc.code)['card.fixture'];
-    assert.notEqual(sourcedMark, fixtureMark, `${loc.code}: the two class marks are the same word`);
-    for (const [ids, mark, other] of [
-      [EXPECTED_SOURCED_IDS, sourcedMark, fixtureMark],
-      [EXPECTED_FIXTURE_IDS, fixtureMark, sourcedMark],
+    const marks = {
+      sourced: dicts.get(loc.code)['card.sourced'],
+      'practical-note': dicts.get(loc.code)['card.practical'],
+      fixture: dicts.get(loc.code)['card.fixture'],
+    };
+    // Three distinct words, or the mark tells a reader nothing.
+    assert.equal(new Set(Object.values(marks)).size, 3,
+      `${loc.code}: two of the three class marks are the same word`);
+
+    for (const [cls, ids] of [
+      ['sourced', EXPECTED_SOURCED_IDS],
+      ['practical-note', EXPECTED_PRACTICAL_IDS],
+      ['fixture', EXPECTED_FIXTURE_IDS],
     ]) {
+      const others = Object.entries(marks).filter(([c]) => c !== cls).map(([, m]) => m);
       for (const id of ids) {
         const html = read(r, `${loc.prefix}recipes/${id}/index.html`);
-        assert.ok(html.includes(`<span class="card__class">${esc(mark)}</span>`),
-          `${loc.code}/${id}: not marked "${mark}"`);
-        assert.ok(!html.includes(`<span class="card__class">${esc(other)}</span>`),
-          `${loc.code}/${id}: also marked "${other}"`);
+        assert.ok(html.includes(`<span class="card__class">${esc(marks[cls])}</span>`),
+          `${loc.code}/${id}: not marked "${marks[cls]}"`);
+        for (const other of others) {
+          assert.ok(!html.includes(`<span class="card__class">${esc(other)}</span>`),
+            `${loc.code}/${id}: also marked "${other}"`);
+        }
       }
     }
   }
+});
+
+// ======================================= the Quick Air-Fryer editorial section
+
+test('the section is translated heading and intro only — membership never moves', () => {
+  const collection = baseCollection();
+  const overlay = loadOverlay('collections', 'zh', 'world-recipes');
+  const zh = localizeCollection(collection, overlay, 'zh').record;
+
+  assert.equal(collection.sections.length, 1);
+  assert.equal(zh.sections.length, 1);
+  const [en_, zh_] = [collection.sections[0], zh.sections[0]];
+
+  assert.equal(zh_.section_id, QUICK_AIR_FRYER, 'a section_id must never be translated');
+  assert.equal(zh_.section_id, en_.section_id);
+  assert.deepEqual(zh_.item_ids, en_.item_ids, 'translation moved a record between sections');
+  assert.deepEqual(zh_.item_ids, EXPECTED_PRACTICAL_IDS);
+
+  for (const [field, english, localized] of [
+    ['title', en_.title, zh_.title],
+    ['intro', en_.intro, zh_.intro],
+  ]) {
+    assert.notEqual(localized, english, `section ${field} is still the English original`);
+    assert.match(localized, HAN, `section ${field} was never written in Chinese`);
+  }
+  assert.equal(zh_.title, '快手空气炸锅');
+  // The intro counts its own members; that number must survive translation.
+  assert.deepEqual(numbersIn(zh_.intro), numbersIn(en_.intro), 'the section intro numbers drifted in zh');
+
+  // An untranslated section falls back whole, and the base record is untouched.
+  const none = localizeCollection(collection, { ...overlay, sections: {} }, 'zh').record;
+  assert.deepEqual(none.sections[0], en_, 'a missing section translation must fall back to the English section');
+  assert.deepEqual(baseCollection(), collection, 'localizing the collection mutated the base manifest');
+});
+
+test('each locale gallery renders its own section heading, intro, and local links', () => {
+  const r = localeBuild();
+  const en_ = baseCollection().sections[0];
+  const zh_ = loadOverlay('collections', 'zh', 'world-recipes').sections[QUICK_AIR_FRYER];
+  const expected = { en: en_, zh: zh_ };
+
+  for (const loc of LOCALES) {
+    const gallery = read(r, `${loc.prefix}recipes/index.html`);
+    const section = /<section class="mini-section"[\s\S]*?<\/section>/.exec(gallery);
+    assert.ok(section, `${loc.code}: the gallery renders no mini-section`);
+    const html = section[0];
+
+    assert.ok(html.includes(esc(expected[loc.code].title)), `${loc.code}: wrong section title`);
+    assert.ok(html.includes(esc(expected[loc.code].intro)), `${loc.code}: wrong section intro`);
+    const foreign = loc.code === 'en' ? zh_ : en_;
+    assert.ok(!html.includes(esc(foreign.intro)), `${loc.code}: the other locale's section intro leaked in`);
+
+    // Links stay inside this locale's page set and point at real pages.
+    const links = [...html.matchAll(/class="mini-section__link" href="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(links, EXPECTED_PRACTICAL_IDS.map((id) => `/${loc.prefix}recipes/${id}/`),
+      `${loc.code}: the section does not link its seven members inside its own page set`);
+    for (const link of links) {
+      assert.ok(existsSync(path.join(r.outDir, `${link.slice(1)}index.html`)),
+        `${loc.code}: section link "${link}" has no page behind it`);
+    }
+
+    // The member names in the section are this locale's names.
+    const names = [...html.matchAll(/class="mini-section__name">([^<]*)</g)].map((m) => m[1]);
+    const expectedNames = EXPECTED_PRACTICAL_IDS.map((id) => (loc.code === 'en'
+      ? baseItem(id).name.primary
+      : loadOverlay('items', 'zh', id).name.primary));
+    assert.deepEqual(names, expectedNames.map((n) => esc(n)), `${loc.code}: section member names are not localized`);
+  }
+});
+
+test('the zh section surfaces the vegetarian options the way the English one does', () => {
+  const r = localeBuild();
+  const VEGETARIAN = [
+    'wr-airfryer-crispy-tofu',
+    'wr-airfryer-broccoli-mixed-veg',
+    'wr-airfryer-sweet-potato-wedges',
+    'wr-airfryer-bean-cheese-quesadilla',
+    'wr-airfryer-frozen-veg-dumplings',
+  ];
+  const notes = ((html) => [...html.matchAll(/class="mini-section__note">([^<]*)</g)].map((m) => m[1]));
+
+  const enNotes = notes(read(r, 'recipes/index.html'));
+  const zhNotes = notes(read(r, 'zh/recipes/index.html'));
+  assert.equal(enNotes.length, 7);
+  assert.equal(zhNotes.length, 7);
+
+  EXPECTED_PRACTICAL_IDS.forEach((id, i) => {
+    const vegetarian = VEGETARIAN.includes(id);
+    assert.equal(/vegetarian/i.test(enNotes[i]), vegetarian, `en: ${id} is labelled wrongly`);
+    assert.equal(/素/.test(zhNotes[i]), vegetarian, `zh: ${id} is labelled wrongly`);
+  });
 });
 
 // ================================================ the browser-side switch

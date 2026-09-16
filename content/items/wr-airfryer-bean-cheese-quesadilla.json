@@ -1,0 +1,77 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-bean-cheese-quesadilla",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+
+  "name": {
+    "primary": "Air-Fryer Bean and Cheese Quesadilla",
+    "alt": ["Bean and Cheese Toastie (vegetarian)", "空气炸锅豆泥芝士薄饼"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer tortilla snack — vegetarian",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vegetarian. A tortilla folded over tinned beans and grated cheese and crisped in six or seven minutes. It costs very little, uses nothing that goes off quickly, and it is the recipe to know for the week the shopping runs out.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Large flour tortillas", "quantity": "2, about 20 cm across", "note": "Wheat tortillas contain gluten. Corn tortillas crisp beautifully but crack when folded cold, so warm them first." },
+    { "item": "Tinned red kidney or black beans, drained and rinsed", "quantity": "200 g drained, half a 400 g tin", "note": "Tinned beans are already cooked. Keep the rest of the tin in a covered container in the fridge and use it within a couple of days." },
+    { "item": "Grated tasty or mozzarella cheese", "quantity": "80 g", "note": "For a vegetarian kitchen, check the packet says it is made without animal rennet." },
+    { "item": "Ground cumin or smoked paprika, salt and pepper", "quantity": "half a teaspoon in total" },
+    { "item": "Neutral oil, for brushing", "quantity": "1 teaspoon", "note": "Brushed on the outside. It is what makes the tortilla crisp instead of merely dry." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Mash the beans roughly with the cumin, salt and pepper, spread them over half of each tortilla, scatter the cheese on top and fold the tortilla over into a half-moon." },
+    { "step": 2, "instruction": "Brush the outside of each folded tortilla with a little oil, then push two or three cocktail sticks through the open edge to pin it shut. An unpinned tortilla is light enough for the fan to lift." },
+    { "step": 3, "instruction": "Set the air fryer to 180°C, preheating only if your appliance manual calls for it, and lay the quesadillas flat in a single layer without overlapping them." },
+    { "step": 4, "instruction": "Cook for 6 to 8 minutes, turning once at about 4 minutes, until the outside is blistered and crisp and the cheese has melted. Tinned beans and cheese are both already safe to eat, so this is a browning judgement rather than a temperature one." },
+    { "step": 5, "instruction": "Take the cocktail sticks out before eating. Crumbs and escaped cheese fall through the basket, so pull the drawer out over the bin, tip it, and wipe it while it is still warm." }
+  ],
+
+  "yield_note": "Two quesadillas — lunch for two, or one large plate for one. About 12 minutes in total.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+
+  "reviewed_at": "2026-09-16",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-16",
+      "change": "Record written as part of the Quick Air-Fryer section: seven original practical notes for a small air fryer and an ordinary supermarket shop.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "A loose tortilla is light enough for the fan to lift it against the element on some models. Fold it, pin it shut, keep it flat, and do not leave the machine running unattended the first time you make it.",
+      "Cocktail sticks are easy to forget and easy to bite down on. Count them in and count them out.",
+      "Allergens: wheat in flour tortillas, dairy in the cheese. Both are printed on the packets.",
+      "Nothing here needs cooking to a temperature: the beans were cooked in the tin and the cheese only has to melt. Drain and rinse the beans, and refrigerate what is left of the tin.",
+      "These are practical notes, not kitchen-tested here and never given a professional food-safety review."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["beans", "cheese", "quesadilla", "snack", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
+}

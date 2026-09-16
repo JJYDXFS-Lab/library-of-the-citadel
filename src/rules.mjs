@@ -1,9 +1,12 @@
 // Cross-record content rules that JSON Schema cannot express.
 //
-// Two families live here. Referential rules keep the collection manifest and the
-// item files consistent. Honesty rules keep a fixture from drifting into looking
-// like sourced, reviewed, publication-ready knowledge — that drift is the single
-// most likely way this repository could end up making a claim nobody checked.
+// Two families live here. Referential rules keep the collection manifest, its
+// editorial sections, and the item files consistent. Honesty rules keep each
+// record class from drifting into looking like another: a fixture must not grow
+// sources or a review, an original practical note must not acquire citations it
+// never had, and neither may pass for sourced, reviewed, publication-ready
+// knowledge. That drift is the single most likely way this repository could end
+// up making a claim nobody checked.
 
 const ISO_DATE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/;
 
@@ -41,6 +44,40 @@ export function checkCollection(collection, items) {
   pushIf(errors, collection.record_class === 'fixture' && collection.publication_ready,
     `collection ${collection.collection_id}: a fixture collection must not be marked publication_ready`);
 
+  errors.push(...checkSections(collection));
+
+  return errors;
+}
+
+/**
+ * Sections are an editorial grouping inside one collection, not a second
+ * membership list. A section may only name records the collection already
+ * holds, and no record belongs to two sections — otherwise the gallery would
+ * present the same card twice under two competing headings.
+ */
+function checkSections(collection) {
+  const errors = [];
+  const label = `collection ${collection.collection_id}`;
+  const members = new Set(collection.item_ids);
+  const seenSections = new Set();
+  const claimed = new Map();
+
+  for (const section of collection.sections ?? []) {
+    pushIf(errors, seenSections.has(section.section_id), `${label}: duplicate section_id "${section.section_id}"`);
+    seenSections.add(section.section_id);
+
+    const seenHere = new Set();
+    for (const id of section.item_ids) {
+      pushIf(errors, !members.has(id),
+        `${label}: section "${section.section_id}" lists "${id}", which is not a member of the collection`);
+      pushIf(errors, seenHere.has(id), `${label}: section "${section.section_id}" lists "${id}" twice`);
+      seenHere.add(id);
+      pushIf(errors, claimed.has(id) && claimed.get(id) !== section.section_id,
+        `${label}: "${id}" is claimed by both section "${claimed.get(id)}" and section "${section.section_id}"`);
+      claimed.set(id, section.section_id);
+    }
+  }
+
   return errors;
 }
 
@@ -70,9 +107,40 @@ export function checkItem(item) {
 
   if (item.record_class === 'sourced') {
     pushIf(errors, item.sources.length === 0, `${label}: a sourced record needs at least one identified source URL`);
-    pushIf(errors, item.source_state === 'none-fixture-authored', `${label}: source_state "none-fixture-authored" contradicts record_class "sourced"`);
+    pushIf(errors, item.source_state.startsWith('none-'), `${label}: source_state "${item.source_state}" contradicts record_class "sourced"`);
     pushIf(errors, item.rights.license_review_state === 'fixture-original-text', `${label}: sourced text cannot claim fixture-original-text licensing`);
   }
+
+  // An original practical note is neither of the other two, and its gate keeps
+  // it from drifting into either. It may not borrow a fixture's "this is only a
+  // demonstration" cover, and it may not grow citations for text nobody
+  // sourced: a note that acquires real sources is promoted to "sourced", it is
+  // not annotated after the fact.
+  if (item.record_class === 'practical-note') {
+    pushIf(errors, item.publication_ready, `${label}: a practical note must not be marked publication_ready; it has had no factual or food-safety review`);
+    pushIf(errors, item.sources.length > 0, `${label}: a practical note carries no source pointers — it was written here, not retrieved; promote it to "sourced" instead of citing it after the fact`);
+    pushIf(errors, item.source_state !== 'none-authored-here', `${label}: a practical note must use source_state "none-authored-here", got "${item.source_state}"`);
+    pushIf(errors, item.region.label_basis !== 'editorial-facet', `${label}: a practical note has no source to attribute a region to, so region.label_basis must be "editorial-facet"`);
+    pushIf(errors, item.safety.review_state !== 'not-reviewed', `${label}: a practical note must use safety.review_state "not-reviewed"; it is neither a demonstration fixture nor professionally reviewed`);
+    pushIf(errors, item.rights.license_review_state === 'fixture-original-text', `${label}: a practical note is original text, but it is not fixture text and cannot claim fixture-original-text licensing`);
+    pushIf(errors, !/practical note/i.test(item.record_notice), `${label}: record_notice must name the record as a practical note, since it is the banner every view renders`);
+
+    // The record cites nobody. If it still names a temperature to cook to the
+    // centre, it has to send the reader to the authority it cannot cite.
+    const methodText = item.method.map((m) => m.instruction).join(' ');
+    pushIf(errors,
+      /\b(internal temperature|in the centre|at the centre|internally)\b/i.test(methodText)
+        && /\d+\s*°C/.test(methodText)
+        && !/food-safety authority/i.test(methodText),
+      `${label}: a practical note that gives a cook-to-the-centre temperature must tell the reader to check it against their own food-safety authority, because the record cites none`);
+  }
+
+  // The two sourceless states are not interchangeable: each belongs to exactly
+  // one record class, so neither can be borrowed to blur what a record is.
+  pushIf(errors, item.source_state === 'none-fixture-authored' && item.record_class !== 'fixture',
+    `${label}: source_state "none-fixture-authored" belongs to record_class "fixture", not "${item.record_class}"`);
+  pushIf(errors, item.source_state === 'none-authored-here' && item.record_class !== 'practical-note',
+    `${label}: source_state "none-authored-here" belongs to record_class "practical-note", not "${item.record_class}"`);
 
   // No invented provenance, anywhere in the record's free text.
   const freeText = [item.provenance_note, item.record_notice, item.summary].join(' ').toLowerCase();

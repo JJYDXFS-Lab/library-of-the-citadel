@@ -2,7 +2,7 @@
   "$comment": "简体中文界面词典。键与 content/locales/ui/en.json 完全一致（src/i18n.mjs 会校验键的一致性并拒绝空字符串）。\"site.\" 命名空间是对 config/site.config.json 中站点文案的翻译，默认语言直接读取配置，因此该命名空间不参与键一致性校验。占位符形如 {name}，由模板替换。",
 
   "site.tagline": "一座陈列世界知识的视觉厅堂。",
-  "site.build_notice": "混合构建。其中六条是有来源的记录：其烹饪事实依据各自引用的页面、由本项目以自己的措辞概述并已对照核对，但都未在此实际烹制或试做，也没有经过任何专业食品安全审核。另有三条是用于演示内容契约的示例记录。没有任何一条记录可供发布。",
+  "site.build_notice": "混合构建。其中六条是有来源的记录：其烹饪事实依据各自引用的页面、由本项目以自己的措辞概述并已对照核对。七条是“快手空气炸锅”栏目中的原创实用笔记，写于此处，不引用任何来源。另有三条是用于演示内容契约的示例记录。以上都未在此实际烹制或试做，也没有经过任何专业食品安全审核，没有任何一条记录可供发布。",
   "site.footer_note": "Library of the Citadel —— 一个独立的静态 Library 框架，与 Atom-KB 自有的 Library 相互独立。没有后端，没有跟踪，不请求任何外部资源。",
   "site.citadel_note": "Citadel 反向链接默认未设置。待所有者提供地址后再设置 citadel.url（或 LIBRARY_CITADEL_URL）；在其为空期间，构建只渲染一个禁用的占位标记，而不会编造一个目的地。",
 
@@ -17,7 +17,11 @@
   "footer.rights_note": "凡记录标注了来源，其烹饪事实均由我们以自己的措辞概述。此处不转载任何来源文字或图片，第三方材料的权利仍归其各自所有者。",
   "fixture.tag": "示例",
   "sourced.tag": "有来源",
+  "practical.tag": "实用笔记",
   "notice.tag": "提示",
+
+  "section.count.one": "{count} 条记录",
+  "section.count.other": "{count} 条记录",
 
   "page.title.hall": "大厅",
   "page.title.about": "关于本次构建",
@@ -50,6 +54,7 @@
 
   "card.fixture": "示例",
   "card.sourced": "有来源",
+  "card.practical": "实用笔记",
   "card.variants.one": "{count} 种变体",
   "card.variants.other": "{count} 种变体",
   "card.untranslated": "英文原文",
@@ -102,11 +107,15 @@
   "about.name_title": "名称",
   "about.name_body": "本项目的正式名称是 {siteName}。它与 Atom-KB 自有的 Library 是两个彼此独立的项目：两者在不同的存储中保存不同的内容，本构建既不镜像、也不同步、更不取代 Atom-KB 的那一个。即便将来配置了两者之间的链接，那也只是一个指针，而不是权威来源关系。",
   "about.status_title": "内容状态",
-  "about.status_body": "本次部署在{collection}中包含 {count} 条记录：{sourced} 条有来源记录，{fixture} 条示例记录。",
+  "about.status_body": "本次部署在{collection}中包含 {count} 条记录：{sourced} 条有来源记录，{practical} 条原创实用笔记，{fixture} 条示例记录。",
   "about.sourced_title": "有来源的记录是什么",
   "about.sourced.cites": "它会写明用量、烤箱温度与时间出自哪个页面，以及该页面的访问日期；凡记录中给出温度阈值，也会注明所依据的食品安全权威机构。",
   "about.sourced.paraphrase": "其做法由本项目以自己的措辞写成。不转载任何来源文字或照片，被引用页面的权利仍归其作者与出版方所有。",
   "about.sourced.untested": "它已对照来源核对，但本项目并未实际烹制或试做，也没有经过任何专业食品安全审核。若来源只给出含糊的判断标准，记录会在旁边给出有出处的温度阈值。",
+  "about.practical_title": "原创实用笔记是什么",
+  "about.practical.authored": "它是在本仓库这里写下的日常烹饪内容 —— 既不是概述自别人的页面，也不是用于演示的示例记录。凡其中给出需要做到的温度，都会把读者交还给他们所在地公布的食品安全权威机构，因为本记录并不自行指名任何机构。",
+  "about.practical.nosources": "它不带任何来源，而这是诚实的状态，不是缺口：它不对任何已发表的食谱作出主张，因此也没有什么需要引用。一旦某条笔记真的有了来源，它会被提升为有来源的记录，而不是事后补上注释。",
+  "about.practical.untested": "它没有在此处的试验厨房里做过，没有经过任何专业食品安全审核，也不可供发布。其中的时间与温度是给你自己那台机器的起点，而不是核验过的结果。",
   "about.notfixture_title": "示例记录不是什么",
   "about.notfixture.sources": "它没有经过研究，也不带任何来源 URL。来源列表是空的，而不是填上一个占位符。",
   "about.notfixture.claims": "它不对任何菜肴的历史、起源、正宗性或地域归属作出主张。",

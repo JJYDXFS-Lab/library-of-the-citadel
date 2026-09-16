@@ -19,9 +19,11 @@ import { validate } from '../src/schema-validate.mjs';
 import { esc } from '../src/templates/pages.mjs';
 import { build } from '../src/build.mjs';
 
-// The collection is mixed, and the two kinds are held to different rules: a
-// fixture must never acquire a source, and a sourced record must never be
-// without one. Keeping the two lists apart is what lets each test say which.
+// The collection is mixed, and the three kinds are held to different rules: a
+// fixture must never acquire a source, a sourced record must never be without
+// one, and an original practical note must have none at all while still being
+// neither of the other two. Keeping the three lists apart is what lets each
+// test say which kind it is talking about.
 const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-griddle-flatbread',
   'wr-fixture-rice-porridge',
@@ -35,7 +37,22 @@ const EXPECTED_SOURCED_IDS = [
   'wr-oven-root-veg-traybake',
   'wr-oven-salmon-traybake',
 ];
-const EXPECTED_ITEM_IDS = [...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS].sort();
+// The Quick Air-Fryer section, in the order the manifest's section lists it.
+// Membership is asserted against the manifest below rather than assumed.
+const EXPECTED_PRACTICAL_IDS = [
+  'wr-airfryer-crispy-tofu',
+  'wr-airfryer-chicken-thigh-bites',
+  'wr-airfryer-salmon-fillet',
+  'wr-airfryer-broccoli-mixed-veg',
+  'wr-airfryer-sweet-potato-wedges',
+  'wr-airfryer-bean-cheese-quesadilla',
+  'wr-airfryer-frozen-veg-dumplings',
+];
+const QUICK_AIR_FRYER = 'quick-air-fryer';
+const EXPECTED_ITEM_IDS = [
+  ...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS,
+].sort();
+const TOTAL_RECORDS = 16;
 
 /** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
 function walk(dir, base = dir) {
@@ -83,15 +100,51 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds nine records in one collection: six sourced, three fixtures', () => {
+test('the repository holds sixteen records in one collection: six sourced, seven practical notes, three fixtures', () => {
   const { items, collections } = loadContent();
-  assert.equal(items.length, 9);
+  assert.equal(items.length, TOTAL_RECORDS);
   assert.equal(collections.length, 1);
   const idsOfClass = (cls) => items.filter((i) => i.record_class === cls).map((i) => i.item_id).sort();
   assert.deepEqual(idsOfClass('fixture'), EXPECTED_FIXTURE_IDS);
   assert.deepEqual(idsOfClass('sourced'), EXPECTED_SOURCED_IDS);
+  assert.deepEqual(idsOfClass('practical-note'), [...EXPECTED_PRACTICAL_IDS].sort());
+  // No fourth class slipped in: the three lists account for every record.
   assert.deepEqual(items.map((i) => i.item_id).sort(), EXPECTED_ITEM_IDS);
   assert.deepEqual([...collections[0].item_ids].sort(), EXPECTED_ITEM_IDS);
+  assert.equal(
+    EXPECTED_SOURCED_IDS.length + EXPECTED_PRACTICAL_IDS.length + EXPECTED_FIXTURE_IDS.length,
+    TOTAL_RECORDS);
+});
+
+test('the existing sourced and fixture records are untouched by the air-fryer addition', () => {
+  // The air-fryer section was added beside the earlier content, not on top of
+  // it. The earlier records keep their IDs, their classes, their sources, and
+  // their place at the front and the back of the manifest.
+  const { items, collections } = loadContent();
+  const byId = new Map(items.map((i) => [i.item_id, i]));
+  const order = collections[0].item_ids;
+
+  assert.deepEqual(order.slice(0, 6), [
+    'wr-oven-lamb-kofta-traybake',
+    'wr-oven-lamb-potato-bake',
+    'wr-oven-chicken-thigh-traybake',
+    'wr-oven-salmon-traybake',
+    'wr-oven-halloumi-chickpea-traybake',
+    'wr-oven-root-veg-traybake',
+  ], 'the sourced oven records no longer open the manifest in their original order');
+  assert.deepEqual(order.slice(6, 13), EXPECTED_PRACTICAL_IDS,
+    'the Quick Air-Fryer records are not in manifest order between the oven set and the fixtures');
+  assert.deepEqual(order.slice(13), EXPECTED_FIXTURE_IDS,
+    'the fixtures no longer close the manifest');
+
+  for (const id of EXPECTED_SOURCED_IDS) {
+    assert.equal(byId.get(id).record_class, 'sourced', `${id} changed class`);
+    assert.ok(byId.get(id).sources.length >= 1, `${id} lost its sources`);
+  }
+  for (const id of EXPECTED_FIXTURE_IDS) {
+    assert.equal(byId.get(id).record_class, 'fixture', `${id} changed class`);
+    assert.deepEqual(byId.get(id).sources, [], `${id} grew sources`);
+  }
 });
 
 test('the fixture gates still hold: no fixture has grown a source or a review', () => {
@@ -108,6 +161,109 @@ test('the fixture gates still hold: no fixture has grown a source or a review', 
     assert.notEqual(item.safety.review_state, 'reviewed');
     assert.deepEqual(item.rights.images, []);
   }
+});
+
+test('the practical-note gate holds: original notes cite nothing and claim nothing', () => {
+  const { items } = loadContent();
+  const notes = items.filter((i) => i.record_class === 'practical-note');
+  assert.equal(notes.length, 7);
+
+  for (const item of notes) {
+    const where = item.item_id;
+    // A note that is neither researched nor a demonstration: its honesty is the
+    // empty source list plus a source_state that only this class may use.
+    assert.deepEqual(item.sources, [], `${where}: a practical note must carry no sources`);
+    assert.equal(item.source_state, 'none-authored-here', `${where}: wrong source_state`);
+    assert.notEqual(item.source_state, 'none-fixture-authored',
+      `${where}: a practical note must not borrow the fixture's sourceless state`);
+    assert.equal(item.region.label_basis, 'editorial-facet', `${where}: wrong region label basis`);
+    assert.equal(item.publication_ready, false, `${where}: claims to be publication-ready`);
+    assert.equal(item.safety.review_state, 'not-reviewed', `${where}: claims a review it has not had`);
+    assert.notEqual(item.rights.license_review_state, 'fixture-original-text',
+      `${where}: a practical note is original text but it is not fixture text`);
+    assert.deepEqual(item.rights.images, [], `${where}: practical notes ship no images`);
+
+    // The banner a reader sees must name the class and disclaim both testing
+    // and a professional food-safety review.
+    assert.match(item.record_notice, /practical note/i, `${where}: the notice does not name the class`);
+    assert.match(item.record_notice, /professional food-safety review/i,
+      `${where}: the notice does not disclaim a professional food-safety review`);
+    assert.match(item.record_notice, /cooked or tested/i,
+      `${where}: the notice does not disclaim kitchen testing`);
+
+    // Celsius only, everywhere in the record. A stray Fahrenheit figure in one
+    // record and not the others is exactly the inconsistency a reader trips on.
+    const allText = JSON.stringify(item);
+    assert.doesNotMatch(allText, /°F|Fahrenheit/i, `${where}: this section is Celsius-only`);
+    assert.match(allText, /°C/, `${where}: no Celsius temperature anywhere in the record`);
+
+    assert.ok(item.tags.includes('air-fryer'), `${where}: not tagged air-fryer`);
+    assert.ok(item.tags.includes('practical-note'), `${where}: not tagged practical-note`);
+  }
+});
+
+test('the air-fryer section keeps vegetarian options visible, and marks them', () => {
+  // Five of the seven are vegetarian. That is a browsing promise the section
+  // intro makes, so it is checked rather than left to the prose.
+  const { items } = loadContent();
+  const byId = new Map(items.map((i) => [i.item_id, i]));
+  const VEGETARIAN = [
+    'wr-airfryer-crispy-tofu',
+    'wr-airfryer-broccoli-mixed-veg',
+    'wr-airfryer-sweet-potato-wedges',
+    'wr-airfryer-bean-cheese-quesadilla',
+    'wr-airfryer-frozen-veg-dumplings',
+  ];
+  const NOT_VEGETARIAN = ['wr-airfryer-chicken-thigh-bites', 'wr-airfryer-salmon-fillet'];
+
+  const tagged = EXPECTED_PRACTICAL_IDS.filter((id) => byId.get(id).tags.includes('vegetarian'));
+  assert.deepEqual(tagged, VEGETARIAN, 'the vegetarian tagging of the section has drifted');
+  for (const id of VEGETARIAN) {
+    // The facet a reader actually sees on the card and in the mini-section.
+    assert.match(byId.get(id).region.cuisine_label, /vegetarian/i,
+      `${id}: the cuisine label does not surface that it is vegetarian`);
+  }
+  for (const id of NOT_VEGETARIAN) {
+    assert.ok(!byId.get(id).tags.includes('vegetarian'), `${id} must not be tagged vegetarian`);
+    assert.doesNotMatch(byId.get(id).region.cuisine_label, /vegetarian/i,
+      `${id}: the cuisine label calls a meat or fish recipe vegetarian`);
+  }
+});
+
+test('the poultry note requires a measured 75°C and refuses time or colour as the test', () => {
+  const chicken = loadContent().items.find((i) => i.item_id === 'wr-airfryer-chicken-thigh-bites');
+  const method = chicken.method.map((m) => m.instruction).join(' ');
+  const caveats = chicken.safety.caveats.join(' ');
+  const both = `${method} ${caveats}`;
+
+  assert.match(method, /75°C/, 'the method does not name the 75°C figure the notes cook to');
+  assert.match(both, /thickest/i, 'the temperature is not tied to the thickest part');
+  assert.match(both, /clear of the basket and any metal/i,
+    'the reader is not told to keep the probe clear of the basket and any metal');
+  assert.match(both, /food-safety authority/i,
+    'a sourceless record that names a cook-to temperature must hand the reader back to their own authority');
+  assert.match(both, /[Cc]olour and elapsed time are not tests|Time is not a control and neither is colour/,
+    'the record does not refuse time and colour as doneness tests');
+  assert.doesNotMatch(both, /safe at|guaranteed|guarantees|always safe/i,
+    'an unreviewed record must not promise safety');
+});
+
+test('the fish note states no temperature of its own and does not sell time as a test', () => {
+  const salmon = loadContent().items.find((i) => i.item_id === 'wr-airfryer-salmon-fillet');
+  const method = salmon.method.map((m) => m.instruction).join(' ');
+  const both = `${method} ${salmon.safety.caveats.join(' ')}`;
+
+  // The appliance setting is a Celsius number; a doneness threshold is not.
+  const temperatures = [...both.matchAll(/(\d+)\s*°C/g)].map((m) => Number(m[1]));
+  assert.deepEqual(temperatures, [180],
+    'the only Celsius figure in the fish note should be the air-fryer setting, not a doneness claim');
+  assert.match(both, /[Tt]ime alone is not a doneness test|Elapsed time is not a safety control/,
+    'the fish note does not say that time alone is not a test');
+  assert.match(both, /food-safety authority/i,
+    'a reader who wants a number is not sent to their own food-safety authority');
+  assert.doesNotMatch(both, /safe at|safe internal|guaranteed|always safe/i,
+    'the fish note must make no universal safe-temperature claim');
+  assert.match(both, /opaque/i, 'the stated endpoint is not the visual and texture one the record claims to give');
 });
 
 test('every sourced record carries its provenance and claims no review it has not had', () => {
@@ -191,6 +347,102 @@ test('the rules reject an unreviewed record that ships an image', () => {
   const item = fixtureItem();
   item.rights.images.push({ url: 'local.png', rights_note: 'unknown' });
   assert.ok(checkItem(item).some((e) => /image_rights_review_state/.test(e)));
+});
+
+const practicalItem = () => JSON.parse(readFileSync(
+  path.join(repoRoot, 'content', 'items', 'wr-airfryer-crispy-tofu.json'), 'utf8',
+));
+
+test('the honesty rules reject a practical note that grows a citation or a review', () => {
+  const cited = practicalItem();
+  cited.sources.push({ url: 'https://an.example.org/a', title: 'A', accessed_at: '2026-09-16' });
+  assert.ok(checkItem(cited).some((e) => /a practical note carries no source pointers/.test(e)),
+    checkItem(cited).join('; '));
+
+  const ready = practicalItem();
+  ready.publication_ready = true;
+  assert.ok(checkItem(ready).some((e) => /must not be marked publication_ready/.test(e)));
+
+  const reviewed = practicalItem();
+  reviewed.safety.review_state = 'reviewed';
+  assert.ok(checkItem(reviewed).some((e) => /must use safety\.review_state "not-reviewed"/.test(e)));
+
+  const attributed = practicalItem();
+  attributed.region.label_basis = 'source-attributed';
+  assert.ok(checkItem(attributed).some((e) => /label_basis must be "editorial-facet"/.test(e)));
+
+  const unlabelled = practicalItem();
+  unlabelled.record_notice = 'A note about cooking.';
+  assert.ok(checkItem(unlabelled).some((e) => /record_notice must name the record as a practical note/.test(e)));
+});
+
+test('the two sourceless states cannot be borrowed by the wrong record class', () => {
+  const borrowedByNote = practicalItem();
+  borrowedByNote.source_state = 'none-fixture-authored';
+  const noteErrors = checkItem(borrowedByNote);
+  assert.ok(noteErrors.some((e) => /must use source_state "none-authored-here"/.test(e)), noteErrors.join('; '));
+  assert.ok(noteErrors.some((e) => /"none-fixture-authored" belongs to record_class "fixture"/.test(e)),
+    noteErrors.join('; '));
+
+  const borrowedByFixture = fixtureItem();
+  borrowedByFixture.source_state = 'none-authored-here';
+  assert.ok(checkItem(borrowedByFixture)
+    .some((e) => /"none-authored-here" belongs to record_class "practical-note"/.test(e)));
+});
+
+test('a sourceless practical note that names a cook-to temperature must point at an authority', () => {
+  const chicken = JSON.parse(readFileSync(
+    path.join(repoRoot, 'content', 'items', 'wr-airfryer-chicken-thigh-bites.json'), 'utf8'));
+  assert.deepEqual(checkItem(chicken), [], 'the chicken note as written must satisfy its own gate');
+
+  const stripped = JSON.parse(JSON.stringify(chicken));
+  stripped.method = stripped.method.map((m) => ({
+    ...m, instruction: m.instruction.replace(/food-safety authority/g, 'packet'),
+  }));
+  assert.ok(checkItem(stripped).some((e) => /must tell the reader to check it against their own food-safety authority/.test(e)),
+    checkItem(stripped).join('; '));
+});
+
+test('the section rules refuse a member the collection does not hold, or one claimed twice', () => {
+  const { collections, items } = loadContent();
+  const base = () => JSON.parse(JSON.stringify(collections[0]));
+
+  const stranger = base();
+  stranger.sections[0].item_ids.push('wr-fixture-does-not-exist');
+  assert.ok(checkCollection(stranger, items)
+    .some((e) => /is not a member of the collection/.test(e)));
+
+  const twice = base();
+  twice.sections[0].item_ids.push(twice.sections[0].item_ids[0]);
+  assert.ok(checkCollection(twice, items).some((e) => /twice/.test(e)));
+
+  const contested = base();
+  contested.sections.push({
+    section_id: 'another-section',
+    title: 'Another',
+    intro: 'Another grouping.',
+    item_ids: [contested.sections[0].item_ids[0]],
+  });
+  assert.ok(checkCollection(contested, items).some((e) => /is claimed by both section/.test(e)));
+
+  const duplicated = base();
+  duplicated.sections.push(JSON.parse(JSON.stringify(duplicated.sections[0])));
+  assert.ok(checkCollection(duplicated, items).some((e) => /duplicate section_id/.test(e)));
+});
+
+test('the collection declares exactly one section, holding exactly the practical notes', () => {
+  const { collections } = loadContent();
+  const sections = collections[0].sections;
+  assert.equal(sections.length, 1, 'the collection should declare exactly the Quick Air-Fryer section');
+  assert.equal(sections[0].section_id, QUICK_AIR_FRYER);
+  assert.equal(sections[0].title, 'Quick Air-Fryer');
+  assert.deepEqual(sections[0].item_ids, EXPECTED_PRACTICAL_IDS,
+    'the section does not hold exactly the seven practical notes, in order');
+  assert.ok(sections[0].intro.trim().length > 0);
+  // A section is discovery, not a second membership list.
+  for (const id of sections[0].item_ids) {
+    assert.ok(collections[0].item_ids.includes(id), `${id} is in the section but not in the collection`);
+  }
 });
 
 test('the collection rules catch a manifest that drifts from the files on disk', () => {
@@ -315,7 +567,7 @@ for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewB
   test(`the ${label} build emits every page, asset, and data file`, () => {
     const r = run();
     assert.equal(r.cfg.basePath, base);
-    assert.equal(r.itemCount, 9);
+    assert.equal(r.itemCount, TOTAL_RECORDS);
     for (const rel of [...ALL_PAGES, ...ASSETS]) {
       assert.ok(existsSync(path.join(r.outDir, rel)), `missing ${rel} in the ${label} build`);
     }
@@ -342,6 +594,43 @@ for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewB
     }
   });
 }
+
+test('the gallery renders the Quick Air-Fryer mini-section, and it links locally at every base', () => {
+  for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
+    const r = run();
+    const gallery = read(r, 'recipes/index.html');
+    const section = /<section class="mini-section"[\s\S]*?<\/section>/.exec(gallery);
+    assert.ok(section, `${label}: the gallery renders no mini-section`);
+    const html = section[0];
+
+    assert.ok(html.includes(`data-section="${QUICK_AIR_FRYER}"`), `${label}: the section carries no stable id`);
+    assert.ok(html.includes(`aria-labelledby="section-${QUICK_AIR_FRYER}"`),
+      `${label}: the section is not labelled by its own heading`);
+    assert.match(html, /<h2 id="section-quick-air-fryer"[^>]*>Quick Air-Fryer /, `${label}: wrong section heading`);
+    assert.match(html, /7 records/, `${label}: the section does not count its own members`);
+
+    // Discovery: every member is reachable from the section, at this base path.
+    const links = [...html.matchAll(/class="mini-section__link" href="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(links, EXPECTED_PRACTICAL_IDS.map((id) => `${base}recipes/${id}/`),
+      `${label}: the section does not link its seven members in order at base "${base}"`);
+    for (const link of links) {
+      assert.ok(link.startsWith(base), `${label}: section link "${link}" is not under base "${base}"`);
+      assert.ok(existsSync(path.join(r.outDir, link.slice(base.length), 'index.html')),
+        `${label}: section link "${link}" has no page behind it`);
+    }
+
+    // It is a second view, not a second index: the members are still ordinary
+    // cards in the grid, so search and the region filter keep covering them.
+    for (const id of EXPECTED_PRACTICAL_IDS) {
+      assert.ok(gallery.includes(`data-item-id="${id}"`), `${label}: ${id} lost its card in the grid`);
+    }
+    // And no other page grows one.
+    for (const page of ALL_PAGES.filter((p) => !p.endsWith('recipes/index.html'))) {
+      assert.ok(!read(r, page).includes('class="mini-section"'),
+        `${label}: ${page} should not carry the gallery's section`);
+    }
+  }
+});
 
 test('the subpath build shares no absolute link shape with the root build', () => {
   const preview = read(previewBuild(), 'recipes/index.html');
@@ -392,8 +681,9 @@ test('the gallery exposes the search, filter, and empty-state hooks the script b
   for (const region of regionsOf(loadContent().items)) {
     assert.ok(html.includes(`<option value="${region}">`), `no filter option for region "${region}"`);
   }
-  assert.equal([...html.matchAll(/data-haystack="/g)].length, 9, 'every card needs a search haystack');
-  assert.equal([...html.matchAll(/class="card"/g)].length, 9);
+  assert.equal([...html.matchAll(/data-haystack="/g)].length, TOTAL_RECORDS,
+    'every card needs a search haystack');
+  assert.equal([...html.matchAll(/class="card"/g)].length, TOTAL_RECORDS);
 
   const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
   for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
@@ -450,7 +740,7 @@ test('only the released recipe routes are emitted', () => {
       .filter((rel) => /^(zh\/)?recipes\/[^/]+\/index\.html$/.test(rel))
       .map((rel) => rel.replace(/^(zh\/)?recipes\//, '').replace(/\/index\.html$/, ''))
       .sort();
-    // Nine records, two page sets.
+    // Sixteen records, two page sets.
     assert.deepEqual(detailRoutes, [...EXPECTED_ITEM_IDS, ...EXPECTED_ITEM_IDS].sort(),
       'the emitted detail routes are not exactly the released records, once per locale');
   }
@@ -478,12 +768,17 @@ test('the build output contains no run receipts, secrets, or local paths', () =>
 test('the published data file is presentation-free content and nothing else', () => {
   const r = rootBuild();
   const data = JSON.parse(read(r, 'data/world-recipes.json'));
-  assert.equal(data.items.length, 9);
+  assert.equal(data.items.length, TOTAL_RECORDS);
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
   assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 6);
+  assert.equal(data.items.filter((i) => i.record_class === 'practical-note').length, 7);
   assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
   for (const item of data.items) assert.equal(item.publication_ready, false);
+  // The section travels with the manifest, so a consumer of the data file can
+  // reproduce the grouping without scraping the HTML.
+  assert.deepEqual(data.collection.sections.map((s) => s.section_id), [QUICK_AIR_FRYER]);
+  assert.deepEqual(data.collection.sections[0].item_ids, EXPECTED_PRACTICAL_IDS);
 });
 
 test('the output is static and fetches nothing from a third party', () => {

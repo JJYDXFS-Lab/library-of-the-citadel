@@ -118,15 +118,21 @@ it is a source constant, not a configuration key.
 
 `tests/check.mjs` uses `node:test` and `node:assert` only. It covers the
 official display name on every generated page, content
-integrity and the exactly-three-fixtures invariant, the honesty rules under
-tampering, base-path normalization, the output-directory guard, both the root
-and subpath builds, generated link/base-path correctness, detail prev/next
-navigation, the search/filter/empty-state hooks, build stability, and the
-exclusion of run receipts, secrets, and local paths from the output.
+integrity and the sixteen-record, three-class census (six sourced, seven
+original practical notes, three fixtures), the honesty rules for each class
+under tampering — including the practical-note gate and the section rules — the
+Quick Air-Fryer mini-section and its local links at both base paths,
+base-path normalization, the output-directory guard, both the root and subpath
+builds, generated link/base-path correctness, detail prev/next navigation, the
+search/filter/empty-state hooks, build stability, and the exclusion of run
+receipts, secrets, and local paths from the output.
 
 `tests/locale.mjs` covers the localization layer on the same terms: dictionary
 parity and its fail-closed behavior, overlay fallback and the `none`/`partial`/
 `complete` states, the per-locale page sets and data files, the switch targets
-on every route, and — by running `src/assets/app.js` in a `node:vm` context
+on every route, the translated section heading and intro against untranslated
+section membership, EN/ZH numeric parity for the sourced records and the
+practical notes alike, the Celsius-only and 75°C poultry wording in both
+languages, and — by running `src/assets/app.js` in a `node:vm` context
 against a hand-built DOM — the browser-side switch under refused, unreadable,
 and absent storage.

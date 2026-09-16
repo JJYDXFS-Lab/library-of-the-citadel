@@ -42,12 +42,12 @@
 
     "record_class": {
       "type": "string",
-      "description": "fixture = authored to demonstrate the schema and the presentation framework; sourced = derived from identified sources and eligible for publication review.",
-      "enum": ["fixture", "sourced"]
+      "description": "fixture = authored to demonstrate the schema and the presentation framework; sourced = derived from identified sources and eligible for publication review; practical-note = original everyday cooking notes written for this repository, citing nothing because they claim nothing, and not a demonstration record either. Each class has its own honesty gate in src/rules.mjs.",
+      "enum": ["fixture", "sourced", "practical-note"]
     },
     "publication_ready": {
       "type": "boolean",
-      "description": "Must be false for record_class fixture (enforced in src/rules.mjs)."
+      "description": "Must be false for record_class fixture and for record_class practical-note (enforced in src/rules.mjs)."
     },
     "record_notice": {
       "type": "string",
@@ -75,7 +75,7 @@
         "cuisine_label": { "type": "string", "minLength": 1 },
         "label_basis": {
           "type": "string",
-          "description": "fixture-illustrative = a label invented for a demonstration record; source-attributed = the cited source names this region or cuisine itself; editorial-facet = this project assigned the label as a browsing facet and the source makes no such claim.",
+          "description": "fixture-illustrative = a label invented for a demonstration record; source-attributed = the cited source names this region or cuisine itself; editorial-facet = this project assigned the label as a browsing facet and no source makes such a claim. An original practical note has no source to attribute, so editorial-facet is the only honest basis for it.",
           "enum": ["fixture-illustrative", "source-attributed", "editorial-facet"]
         }
       }
@@ -147,8 +147,8 @@
     },
     "source_state": {
       "type": "string",
-      "description": "none-fixture-authored is the only honest value for a record with no sources: the text was written for this repository to exercise the schema.",
-      "enum": ["none-fixture-authored", "sources-recorded", "sources-pending-review"]
+      "description": "Two of these values describe a record with no sources at all, and they are not interchangeable. none-fixture-authored: the text was written for this repository to exercise the schema. none-authored-here: the text is an original practical note written for this repository, making no claim that needs a citation. src/rules.mjs ties each value to its record_class so neither can be borrowed by the other.",
+      "enum": ["none-fixture-authored", "none-authored-here", "sources-recorded", "sources-pending-review"]
     },
     "provenance_note": { "type": "string", "minLength": 1 },
 
