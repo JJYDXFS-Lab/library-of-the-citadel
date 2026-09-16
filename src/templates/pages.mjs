@@ -17,11 +17,11 @@ export const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => AMP
  * translated text is escaped first and the fragments are inserted afterwards,
  * so a dictionary value can never inject markup.
  */
-const fill = (template, fragments) => esc(template).replace(/\{(\w+)\}/g, (match, name) => (
+export const fill = (template, fragments) => esc(template).replace(/\{(\w+)\}/g, (match, name) => (
   Object.prototype.hasOwnProperty.call(fragments, name) ? fragments[name] : match
 ));
 
-const code = (value) => `<code>${esc(value)}</code>`;
+export const code = (value) => `<code>${esc(value)}</code>`;
 
 const itemPath = (item) => `recipes/${item.item_id}/`;
 
@@ -33,9 +33,9 @@ const itemPath = (item) => `recipes/${item.item_id}/`;
 const CATALOGUE_ID = 'catalogue';
 const SECTION_PARAM = 'section';
 
-const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
+export const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
 
-function head(cfg, L, { title, description }) {
+export function head(cfg, L, { title, description }) {
   return `<!DOCTYPE html>
 <html lang="${esc(L.htmlLang)}">
 <head>
@@ -73,10 +73,15 @@ ${links}
 </nav>`;
 }
 
-function chrome(cfg, L, { nav: current, route }) {
+export function chrome(cfg, L, { nav: current, route }) {
+  // One entry per shelf the hall holds, in hall order, then the build notes.
+  // Both shelf labels come from their own manifests, so the navigation reads in
+  // the reader's language without a second copy of either title in a
+  // dictionary.
   const nav = [
     ['', L.t('nav.hall')],
     ['recipes/', L.collectionTitle],
+    ['stories/', L.storiesTitle],
     ['about/', L.t('nav.about')],
   ];
   return `<a class="skip-link" href="#main">${esc(L.t('skip_link'))}</a>
@@ -111,14 +116,16 @@ function holdersHtml(cfg) {
   return html;
 }
 
-function foot(cfg, L) {
+export function foot(cfg, L) {
   // The copyright line covers this site's own presentation and editorial work
-  // and is written the same way in every locale, the way a name is. The rights
-  // note beside it is prose and is therefore localized. Neither one claims
-  // anything about third-party material beyond leaving its rights where they
-  // are. An unconfigured holder renders no line rather than a guessed one.
+  // and is written the same way in every locale, the way a name is — including
+  // the reservation of rights, which is a legal formula rather than prose. The
+  // rights note beside it is prose and is therefore localized. Neither one
+  // claims anything about third-party material beyond leaving its rights where
+  // they are. An unconfigured holder renders no line rather than a guessed one.
+  const reserved = String(cfg.copyright.reserved ?? '').trim();
   const copyright = String(cfg.copyright.holders).trim()
-    ? `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${holdersHtml(cfg)}.</p>`
+    ? `<p class="colophon__copyright">© ${esc(String(cfg.copyright.year))} ${holdersHtml(cfg)}.${reserved ? ` ${esc(reserved)}` : ''}</p>`
     : '';
   return `<footer class="colophon">
 <p class="colophon__notice">${esc(L.site.buildNotice)}</p>
@@ -137,7 +144,7 @@ ${copyright}
  * banner takes the record's own class, while a collection or build notice —
  * which now covers records of both classes — takes the neutral tag.
  */
-const noticeBanner = (L, text, tagKey = 'notice.tag') => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t(tagKey))}</span> ${esc(text)}</p>`;
+export const noticeBanner = (L, text, tagKey = 'notice.tag') => `<p class="fixture-banner" role="note"><span class="fixture-banner__tag">${esc(L.t(tagKey))}</span> ${esc(text)}</p>`;
 
 const CLASS_TAG = { sourced: 'sourced.tag', 'practical-note': 'practical.tag', fixture: 'fixture.tag' };
 const CLASS_MARK = { sourced: 'card.sourced', 'practical-note': 'card.practical', fixture: 'card.fixture' };
@@ -157,16 +164,17 @@ function translationNotice(L, state) {
 }
 
 /**
- * A locale context carries the collection title it needs for the nav label, so
- * chrome() does not have to be handed the collection on every page.
+ * A locale context carries the shelf titles it needs for the nav labels, so
+ * chrome() does not have to be handed a manifest on every page. Each title
+ * comes from the manifest that owns it, already in this locale.
  */
-export function withCollectionTitle(L, collection) {
-  return { ...L, collectionTitle: collection.title.primary };
+export function withShelfTitles(L, { collection, stories }) {
+  return { ...L, collectionTitle: collection.title.primary, storiesTitle: stories.shelf.text.title };
 }
 
 // ---------------------------------------------------------------- hall
 
-export function hallPage(cfg, L, view) {
+export function hallPage(cfg, L, view, { stories }) {
   const collection = view.collection.record;
   const items = view.entries.map((e) => e.record);
   return `${head(cfg, L, { title: L.t('page.title.hall'), description: L.t('meta.hall', { siteName: cfg.siteName, tagline: L.site.tagline }) })}
@@ -195,6 +203,16 @@ ${chrome(cfg, L, { nav: '', route: '' })}
             <span class="shelf__title">${esc(collection.title.primary)}${(collection.title.alt ?? []).length ? `<span class="shelf__alt">${esc(collection.title.alt[0])}</span>` : ''}</span>
             <span class="shelf__desc">${esc(collection.description)}</span>
             <span class="shelf__count">${esc(plural(L, 'hall.count', items.length))}</span>
+          </span>
+        </a>
+      </li>
+      <li class="shelf">
+        <a class="shelf__link" href="${L.path('stories/')}">
+          <span class="shelf__spine" aria-hidden="true"></span>
+          <span class="shelf__body">
+            <span class="shelf__title">${esc(stories.shelf.text.title)}${stories.shelf.text.title_alt ? `<span class="shelf__alt">${esc(stories.shelf.text.title_alt)}</span>` : ''}</span>
+            <span class="shelf__desc">${esc(stories.shelf.text.description)}</span>
+            <span class="shelf__count">${esc(plural(L, 'hall.stories_count', stories.stories.length))}</span>
           </span>
         </a>
       </li>
@@ -454,7 +472,7 @@ ${foot(cfg, L)}`;
 
 // --------------------------------------------------------------- about
 
-export function aboutPage(cfg, L, view) {
+export function aboutPage(cfg, L, view, { stories }) {
   const collection = view.collection.record;
   const items = view.entries;
   const languages = LOCALES.map((loc) => `${loc.endonym} (${loc.englishName}, ${loc.prefix === '' ? cfg.basePath : `${cfg.basePath}${loc.prefix}`})`).join('; ');
@@ -482,6 +500,10 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
       practical: String(items.filter((e) => e.record.record_class === 'practical-note').length),
       fixture: String(items.filter((e) => e.record.record_class === 'fixture').length),
     })} ${esc(collection.scope_note)}</p>
+    <p>${esc(L.t('about.stories_body', {
+      shelf: stories.shelf.text.title,
+      works: plural(L, 'about.stories_count', stories.stories.length),
+    }))} ${esc(stories.shelf.text.scope_note)}</p>
 
     <h2>${esc(L.t('about.sourced_title'))}</h2>
     <ul>

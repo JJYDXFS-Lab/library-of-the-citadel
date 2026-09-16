@@ -20,20 +20,24 @@ script, a `.nojekyll` marker, and a JSON copy of the content.
 | `src/schema-validate.mjs` | Interpret the JSON Schema subset the content schemas use. |
 | `src/rules.mjs` | Cross-record rules JSON Schema cannot express: referential integrity and the honesty gates. |
 | `src/content.mjs` | Read `content/`, validate, apply rules, return plain data. |
+| `src/stories.mjs` | The same three steps for the story shelf: read `content/stories/`, validate, apply the story gates, return plain data. |
 | `src/i18n.mjs` | The locale table, the interface dictionaries, the record-translation overlays, and the per-locale path helpers. |
-| `src/templates/pages.mjs` | Hall, gallery, detail, and about pages as template literals. |
+| `src/templates/pages.mjs` | Hall, gallery, detail, and about pages as template literals. It also exports the shared chrome — `head`, `chrome`, `foot`, `noticeBanner` and the escaping helpers — so a second page family cannot drift from the first. |
+| `src/templates/stories.mjs` | The shelf index and the reading page, built from that shared chrome. |
 | `src/build.mjs` | Orchestrate: load, render, write, copy assets, report. |
 
-The dependency direction is strict: `content.mjs` never imports a template, and
-no template reads `content/` from disk. That is what keeps the records usable
-without the presentation layer.
+The dependency direction is strict: neither `content.mjs` nor `stories.mjs`
+imports a template, and no template reads `content/` from disk. That is what
+keeps the records usable without the presentation layer.
 
 ## Build pipeline
 
 1. `loadConfig(env)` resolves configuration and the output directory.
 2. `loadContentOrThrow()` reads every record, validates it against its schema,
-   then applies the cross-record rules. **Errors are collected, not thrown one
-   at a time**, so a single run reports every problem in the corpus.
+   then applies the cross-record rules. `loadStoriesOrThrow()` does the same for
+   the story shelf, against its own schemas and its own gates. **Errors are
+   collected, not thrown one at a time**, so a single run reports every problem
+   in the corpus.
 3. The `world-recipes` manifest's `item_ids` order is the editorial order. It
    drives the gallery sequence and the prev/next links on detail pages.
 4. The output directory is deleted and rewritten.
@@ -41,10 +45,11 @@ without the presentation layer.
    deep links and browser reloads work on a static host with no router.
 6. Steps 3–5 run once per locale: the whole page set is emitted again under the
    locale's route prefix, from the same templates and the same records.
-7. `src/assets/` is copied verbatim; `.nojekyll` and one data file per locale
-   are written.
-8. `build()` returns `{ cfg, outDir, written, bytes, itemCount, locales }` so
-   callers and tests can assert on the result instead of scraping stdout.
+7. `src/assets/` is copied verbatim; `.nojekyll`, one data file per locale, and
+   the single story-shelf data file are written.
+8. `build()` returns `{ cfg, outDir, written, bytes, itemCount, storyCount,
+   locales }` so callers and tests can assert on the result instead of scraping
+   stdout.
 
 ## Output shape
 
@@ -52,13 +57,55 @@ without the presentation layer.
 index.html                      hall
 recipes/index.html              World Recipes gallery
 recipes/<item_id>/index.html    one per record
+stories/index.html              Stories / 故事集 shelf index
+stories/<story_id>/index.html   one reading page per story
 about/index.html                build notes
-zh/…                            the same four routes again, in Chinese
+zh/…                            the same route set again, in Chinese
 assets/site.css  assets/app.js
 data/world-recipes.json         presentation-free content copy
 data/world-recipes.zh.json      the same records, same IDs, translated text
+data/stories.json               the story shelf; one file, already bilingual
 .nojekyll
 ```
+
+## The story shelf
+
+`content/stories/` is a second content type, loaded by `src/stories.mjs` and
+rendered by `src/templates/stories.mjs`. It shares the chrome, the colophon and
+the notice banner with the knowledge pages and nothing else. One difference
+drives its shape: a story has exactly one canonical language for its body and is
+never machine-translated, so it has no English original for a translation
+overlay to fall back to. Each story and the shelf manifest therefore carry a
+complete metadata block per interface locale inside the record, under `locales`,
+and `src/stories.mjs` fails the build if one is missing. The body is single
+sourced, marked with its own `lang`, and rendered identically in every locale.
+
+```
+content/schema/library-story.schema.json        one work
+content/schema/library-story-shelf.schema.json  the shelf manifest
+content/stories/shelf.json                      membership, by story_id
+content/stories/items/<story_id>.json           the work itself
+```
+
+The shelf manifest is the definition of what is published. `src/stories.mjs`
+refuses a `story_id` with no record on disk **and** a record on disk the
+manifest does not list, so a file dropped into `content/stories/items/` is a
+build failure rather than a page nobody meant to publish.
+
+The gates are the mirror image of the knowledge-record ones. Where a recipe must
+not quietly acquire a claim it never checked, a story must not quietly acquire a
+source, an authority, or a provenance it does not have: `record_class` must be
+`original-fiction`, `provenance.origin` must be `original-work`, the source list
+must be empty, the author must be named, and a released story's `genre_note`
+must say in every locale both what the work is and what it is not. A published
+text must also not lose a paragraph, so `body_block_count` is written down and
+checked against the array on every build, and an `emphasis` phrase that no
+longer occurs in its block fails the build rather than rendering nothing.
+
+The reading page is deliberately spare: title, byline, abstract, the language
+note, the text, the colophon, and one link back to the shelf. It has no
+prev/next, no counter, no comment thread, no tracking, and — as everywhere in
+this build — no external asset.
 
 ## Localization
 
@@ -139,3 +186,20 @@ practical notes alike, the Celsius-only and 75°C poultry wording in both
 languages, and — by running `src/assets/app.js` in a `node:vm` context
 against a hand-built DOM — the browser-side switch under refused, unreadable,
 and absent storage.
+
+`tests/stories.mjs` covers the story shelf. Its census is an allowlist rather
+than a denylist: the file writes down the one published work once, then checks
+the files on disk, the manifest, the emitted routes, the shelf index and the
+data export against it. That fails the same way a denylist would if an
+unpublished work reached the tree, without naming anything that was not
+released. Beyond the census it covers the canonical body rendered line for line
+in both locales and at both base paths, the two authorial emphases surviving as
+markup, the English view publishing the Chinese original — asserted as byte
+equality between the two page sets' reading columns — rather than a translation
+of it, the per-locale metadata parity a story needs because it has no original
+to fall back to, the genre note naming both what the work is and what it is not,
+the authorship/provenance/rights/publication facts, the shelf and reading-page
+navigation and the language switch on both story routes, the return link, the
+exact footer credit with both holders linked, each honesty gate under tampering,
+the absence of operational paths and run receipts from every story source and
+output file, and that the World Recipes collection did not move.

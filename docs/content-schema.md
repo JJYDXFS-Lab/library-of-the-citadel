@@ -5,9 +5,15 @@ ordinary JSON Schema documents, so the records stay portable to any validator.
 
 - `library-item/1.0.0` — `content/schema/library-item.schema.json`
 - `library.collection/1.0.0` — `content/schema/library-collection.schema.json`
+- `library.story/1.0.0` — `content/schema/library-story.schema.json`
+- `library.story-shelf/1.0.0` — `content/schema/library-story-shelf.schema.json`
 
-Schema `$id`s, `schema_version` values, `item_id`s, and `collection_id`s are
-stable identifiers. The project's official name is **Library of the Citadel**,
+The first two describe knowledge records; the last two describe literary works,
+which are a different kind of thing and have a different contract. See
+*[Stories](#stories)* below.
+
+Schema `$id`s, `schema_version` values, `item_id`s, `collection_id`s,
+`story_id`s, and `shelf_id`s are stable identifiers. The project's official name is **Library of the Citadel**,
 but that naming decision changed only human-readable `title`/`description`
 metadata — no identifier moved, so existing records keep validating unchanged.
 
@@ -128,6 +134,80 @@ Numbers are the part of a translation that can do harm. Quantities, times,
 temperatures, sizes and safe internal thresholds must be identical in every
 language; `tests/locale.mjs` compares them field by field for the sourced
 records rather than trusting a reading.
+
+## Stories
+
+A story is a literary work, not a knowledge record. It claims nothing about the
+world, cites nothing because it summarizes nothing, and is published as its
+named author's own text. Three things follow from that, and they are the whole
+difference between the two contracts.
+
+**It has no sources, and that is the honest state.** `record_class` is
+`original-fiction`, `provenance.origin` is `original-work`, and
+`provenance.sources` is empty. A work that ever needed a citation would not be
+this class of record. "Sourced", "reviewed", "kitchen-tested" and
+`publication_ready`-as-safety do not apply; `publication_ready` on a story means
+only that its author has released it.
+
+**Its body has exactly one canonical language.** It is never machine-translated,
+so there is no English original for a translation overlay to fall back to. A
+story and the shelf manifest therefore carry a complete metadata block per
+interface locale *inside the record*, under `locales`, and `src/stories.mjs`
+fails the build if one is missing or blank. `body_language` marks the text,
+`title.canonical` keeps the title the author gave it, and every locale shows
+that canonical title beside its own rendering so no reader mistakes a translated
+title for the work's name.
+
+**Its text must arrive whole.** `body` is an ordered list of plain blocks — a
+`paragraph` carries `text`, a `verse` carries `stanzas`, each a list of lines.
+No markup, no Markdown, nothing a renderer has to parse. `body_block_count`
+declares the length and is checked against the array on every build, so a
+published text cannot lose a paragraph to a careless edit. `emphasis` lists
+exact substrings to render as strong, and a phrase that no longer occurs in its
+block fails the build rather than silently rendering nothing.
+
+| Field | Notes |
+| --- | --- |
+| `schema_version`, `story_id`, `shelf_id` | Identity. A file under `content/stories/items/` must be named for its `story_id`. |
+| `record_class` | `original-fiction`, the only class a story shelf holds. |
+| `publication_ready` | True only for a work its author has released. |
+| `title` | `canonical` plus `canonical_language`; must agree with `body_language`. |
+| `body`, `body_block_count`, `body_language` | The text, its declared length, and its language. |
+| `authorship` | `author.name` — required and non-blank for a released work — and `acknowledgements`. The *role* is prose and lives in each locale's `acknowledgement` string. |
+| `provenance` | `origin`, an empty `sources`, and a `note` saying where the work came from. |
+| `rights` | Licence, holders, review state, images and their review state. |
+| `locales` | One complete block per interface locale: `title`, `abstract`, `genre_note`, `body_language_note`, `publication_note`, `acknowledgement`, `rights_note`. |
+| `first_published`, `reviewed_at`, `record_version`, `change_history` | Publication facts and a chained history, as on any record. |
+
+### Story rules (`src/stories.mjs`)
+
+**Referential.** Every `story_ids` entry has a record; every record on disk is
+listed in the manifest; `shelf_id` agrees both ways; no duplicate ids; the
+version history chains and has no duplicate versions. A file dropped into
+`content/stories/items/` is a build failure, not a draft the build may pick up.
+
+**Honesty.** The mirror image of the recipe gates. A story may not carry a
+source, may not claim an origin other than `original-work`, must name its
+author, must not disagree with itself about the language of its title and body,
+must not lose or gain a body block, and must not carry a stale emphasis marker.
+A released story's `genre_note` must, *in every locale*, both name the work as
+fiction and state what it is not — which is what keeps an invented text from
+ever being read as a quoted one.
+
+These are gates, not documentation: a violation fails `npm run check` and
+`npm run build`.
+
+### Adding a story
+
+1. Write `content/stories/items/<story_id>.json`, with a complete `locales`
+   block for every interface locale in `src/i18n.mjs`.
+2. Add `<story_id>` to `content/stories/shelf.json`'s `story_ids`, in editorial
+   order.
+3. Run `npm run check`.
+
+There is no translation-overlay step, and there should not be one: the body is
+published in the language it was written in, and the metadata around it is
+written — not translated — for each interface language.
 
 ## The validated subset
 

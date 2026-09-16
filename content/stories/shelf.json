@@ -1,0 +1,41 @@
+{
+  "schema_version": "library.story-shelf/1.0.0",
+  "shelf_id": "stories",
+  "story_ids": [
+    "citadel-night-dialogue-on-relation"
+  ],
+  "locales": {
+    "en": {
+      "title": "Stories",
+      "title_alt": "故事集",
+      "description": "A quiet shelf for original literary work written for this Library. One story stands here.",
+      "scope_note": "Holds one published story. A work on this shelf is fiction: it makes no factual, historical, or doctrinal claim, it cites nothing because it summarizes nothing, and it is published as its named author's own text with rights reserved. Each work is shown in the language its author wrote it in, with English metadata that says which language that is. Nothing on this shelf is machine-translated, and nothing is promised for it.",
+      "shelf_notice": "Fiction. Everything on this shelf is original writing, published by its author. It is not a knowledge record, it reports nothing, and it should not be read as a statement about any real tradition, text, or person."
+    },
+    "zh": {
+      "title": "故事集",
+      "title_alt": "Stories",
+      "description": "一个安静的书架，放为这座图书馆而写的原创文学作品。目前架上有一篇。",
+      "scope_note": "现收录一篇已发表的作品。架上的作品都是虚构写作：不作任何事实、历史或教义上的主张，也不引用任何来源，因为它并不概述任何东西；作品以署名作者本人的文字发表，权利保留。每篇作品都按作者写作时所用的语言呈现，英文页面会写明那是哪种语言。本架上的任何内容都不经机器翻译，也不对它作出任何承诺。",
+      "shelf_notice": "虚构作品。本架上的一切都是原创写作，由作者本人发表。它不是知识记录，不报告任何事实，也不应被当作对任何真实传统、典籍或人物的论断。"
+    }
+  },
+  "rights": {
+    "content_license": "Original literary work. All rights reserved by the holders named below; publication here grants no licence to reuse, adapt, or redistribute the text.",
+    "license_review_state": "author-original-text",
+    "holders": [
+      "JJYDXFS",
+      "Atom (原子)"
+    ]
+  },
+  "reviewed_at": "2026-09-17",
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-17",
+      "change": "Story shelf created with its first published work. The shelf is a second content type beside World Recipes, not a change to it: no knowledge record, collection manifest, route, or identifier moved.",
+      "supersedes": null
+    }
+  ]
+}

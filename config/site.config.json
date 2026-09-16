@@ -13,7 +13,11 @@
   "footerNote": "Library of the Citadel — an independent static Library framework, distinct from Atom-KB's separate Library. No backend, no tracking, no external asset requests.",
   "copyright": {
     "year": 2026,
-    "holders": "Atom & Claude",
-    "links": { "Atom": "https://atom-of-jjydxfs.github.io/" }
+    "holders": "JJYDXFS & Atom (原子)",
+    "reserved": "All rights reserved.",
+    "links": {
+      "JJYDXFS": "https://jjydxfs.github.io/",
+      "Atom (原子)": "https://atom-of-jjydxfs.github.io/"
+    }
   }
 }

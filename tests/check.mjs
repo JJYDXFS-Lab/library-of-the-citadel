@@ -54,6 +54,11 @@ const EXPECTED_ITEM_IDS = [
 ].sort();
 const TOTAL_RECORDS = 16;
 
+// The story shelf is a second content type, not a seventeenth recipe. Its
+// census lives in tests/stories.mjs; this file only needs to know which routes
+// the build is allowed to emit. Exactly one story is published.
+const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation'];
+
 /** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
 function walk(dir, base = dir) {
   const out = [];
@@ -553,8 +558,9 @@ test('esc neutralizes every character that could break out of markup', () => {
 // ------------------------------------------------------------- builds
 
 // The default-locale page set, at the output root.
-const PAGES = ['index.html', 'recipes/index.html', 'about/index.html',
-  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`)];
+const PAGES = ['index.html', 'recipes/index.html', 'stories/index.html', 'about/index.html',
+  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`),
+  ...EXPECTED_STORY_IDS.map((id) => `stories/${id}/index.html`)];
 // One full page set per non-default locale, under its own route prefix, with
 // the same slugs and the same record IDs. tests/locale.mjs covers what is
 // inside them; this file covers that the output is exactly this set of files.
@@ -565,7 +571,7 @@ const PAGE_LANG = new Map([
   ...ZH_PAGES.map((rel) => [rel, 'zh-Hans']),
 ]);
 const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll',
-  'data/world-recipes.json', 'data/world-recipes.zh.json'];
+  'data/world-recipes.json', 'data/world-recipes.zh.json', 'data/stories.json'];
 
 for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
   test(`the ${label} build emits every page, asset, and data file`, () => {
@@ -876,13 +882,18 @@ test('the published data file is presentation-free content and nothing else', ()
   assert.deepEqual(data.collection.sections[0].item_ids, EXPECTED_PRACTICAL_IDS);
 });
 
-test('the output is static and fetches nothing from a third party', () => {
+test('the output fetches nothing from a third party', () => {
+  // Reader-activated source and copyright links are allowed; silently loaded
+  // third-party subresources are not.
   const r = rootBuild();
   for (const rel of walk(r.outDir)) {
     if (!rel.endsWith('.html') && !rel.endsWith('.css')) continue;
     const body = readFileSync(path.join(r.outDir, rel), 'utf8');
-    assert.doesNotMatch(body, /(?:href|src|url\()\s*["']?https?:\/\//,
-      `${rel} makes an external request; this build must fetch nothing`);
+
+    assert.doesNotMatch(body, /\ssrc\s*=\s*["']?https?:\/\//i, `${rel} loads a third-party subresource`);
+    assert.doesNotMatch(body, /url\(\s*["']?https?:\/\//i, `${rel} loads a third-party asset from CSS`);
+    assert.doesNotMatch(body, /@import/i, `${rel} imports a stylesheet`);
+    assert.doesNotMatch(body, /<link\b[^>]*href\s*=\s*["']https?:\/\//i, `${rel} links a third-party resource into the page`);
   }
 });
 

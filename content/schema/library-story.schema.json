@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "library.story/1.0.0",
+  "title": "Library of the Citadel story record",
+  "description": "One literary work on a Library of the Citadel story shelf. A story is not a knowledge record: it makes no factual claim, cites nothing, and is published as its author's own text. Its body has exactly one canonical language and is never machine-translated, so — unlike a knowledge item, whose canonical text is English with additive overlays — a story carries its reader-facing metadata for every interface locale inside the record itself, under \"locales\". That keeps the body single-sourced and makes the record portable: a consumer needs no overlay file and no Library presentation code to render it in either language.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "story_id",
+    "shelf_id",
+    "record_class",
+    "publication_ready",
+    "title",
+    "body_language",
+    "body",
+    "body_block_count",
+    "authorship",
+    "provenance",
+    "rights",
+    "locales",
+    "first_published",
+    "reviewed_at",
+    "record_version",
+    "change_history"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "library.story/1.0.0" },
+    "story_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "shelf_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "record_class": {
+      "type": "string",
+      "description": "The only class a story shelf holds. It says what the text is: an original work of fiction written for this Library, not a sourced record, not a fixture, and not a claim about the world.",
+      "enum": ["original-fiction"]
+    },
+    "publication_ready": {
+      "type": "boolean",
+      "description": "True only for a work its author has released. Unlike a knowledge record, a story has no factual or safety review to pass; src/stories.mjs instead requires a released story to name its author, state its genre and publication note in every locale, and claim no source or authority."
+    },
+    "title": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical", "canonical_language"],
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "description": "The title as the author wrote it, in the language of the body. Every locale shows this alongside its own rendering, so no reader is left thinking a translated title is the work's name.",
+          "minLength": 1
+        },
+        "canonical_language": { "type": "string", "minLength": 2 }
+      }
+    },
+    "body_language": {
+      "type": "string",
+      "description": "BCP 47 tag for the body. The body is published in this language in every locale and is never machine-translated.",
+      "minLength": 2
+    },
+    "body": {
+      "type": "array",
+      "description": "The literary text as ordered blocks. Plain data: no markup, no markdown, nothing a renderer has to parse. A paragraph carries \"text\"; a verse carries \"stanzas\", each a list of lines. \"emphasis\" lists exact substrings to render as strong; src/stories.mjs rejects one that does not occur in the block.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string", "enum": ["paragraph", "verse"] },
+          "text": { "type": "string", "minLength": 1 },
+          "stanzas": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            }
+          },
+          "emphasis": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    },
+    "body_block_count": {
+      "type": "integer",
+      "description": "Declared length of \"body\". A published literary text must not lose a paragraph to a careless edit, so the count is written down and checked against the array on every build."
+    },
+    "authorship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["author", "acknowledgements"],
+      "properties": {
+        "author": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "url": { "type": "string" }
+          }
+        },
+        "acknowledgements": {
+          "type": "array",
+          "description": "People credited beside the author. The role is prose and therefore lives in each locale's \"acknowledgement\" string; only the name and an optional canonical URL are held here.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "url": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "sources", "note"],
+      "properties": {
+        "origin": { "type": "string", "enum": ["original-work"] },
+        "sources": {
+          "type": "array",
+          "description": "Always empty for an original work. A story that ever needs a citation is not this class of record.",
+          "items": { "type": "string" }
+        },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_license",
+        "license_review_state",
+        "holders",
+        "images",
+        "image_rights_review_state"
+      ],
+      "properties": {
+        "content_license": { "type": "string", "minLength": 1 },
+        "license_review_state": {
+          "type": "string",
+          "enum": ["not-reviewed", "author-original-text", "cleared", "blocked"]
+        },
+        "holders": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "image_rights_review_state": {
+          "type": "string",
+          "enum": ["not-applicable", "not-reviewed", "cleared", "blocked"]
+        }
+      }
+    },
+    "locales": {
+      "type": "object",
+      "description": "Reader-facing metadata per interface locale. Every locale in src/i18n.mjs must be present and complete; src/stories.mjs checks that parity, so a story can never render a half-written page or fall back to a language the reader did not ask for.",
+      "additionalProperties": false,
+      "required": ["en", "zh"],
+      "properties": {
+        "en": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "The validated subset in src/schema-validate.mjs has no $ref, so each locale states the same shape in full rather than pointing at a definition the validator would silently ignore.",
+          "required": ["title", "abstract", "genre_note", "body_language_note", "publication_note", "acknowledgement", "rights_note"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "abstract": { "type": "string", "minLength": 1 },
+            "genre_note": { "type": "string", "minLength": 1 },
+            "body_language_note": { "type": "string", "minLength": 1 },
+            "publication_note": { "type": "string", "minLength": 1 },
+            "acknowledgement": { "type": "string", "minLength": 1 },
+            "rights_note": { "type": "string", "minLength": 1 }
+          }
+        },
+        "zh": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "abstract", "genre_note", "body_language_note", "publication_note", "acknowledgement", "rights_note"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "abstract": { "type": "string", "minLength": 1 },
+            "genre_note": { "type": "string", "minLength": 1 },
+            "body_language_note": { "type": "string", "minLength": 1 },
+            "publication_note": { "type": "string", "minLength": 1 },
+            "acknowledgement": { "type": "string", "minLength": 1 },
+            "rights_note": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "first_published": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "reviewed_at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "record_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "change_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "date", "change", "supersedes"],
+        "properties": {
+          "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "change": { "type": "string", "minLength": 1 },
+          "supersedes": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

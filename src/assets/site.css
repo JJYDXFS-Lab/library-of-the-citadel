@@ -291,6 +291,45 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .lens__action:hover, .lens__action:focus-visible { border-color: var(--brass); color: var(--oxblood); }
 .lens__action[aria-current='true'] { border-color: var(--brass); background: rgba(201, 164, 95, .12); color: var(--oxblood); }
 
+/* ---- stories: a quiet shelf, and a page built for reading and nothing else ---- */
+
+.story-shelf__count { font-family: var(--sans); font-size: .8rem; letter-spacing: .06em; color: var(--ink-soft); margin: 2rem 0 0; }
+.story-shelf__scope { max-width: var(--measure); margin-top: 2.5rem; font-size: .9rem; color: var(--ink-soft); }
+.story-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1.25rem; }
+.story-card { min-width: 0; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--brass); border-radius: 2px; box-shadow: var(--shadow); }
+.story-card__link { display: block; min-width: 0; overflow-wrap: anywhere; padding: 1.4rem 1.5rem; text-decoration: none; color: inherit; }
+.story-card__marks { display: flex; gap: .5rem; align-items: center; }
+.story-card__title { margin: .6rem 0 .3rem; font-size: 1.5rem; max-width: var(--measure); }
+.story-card__original { margin: 0; font-size: .95rem; color: var(--brass); }
+.story-card__abstract { margin: .7rem 0 0; color: var(--ink-soft); font-size: .95rem; max-width: var(--measure); }
+.story-card__meta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.1rem; padding-top: .75rem; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: .72rem; letter-spacing: .06em; color: var(--ink-soft); }
+
+.story { margin-top: 1rem; }
+.story__head { max-width: var(--measure); }
+.story__marks { display: flex; gap: .5rem; align-items: center; margin: 0; }
+.story__head h1 { font-size: clamp(1.9rem, 5vw, 3rem); margin: .5rem 0 .3rem; }
+.story__original { margin: 0; color: var(--brass); font-size: 1rem; }
+.story__byline { margin: .8rem 0 0; font-family: var(--sans); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.story__abstract { margin: 1rem 0 0; color: var(--ink-soft); }
+.story__language-note { margin: .6rem 0 0; font-size: .88rem; font-style: italic; color: var(--ink-soft); }
+
+/* The reading column. Narrower than the record layout and with more air between
+   lines: this is the one page on the site meant to be read straight through. */
+.story__body { display: block; max-width: 40rem; margin: 3rem 0 0; font-size: 1.08rem; line-height: 2; }
+.story__body p { margin: 0 0 1.35rem; }
+.story__verse { margin: 1.9rem 0; padding: .2rem 0 .2rem 1.5rem; border-left: 2px solid var(--brass-soft); color: var(--ink-soft); }
+.story__verse p { margin: 0 0 1rem; }
+.story__verse p:last-child { margin-bottom: 0; }
+.story__body strong { font-weight: 600; color: var(--ink); }
+
+.story-nav { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.story-nav__index { font-family: var(--sans); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; }
+
+@media (max-width: 600px) {
+  .story__body { font-size: 1.02rem; line-height: 1.9; }
+  .story-card__link { padding: 1.1rem 1.15rem; }
+}
+
 .card__untranslated {
   font-size: 0.7rem;
   letter-spacing: 0.03em;

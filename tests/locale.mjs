@@ -53,6 +53,11 @@ const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
   ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS, ...EXPECTED_FIXTURE_IDS,
 ];
+// The one published story. Its bilingual behaviour differs from a record's by
+// design — the body is one canonical language in both page sets — so it is
+// covered in tests/stories.mjs; here it only has to appear in every per-locale
+// page-set assertion, like any other route.
+const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation'];
 
 // Each class states what it is in its own words, in each language. A reader
 // must never have to guess which kind of record they are looking at.
@@ -388,8 +393,9 @@ test('a locale view keeps manifest order and pairs every record with its state',
 
 // ==================================================== the generated page sets
 
-const PAGE_ROUTES = ['index.html', 'recipes/index.html', 'about/index.html',
-  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`)];
+const PAGE_ROUTES = ['index.html', 'recipes/index.html', 'stories/index.html', 'about/index.html',
+  ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`),
+  ...EXPECTED_STORY_IDS.map((id) => `stories/${id}/index.html`)];
 const pagesFor = (loc) => PAGE_ROUTES.map((rel) => `${loc.prefix}${rel}`);
 
 test('the build emits one complete page set per locale, plus one data file each', () => {
@@ -402,8 +408,11 @@ test('the build emits one complete page set per locale, plus one data file each'
   }
   assert.ok(existsSync(path.join(r.outDir, 'data', 'world-recipes.json')));
   assert.ok(existsSync(path.join(r.outDir, 'data', 'world-recipes.zh.json')));
+  // The story shelf exports once rather than once per locale: a story record
+  // already carries its own metadata for every locale, and its body is the same
+  // canonical text in all of them.
   assert.deepEqual(readdirSync(path.join(r.outDir, 'data')).sort(),
-    ['world-recipes.json', 'world-recipes.zh.json']);
+    ['stories.json', 'world-recipes.json', 'world-recipes.zh.json']);
 });
 
 test('each page set declares its own language and keeps the shared slugs', () => {
@@ -424,20 +433,23 @@ test('each page set declares its own language and keeps the shared slugs', () =>
   }
 });
 
-test('every page in both locales carries the shared footer line and its own rights note', () => {
+// The exact line the site is required to carry, character for character, on
+// every page of every locale. It names the holders and reserves their rights;
+// both are legal formulae, so neither is translated, the way a name is not.
+const REQUIRED_COPYRIGHT = '© 2026 JJYDXFS & Atom (原子). All rights reserved.';
+const JJYDXFS_LINK = '<a href="https://jjydxfs.github.io/">JJYDXFS</a>';
+const ATOM_LINK = '<a href="https://atom-of-jjydxfs.github.io/">Atom (原子)</a>';
+
+test('every page in both locales carries the exact required footer credit and its own rights note', () => {
   const r = localeBuild();
   const cfg = loadConfig({});
   const dicts = loadDictionaries();
 
-  // The copyright line names who made this site's own presentation and
-  // editorial work. It is a name, so it is written identically in every locale;
-  // the rights note beside it is prose, so each locale shows its own.
   assert.equal(cfg.copyright.year, 2026);
-  assert.equal(cfg.copyright.holders, 'Atom & Claude');
-  assert.equal(cfg.copyright.links.Atom, 'https://atom-of-jjydxfs.github.io/');
-  // Only the name is linked; the rest of the line, including the "&" and the
-  // Claude credit, stays plain text.
-  const ATOM_LINK = '<a href="https://atom-of-jjydxfs.github.io/">Atom</a>';
+  assert.equal(cfg.copyright.holders, 'JJYDXFS & Atom (原子)');
+  assert.equal(cfg.copyright.reserved, 'All rights reserved.');
+  assert.equal(cfg.copyright.links.JJYDXFS, 'https://jjydxfs.github.io/');
+  assert.equal(cfg.copyright.links['Atom (原子)'], 'https://atom-of-jjydxfs.github.io/');
 
   for (const loc of LOCALES) {
     const other = LOCALES.find((l) => l.code !== loc.code);
@@ -447,12 +459,17 @@ test('every page in both locales carries the shared footer line and its own righ
       const html = read(r, rel);
       const line = /<p class="colophon__copyright">([\s\S]*?)<\/p>/.exec(html);
       assert.ok(line, `${rel}: no copyright line`);
-      assert.ok(line[1].includes(ATOM_LINK), `${rel}: "Atom" is not linked to the configured URL`);
-      assert.ok(!line[1].includes('>Claude</a>'), `${rel}: only "Atom" should be a link`);
+      // Each holder is linked to its own address, and only to its own.
+      assert.ok(line[1].includes(JJYDXFS_LINK), `${rel}: "JJYDXFS" is not linked to the configured URL`);
+      assert.ok(line[1].includes(ATOM_LINK), `${rel}: "Atom (原子)" is not linked to the configured URL`);
+      assert.equal([...line[1].matchAll(/<a\b/g)].length, 2, `${rel}: the credit line links something other than the two holders`);
       // Markup removed and entities decoded: what a reader actually sees. The
-      // link must not change one character of it.
+      // links must not change one character of it.
       const visible = line[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
-      assert.equal(visible, '© 2026 Atom & Claude.', `${rel}: the visible copyright text changed`);
+      assert.equal(visible, REQUIRED_COPYRIGHT, `${rel}: the visible copyright text is not the required line`);
+      // The superseded credit must be gone from the page entirely, not merely
+      // from the copyright element.
+      assert.ok(!html.includes('Atom &amp; Claude'), `${rel}: the old "Atom & Claude" credit survives`);
       assert.ok(html.includes(`<p class="colophon__rights">${note}</p>`), `${rel}: no ${loc.code} rights note`);
       assert.ok(!html.includes(foreign), `${rel}: shows the ${other.code} rights note instead of its own`);
     }

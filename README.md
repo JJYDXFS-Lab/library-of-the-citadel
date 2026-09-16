@@ -1,8 +1,9 @@
 # Library of the Citadel
 
 A static Library framework: a hall, a **World Recipes** gallery with search and a
-region filter, and one generated page per knowledge record. No dependencies, no
-backend, no build toolchain — Node's standard library and plain HTML/CSS/JS.
+region filter, one generated page per knowledge record, and a **Stories /
+故事集** shelf holding original literary work. No dependencies, no backend, no
+build toolchain — Node's standard library and plain HTML/CSS/JS.
 
 The site is bilingual. English is the default and owns the site root; Chinese is
 the same page set again under `zh/`, with identical routes and record IDs, so
@@ -51,6 +52,22 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 > No record is publication-ready. Translating a record does not research, test,
 > or review it, and the labels say so in both languages.
 
+> **Stories / 故事集 — one published work.** A second shelf, a second content
+> type, and a different contract. A story is not a knowledge record: it makes no
+> factual claim, cites nothing because it summarizes nothing, and is published
+> as its named author's own text with rights reserved. It is therefore never
+> "sourced", never "reviewed", and never kitchen-tested — those words do not
+> apply to it.
+>
+> The shelf holds **one story**, an original fictional and philosophical
+> dialogue written in the manner of a Chan (Zen) *gong'an*. It is **not Buddhist
+> scripture, not a quotation from any historical text or teacher, and it carries
+> no Buddhist authority**; the characters, the exchange and the closing verse are
+> invented. Its body is published as the author's canonical **Chinese original**
+> in both language views — the English view gives an English title, an English
+> abstract and English metadata, and says plainly that the text itself is the
+> Chinese original rather than machine-translating it.
+
 ## Requirements
 
 Node.js 18 or newer. Nothing to install; `dependencies` and `devDependencies`
@@ -78,6 +95,8 @@ root build. **Nothing here starts a server**, and the deployed output needs none
 | --- | --- |
 | `content/items/` | One JSON file per record, named for its `item_id`. |
 | `content/collections/` | Collection manifests; membership is by `item_id`. |
+| `content/stories/items/` | One JSON file per story, named for its `story_id`. |
+| `content/stories/shelf.json` | The story shelf manifest; membership is by `story_id`. |
 | `content/schema/` | JSON Schema documents — the source of truth for shape. |
 | `content/locales/` | Interface dictionaries and additive record-translation overlays, keyed by stable record IDs. |
 | `config/site.config.json` | Deployment configuration; deployment values plus documented environment overrides. |

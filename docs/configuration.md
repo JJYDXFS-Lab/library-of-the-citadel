@@ -17,6 +17,7 @@ default**. Nothing in `src/` knows a repository name, a remote URL, or a host.
 | `footerNote` | — | Colophon line. |
 | `copyright.year` | — | Year in the footer copyright line. |
 | `copyright.holders` | — | Who is named in that line. Empty renders no line. |
+| `copyright.reserved` | — | The reservation of rights that follows the holders, e.g. `All rights reserved.` A legal formula, so it is written the same way in every locale, like the names before it. Empty omits it entirely. |
 | `copyright.links` | — | Optional map of a name inside `holders` to a URL for that name alone. Only `http(s)` URLs are linked; a holder with no entry stays plain text. |
 | — | `LIBRARY_OUT_DIR` | Output directory, relative to the repository. Default `dist`. |
 
@@ -71,11 +72,16 @@ escapes the repository, or points into `src`, `content`, `config`, `docs`,
 Two lines sit at the foot of every page, in every locale, and they say
 different kinds of thing:
 
-- **The copyright line** — `© <year> <holders>.` from `config/site.config.json`
-  — covers this site's own presentation and editorial work. It is a name, so it
-  is written identically in every locale rather than translated. Leaving
+- **The copyright line** — `© <year> <holders>. <reserved>` from
+  `config/site.config.json` — covers this site's own presentation and editorial
+  work. A name and a reservation of rights are both formulae, so the whole line
+  is written identically in every locale rather than translated. Each name in
+  `holders` that has a `copyright.links` entry is linked to its own address and
+  only to its own; the rest of the line stays plain text. Leaving
   `copyright.holders` empty renders no line at all; the build states a holder
-  only where one is configured.
+  only where one is configured. The deployed value is
+  `© 2026 JJYDXFS & Atom (原子). All rights reserved.`, and `tests/locale.mjs`
+  asserts it character for character on every page of every locale.
 - **The rights note** is prose and is localized like any other interface string
   (`footer.rights_note` in each dictionary). It records that a record citing
   sources summarizes cooking facts in this project's own words, that no source

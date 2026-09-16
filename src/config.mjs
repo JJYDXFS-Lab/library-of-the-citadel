@@ -27,8 +27,10 @@ const DEFAULTS = {
   // default: the build states a holder only where one is configured, exactly as
   // it refuses to invent a Citadel destination.
   // `links` maps a name inside `holders` to a URL for that name alone; a holder
-  // with no entry stays plain text.
-  copyright: { year: '', holders: '', links: {} },
+  // with no entry stays plain text. `reserved` is the reservation of rights that
+  // follows the holders — a legal formula, written the same way in every locale
+  // like the names it follows, and omitted entirely when unset.
+  copyright: { year: '', holders: '', reserved: '', links: {} },
 };
 
 /**
