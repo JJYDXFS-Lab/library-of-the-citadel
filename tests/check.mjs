@@ -800,6 +800,78 @@ test('hiding a grid actually hides it: the stylesheet overrides its own display 
   assert.doesNotMatch(css, /головы/, 'the stylesheet contains corrupted text');
 });
 
+// --------------------------------------------- the hall, its rooms, the trail
+
+test('the hall opens exactly two public rooms, each carrying its own room mark', () => {
+  const r = rootBuild();
+  for (const [hallPage, prefix] of [['index.html', ''], ['zh/index.html', 'zh/']]) {
+    const hall = read(r, hallPage);
+    const shelves = [...hall.matchAll(/<li class="shelf[\s\S]*?<\/li>/g)].map((m) => m[0]);
+    assert.equal(shelves.length, 2, `${hallPage}: the hall should stand exactly two public rooms`);
+
+    // Each room is a real link to its own index, and wears one room mark.
+    const hrefs = shelves.map((s) => /class="shelf__link" href="([^"]+)"/.exec(s)?.[1]);
+    assert.deepEqual(hrefs, [`/${prefix}recipes/`, `/${prefix}stories/`],
+      `${hallPage}: the rooms are not the collection and the story shelf, in hall order`);
+    shelves.forEach((shelf, i) => {
+      assert.equal([...shelf.matchAll(/class="room-mark"/g)].length, 1,
+        `${hallPage}: room ${i + 1} does not carry exactly one room mark`);
+    });
+    // A room the hall does not hold is a note, not a card standing empty.
+    assert.ok(!hall.includes('shelf--empty'), `${hallPage}: an empty shelf card is still being rendered`);
+    assert.match(hall, /<p class="rooms__further">/, `${hallPage}: the further-shelves note was dropped`);
+  }
+});
+
+test('every page below the hall carries a location trail that leads back to it', () => {
+  const r = rootBuild();
+  for (const page of ALL_PAGES) {
+    const html = read(r, page);
+    const isHall = page === 'index.html' || page === 'zh/index.html';
+    if (isHall) {
+      assert.ok(!html.includes('<nav class="trail"'), `${page}: the hall is the trail's root and needs no trail`);
+      continue;
+    }
+    const trail = /<nav class="trail"[\s\S]*?<\/nav>/.exec(html);
+    assert.ok(trail, `${page}: no location trail`);
+    const steps = [...trail[0].matchAll(/<li class="trail__step[^"]*"[^>]*>([\s\S]*?)<\/li>/g)].map((m) => m[1]);
+    assert.ok(steps.length >= 2, `${page}: a trail needs at least the hall and this page`);
+
+    // The first step is always the hall of this page's own locale.
+    const home = page.startsWith('zh/') ? '/zh/' : '/';
+    assert.match(steps[0], new RegExp(`<a href="${home}">`), `${page}: the trail does not start at the hall`);
+    // The last step is this page, marked current, and is never a link.
+    assert.ok(!steps[steps.length - 1].includes('<a '), `${page}: the current trail step links to itself`);
+    assert.equal([...trail[0].matchAll(/aria-current="page"/g)].length, 1,
+      `${page}: exactly one trail step is the current one`);
+  }
+});
+
+test('a record page keeps its room identity and states where it stands on the shelf', () => {
+  const r = rootBuild();
+  const { collections } = loadContent();
+  const order = collections[0].item_ids;
+
+  for (const [prefix, collectionTitle] of [['', 'World Recipes'], ['zh/', '世界食谱']]) {
+    order.forEach((id, i) => {
+      const html = read(r, `${prefix}recipes/${id}/index.html`);
+      const trail = /<nav class="trail"[\s\S]*?<\/nav>/.exec(html)[0];
+      // The middle step is the room: its mark, then its own name, linked.
+      assert.match(trail, new RegExp(`<span class="room-mark">[^<]+</span> <a href="/${prefix}recipes/">`),
+        `${prefix}${id}: the trail does not name the room this record belongs to`);
+      assert.ok(trail.includes(`>${collectionTitle}</a>`), `${prefix}${id}: the room step is not in this locale`);
+
+      // The position line is the record's shelf coordinate, and it agrees with
+      // the prev/next walk rather than being a second, independent ordering.
+      const position = /<p class="record-nav__position">([^<]*)<\/p>/.exec(html);
+      assert.ok(position, `${prefix}${id}: no shelf position on the return rail`);
+      assert.match(position[1], new RegExp(`\\b${i + 1}\\b`), `${prefix}${id}: wrong position on the shelf`);
+      assert.match(position[1], new RegExp(`\\b${TOTAL_RECORDS}\\b`), `${prefix}${id}: the shelf total is not the record count`);
+      assert.ok(position[1].includes(collectionTitle), `${prefix}${id}: the position line does not name the room`);
+    });
+  }
+});
+
 test('the hall and every page carry the accessibility landmarks', () => {
   const r = rootBuild();
   for (const page of ALL_PAGES) {

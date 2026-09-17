@@ -17,6 +17,25 @@
   --glow: rgba(168, 118, 47, .18);
   --shadow: 0 1px 2px rgba(36, 28, 22, .08), 0 8px 24px -12px rgba(36, 28, 22, .35);
   --shadow-lift: 0 12px 30px -14px rgba(36, 28, 22, .5);
+  /* The built surfaces: walls and door reveals, as against the parchment a page
+     is printed on. They are the same warm family, taken several stops down, so
+     the hall reads as an interior and the pages below it read as paper carried
+     out of that interior. Ink on these surfaces is its own pair, because the
+     page ink would vanish on them. */
+  /* Brass reads differently depending on what it is cut into. --brass is the
+     accent; --brass-lit is the same metal catching the hall's light, legible as
+     small type on a wall; --brass-ink is it darkened enough to be legible as
+     small type on paper. Using one value for all three is what makes a warm
+     palette quietly fail a contrast check. */
+  --brass-lit: #d7ae66;
+  --brass-ink: #7d5416;
+  --walnut: #31231a;
+  --walnut-deep: #221810;
+  --room-lit: #3d2c1e;
+  --room-quiet: #2a2018;
+  --hall-ink: #f2e7d5;
+  --hall-ink-soft: #bfab90;
+  --hall-rule: rgba(242, 231, 213, .17);
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
   --sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -43,6 +62,17 @@
     --glow: rgba(168, 118, 47, .22);
     --shadow: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px -12px rgba(0, 0, 0, .9);
     --shadow-lift: 0 12px 30px -14px rgba(0, 0, 0, .95);
+    /* At night the page itself is already dark, so the walls are lifted rather
+       than dropped: the hall stays the lit room and the page stays the paper. */
+    --brass-lit: #d9ad5e;
+    --brass-ink: #d9ad5e;
+    --walnut: #241a13;
+    --walnut-deep: #17110c;
+    --room-lit: #2e2117;
+    --room-quiet: #1f1811;
+    --hall-ink: #ece3d5;
+    --hall-ink-soft: #b0a390;
+    --hall-rule: rgba(236, 227, 213, .16);
   }
 }
 
@@ -97,34 +127,220 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .citadel-link { font-family: var(--sans); font-size: .78rem; letter-spacing: .06em; text-decoration: none; color: var(--brass); }
 .citadel-link--unset { color: var(--ink-soft); opacity: .65; cursor: help; }
 
-/* ---- hall ---- */
-.hall { position: relative; padding: 5rem 0 3.5rem; text-align: center; }
-.hall__vault { position: absolute; inset: 0; display: flex; justify-content: center; gap: 3.5rem; pointer-events: none; }
-.hall__arch {
-  width: 150px; height: 320px;
-  border: 1px solid var(--rule);
-  border-bottom: none;
-  border-radius: 150px 150px 0 0;
-  background: linear-gradient(180deg, rgba(168,118,47,.10), transparent 65%);
+/* On the hall page the masthead is the head of the same wall the hall is cut
+   into, so the first viewport reads as one interior rather than as a header
+   sitting on top of one. The spread shadow carries the wall to the viewport
+   edges; the clip keeps it from bleeding above or below the band. */
+.page--hall .masthead {
+  position: relative;
+  background: var(--walnut-deep);
+  box-shadow: 0 0 0 100vmax var(--walnut-deep);
+  clip-path: inset(0 -100vmax);
+  border-bottom-color: var(--hall-rule);
+  color: var(--hall-ink);
 }
-.hall__arch:nth-child(2) { height: 400px; width: 200px; border-radius: 200px 200px 0 0; }
-.hall__plaque { position: relative; display: inline-block; padding: 2rem 2.75rem; background: var(--plaque); border: 1px solid var(--rule); border-radius: 2px; box-shadow: var(--shadow); }
-.hall__title { margin: 0; font-size: clamp(2.5rem, 7vw, 4.25rem); letter-spacing: .12em; text-transform: uppercase; }
-.hall__title-alt { display: block; font-size: .3em; letter-spacing: .5em; color: var(--brass); margin-top: .6rem; }
-.hall__tagline { margin: 1rem 0 0; color: var(--ink-soft); font-style: italic; }
+.page--hall .wordmark__alt, .page--hall .masthead__nav a { color: var(--hall-ink-soft); }
+.page--hall .masthead__nav a:hover, .page--hall .masthead__nav a[aria-current] { color: var(--hall-ink); border-bottom-color: var(--brass-lit); }
+.page--hall .locale-switch { color: var(--hall-ink); }
+.page--hall .citadel-link { color: var(--brass-lit); }
+.page--hall .citadel-link--unset { color: var(--hall-ink-soft); }
+
+/* ---- hall ----------------------------------------------------------------
+   The hall is one room drawn in one elevation, not a banner with cards under
+   it: an arcade overhead, the building's name cut into the wall beneath it,
+   and — on the same wall, under the same light — the two doorways this hall
+   actually opens. Everything below the hall is paper carried out of it.
+
+   The wall reaches the full width of the viewport while its contents stay on
+   the page's measure, so the interior has edges the reading column does not. */
+.hall {
+  position: relative;
+  isolation: isolate;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem;
+  color: var(--hall-ink);
+}
+.hall::before {
+  content: "";
+  position: absolute; z-index: -1; inset: 0;
+  left: 50%; width: 100vw; transform: translateX(-50%);
+  background:
+    radial-gradient(90% 62% at 50% 0%, var(--glow), transparent 64%),
+    linear-gradient(180deg, var(--walnut-deep) 0%, var(--walnut) 38%, var(--walnut-deep) 100%);
+  border-bottom: 1px solid var(--brass-soft);
+}
+
+/* The arcade. Five bays, the crossing tallest, springing from the masthead and
+   dying out before the floor — a section through the vault rather than a row
+   of ornaments. It is drawn behind everything and touches no pointer. */
+.hall__vault {
+  position: absolute; inset: 0 0 auto; left: 0; right: 0;
+  display: flex; justify-content: center; align-items: flex-start;
+  gap: clamp(.5rem, 2.6vw, 2.5rem);
+  pointer-events: none;
+}
+.hall__arch {
+  flex: none;
+  width: clamp(64px, 11vw, 148px);
+  height: clamp(190px, 27vw, 330px);
+  border: 1px solid var(--hall-rule);
+  border-bottom: none;
+  border-radius: 999px 999px 0 0;
+  background: linear-gradient(180deg, rgba(201, 164, 95, .11), transparent 72%);
+}
+.hall__arch--crossing {
+  width: clamp(104px, 17vw, 224px);
+  height: clamp(250px, 36vw, 440px);
+  border-color: var(--brass-soft);
+  background: linear-gradient(180deg, rgba(201, 164, 95, .18), transparent 76%);
+}
+.hall__arch--outer { opacity: .55; height: clamp(150px, 21vw, 258px); }
+
+/* The nameplate is cut into the wall between two brass rules, not laid on it as
+   a card. Wide tracking and a long measure give it the scale of lettering over
+   a door. */
+.hall__plaque {
+  position: relative;
+  display: block; max-width: 50rem; margin: 0 auto;
+  padding: clamp(3.5rem, 11vw, 7.5rem) 0 clamp(2rem, 5vw, 3.25rem);
+  text-align: center;
+  background: none; border: none; border-radius: 0; box-shadow: none;
+}
+.hall__title {
+  margin: 0;
+  font-size: clamp(2.1rem, 8.2vw, 5rem);
+  letter-spacing: clamp(.08em, 1.1vw, .2em);
+  text-transform: uppercase;
+  color: var(--hall-ink);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .35);
+}
+.hall__title-alt { display: block; font-size: .28em; letter-spacing: .5em; color: var(--brass-lit); margin-top: .9rem; }
+.hall__tagline {
+  margin: clamp(1.5rem, 3.5vw, 2.25rem) auto 0; max-width: 40ch;
+  color: var(--hall-ink-soft); font-style: italic;
+}
+.hall__tagline::before {
+  content: ""; display: block; width: 4.5rem; height: 1px;
+  margin: 0 auto clamp(1.25rem, 3vw, 1.85rem);
+  background: linear-gradient(90deg, transparent, var(--brass), transparent);
+}
 
 .section-title { font-size: .8rem; font-family: var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--rule); padding-bottom: .6rem; margin-top: 3.5rem; }
 
-.shelf-list { list-style: none; padding: 0; margin: 1.5rem 0 0; display: grid; gap: 1rem; }
-.shelf { background: var(--card); border: 1px solid var(--rule); border-radius: 2px; box-shadow: var(--shadow); }
-.shelf__link, .shelf--empty { display: flex; gap: 1.25rem; padding: 1.25rem; text-decoration: none; color: inherit; }
-.shelf__spine { flex: 0 0 8px; border-radius: 2px; background: linear-gradient(180deg, var(--brass), var(--oxblood)); }
-.shelf--empty { opacity: .55; }
-.shelf--empty .shelf__spine { background: var(--rule); }
-.shelf__title { display: block; font-size: 1.5rem; }
-.shelf__alt { font-size: .65em; color: var(--brass); margin-left: .6rem; }
-.shelf__desc { display: block; color: var(--ink-soft); margin-top: .35rem; max-width: var(--measure); }
-.shelf__count { display: block; margin-top: .6rem; font-family: var(--sans); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; color: var(--brass); }
+/* The lintel: the line the two doorways are cut through, labelled at its left
+   end the way a floorplan labels a range of rooms. */
+.rooms { position: relative; max-width: 1080px; margin: 0 auto; padding-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+.rooms .section-title {
+  margin-top: 0; color: var(--hall-ink-soft);
+  border-bottom: 1px solid var(--brass-soft);
+  padding-bottom: .75rem;
+}
+
+/* A room mark is a position in the hall, worn the same way in every place the
+   room is named: on its card in the hall, beside its own heading, and on the
+   trail step of anything the room holds. */
+.room-mark {
+  display: inline-block;
+  font-family: var(--sans); font-size: .64rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--brass-lit); border: 1px solid var(--brass-soft); border-radius: 2px;
+  padding: .1rem .45rem; white-space: nowrap;
+}
+
+/* The two doorways. They are deliberately not a pair of equal cards: room 1 is
+   the broad working archive and gets the wider, shallower opening and the
+   shelf rhythm standing inside it; room 2 is the narrow reading alcove and gets
+   a taller, rounder opening, a shorter silhouette and a lamp instead of shelves.
+   Both stand on the same floor line, so the difference reads as plan rather
+   than as inconsistency. */
+.shelf-list {
+  list-style: none; padding: 0;
+  margin: clamp(1.75rem, 4.5vw, 3rem) 0 0;
+  display: grid; gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+@media (min-width: 880px) {
+  .shelf-list { grid-template-columns: 1.62fr 1fr; align-items: end; }
+}
+.shelf {
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, var(--room-lit) 0%, var(--walnut-deep) 92%);
+  border: 1px solid var(--hall-rule);
+  border-bottom: 3px solid var(--brass-soft);
+  border-radius: 50% 50% 3px 3px / 26% 26% 3px 3px;
+  box-shadow: inset 0 22px 44px -26px rgba(0, 0, 0, .95), var(--shadow);
+  transition: border-bottom-color .15s ease;
+}
+.shelf--room-2 {
+  background: linear-gradient(180deg, var(--room-quiet) 0%, var(--walnut-deep) 92%);
+  border-radius: 50% 50% 3px 3px / 36% 36% 3px 3px;
+}
+.shelf:hover, .shelf:focus-within { border-bottom-color: var(--brass); }
+/* The doorway clips its own contents, so the focus ring is drawn inside the
+   opening instead of being cut off at the arch. */
+.shelf__link:focus-visible { outline: 2px solid var(--brass); outline-offset: -4px; }
+
+/* Arch head, then the air of the room, then the rhythm inside it standing on
+   the text at the foot of the doorway. The middle row is what carries the
+   negative space, so the doorway reads as a height rather than as padding. */
+.shelf__link {
+  display: grid; grid-template-rows: auto 1fr auto;
+  min-height: clamp(19rem, 34vw, 25rem);
+  padding: 0; gap: 0;
+  text-decoration: none; color: var(--hall-ink);
+}
+.shelf--room-2 .shelf__link { min-height: clamp(17rem, 29vw, 21rem); }
+
+.shelf__head {
+  display: flex; align-items: center; justify-content: center;
+  height: clamp(4.5rem, 9vw, 7rem);
+}
+.shelf__numeral {
+  font-family: var(--serif); font-size: clamp(1.9rem, 4vw, 3.1rem); line-height: 1;
+  letter-spacing: .06em; color: var(--brass-lit); opacity: .8;
+}
+
+/* The shelf rhythm: an irregular run of spines, read at a distance through the
+   doorway. It is a texture of catalogue lines, not a drawing of books. */
+.shelf__spine {
+  display: block; align-self: end;
+  height: clamp(3.25rem, 7vw, 5.5rem);
+  margin: 0 clamp(1.1rem, 3vw, 2.25rem);
+  border-bottom: 1px solid var(--hall-rule);
+  background: repeating-linear-gradient(90deg,
+    var(--brass-soft) 0 2px, transparent 2px 7px,
+    var(--oxblood) 7px 10px, transparent 10px 15px,
+    var(--brass-soft) 15px 16px, transparent 16px 24px);
+  opacity: .42;
+  transition: opacity .15s ease;
+}
+.shelf:hover .shelf__spine, .shelf:focus-within .shelf__spine { opacity: .62; }
+/* The alcove holds a reading lamp rather than a run of shelves. */
+.shelf--room-2 .shelf__spine {
+  margin: 0 clamp(1.75rem, 5vw, 3.5rem);
+  background: radial-gradient(64% 130% at 50% 118%, var(--glow), transparent 72%);
+  opacity: .9;
+}
+
+.shelf__body {
+  min-width: 0;
+  padding: clamp(1.25rem, 3vw, 1.9rem) clamp(1.25rem, 3.2vw, 2.25rem) clamp(1.4rem, 3.4vw, 2.1rem);
+}
+.shelf__body .room-mark { margin-bottom: .7rem; }
+.shelf__title { display: block; font-size: clamp(1.5rem, 2.7vw, 2.2rem); line-height: 1.15; }
+.shelf--room-2 .shelf__title { font-size: clamp(1.35rem, 2.1vw, 1.75rem); }
+.shelf__alt { font-size: .6em; color: var(--brass-lit); margin-left: .6rem; }
+.shelf__desc { display: block; color: var(--hall-ink-soft); margin-top: .6rem; max-width: 46ch; font-size: .95rem; }
+.shelf__count { display: block; margin-top: 1rem; font-family: var(--sans); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brass-lit); }
+
+/* The hall holds two rooms. What it does not hold yet is a note under the plan,
+   not a third card standing empty beside them. */
+.rooms__further {
+  margin: clamp(1.75rem, 3.5vw, 2.5rem) 0 0; max-width: var(--measure);
+  padding-top: 1rem; border-top: 1px solid var(--hall-rule);
+  font-size: .88rem; color: var(--hall-ink-soft);
+}
+.rooms__further-title { font-family: var(--sans); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass-lit); margin-right: .6rem; }
+
+.reading-room { margin-top: clamp(1rem, 3vw, 2rem); }
 .reading-room p { max-width: var(--measure); }
 .reading-room__shared { color: var(--ink-soft); }
 .text-link { background: none; border: none; padding: 0; font: inherit; color: var(--oxblood); text-decoration: underline; cursor: pointer; }
@@ -139,13 +355,105 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 }
 .fixture-banner__tag { flex: none; font-family: var(--sans); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; background: var(--brass); color: var(--parchment); padding: .2rem .5rem; border-radius: 2px; }
 
-/* ---- gallery ---- */
-.crumb { font-family: var(--sans); font-size: .78rem; letter-spacing: .08em; color: var(--ink-soft); }
-.crumb a { color: var(--ink-soft); }
+/* ---- the location trail ---- */
+/* The separator is drawn here rather than emitted as text, so the markup stays
+   a list of places and a screen reader is not read a line of slashes. */
+.trail { margin: 0 0 1rem; }
+.trail__path {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .7rem;
+  font-family: var(--sans); font-size: .78rem; letter-spacing: .08em; color: var(--ink-soft);
+}
+.trail__step { display: flex; align-items: center; gap: .45rem; min-width: 0; overflow-wrap: anywhere; }
+.trail__step + .trail__step::before { content: "/"; color: var(--ink-soft); opacity: .45; margin-right: .25rem; }
+.trail__step a { color: var(--ink-soft); }
+.trail__step--current { color: var(--ink); }
+
+/* ---- thresholds: walking out of the hall into a room ----------------------
+   A room's own index page opens on the same wall the hall is built from, under
+   an arch cut to that room's proportions: broad and shallow for the working
+   archive, narrow and tall for the reading alcove. A reader who has seen the
+   hall recognizes the room before reading its name, and the page's own paper
+   begins where the wall stops. */
 .collection-head { padding-top: 2.5rem; }
+.collection-head--room {
+  position: relative; isolation: isolate;
+  margin: 0 -1.5rem; padding: clamp(1.75rem, 4.5vw, 3rem) 1.5rem clamp(1.75rem, 4vw, 2.75rem);
+  color: var(--hall-ink);
+}
+.collection-head--room::before {
+  content: "";
+  position: absolute; z-index: -1; inset: 0;
+  left: 50%; width: 100vw; transform: translateX(-50%);
+  background:
+    radial-gradient(80% 88% at 50% 8%, var(--glow), transparent 68%),
+    linear-gradient(180deg, var(--walnut-deep), var(--walnut));
+  border-bottom: 2px solid var(--brass-soft);
+}
+/* The same arch geometry the room's doorway carries in the hall, sprung across
+   the head of its own page. */
+.collection-head--room::after {
+  content: "";
+  position: absolute; z-index: -1; inset: 0 auto 0 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--hall-rule); border-bottom: none;
+}
+.collection-head--room-1::after { width: min(900px, 86vw); border-radius: 50% 50% 0 0 / 34% 34% 0 0; }
+.collection-head--room-2::after { width: min(560px, 68vw); border-radius: 50% 50% 0 0 / 58% 58% 0 0; }
+
+.collection-head--room .trail { margin-bottom: 1.1rem; }
+.collection-head--room .trail__path,
+.collection-head--room .trail__step a { color: var(--hall-ink-soft); }
+.collection-head--room .trail__step--current { color: var(--hall-ink); }
+.collection-head__room { margin: 0 0 .75rem; }
+/* The separator is drawn in the trail's own ink, which on a wall is the wall's
+   ink, not the page's. */
+.collection-head--room .trail__step + .trail__step::before,
+.threshold .trail__step + .trail__step::before { color: var(--hall-ink-soft); }
 .collection-head h1 { font-size: clamp(2rem, 5vw, 3rem); margin: .25rem 0; }
+.collection-head--room h1 {
+  font-size: clamp(2.1rem, 6vw, 3.6rem); margin: .35rem 0 0;
+  letter-spacing: .03em; color: var(--hall-ink);
+}
+.collection-head--room-2 h1 { font-size: clamp(1.9rem, 4.6vw, 2.9rem); }
 .collection-head__alt { font-size: .45em; color: var(--brass); margin-left: .75rem; letter-spacing: .25em; }
 .collection-head__desc { color: var(--ink-soft); max-width: var(--measure); }
+.collection-head--room .collection-head__desc { color: var(--hall-ink-soft); margin-top: 1rem; }
+/* The alcove keeps a narrower measure than the archive, on its index page as on
+   its reading pages. */
+.collection-head--room-2 .collection-head__desc { max-width: 52ch; }
+
+/* An item's own page opens on a low band of the same wall: enough of the room
+   to place the reader, not enough to compete with the record. The reveal arch
+   keeps that room's proportions, so a record and a story are distinguishable at
+   a glance before either is read. */
+.threshold {
+  position: relative; isolation: isolate;
+  margin: 0 -1.5rem clamp(1.75rem, 4vw, 2.5rem);
+  padding: clamp(1.1rem, 2.6vw, 1.6rem) 1.5rem;
+  color: var(--hall-ink-soft);
+}
+.threshold::before {
+  content: "";
+  position: absolute; z-index: -1; inset: 0;
+  left: 50%; width: 100vw; transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--walnut-deep), var(--walnut));
+  border-bottom: 1px solid var(--brass-soft);
+}
+.threshold::after {
+  content: "";
+  position: absolute; z-index: -1; inset: 0 auto 0 50%;
+  transform: translateX(-50%);
+  border: 1px solid var(--hall-rule); border-bottom: none;
+}
+.threshold--room-1::after { width: min(900px, 86vw); border-radius: 50% 50% 0 0 / 60% 60% 0 0; }
+.threshold--room-2::after { width: min(520px, 66vw); border-radius: 50% 50% 0 0 / 90% 90% 0 0; }
+.threshold .trail { margin: 0; }
+.threshold .trail__path,
+.threshold .trail__step a { color: var(--hall-ink-soft); }
+.threshold .trail__step--current { color: var(--hall-ink); }
+
+/* ---- gallery ---- */
 
 .filters { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; padding: 1rem 0 1.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
 .filters__field { display: flex; flex-direction: column; gap: .3rem; }
@@ -155,9 +463,19 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .filters__reset { font-family: var(--sans); font-size: .78rem; padding: .55rem .9rem; background: none; border: 1px solid var(--rule); border-radius: 2px; color: var(--ink-soft); cursor: pointer; }
 .filters__status { flex: 1 1 100%; margin: .25rem 0 0; font-family: var(--sans); font-size: .8rem; color: var(--ink-soft); }
 
+/* The archive's catalogue. Each record stands on the shelf as a spine: the
+   brass edge on the left is the same mark the room's doorway carries, so the
+   grid reads as a run of shelved records rather than as a wall of tiles. */
 .card-grid { list-style: none; padding: 0; margin: 2rem 0 0; display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-.card { background: var(--card); border: 1px solid var(--rule); border-radius: 2px; box-shadow: var(--shadow); transition: transform .15s ease, box-shadow .15s ease; }
-.card:hover, .card:focus-within { transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+.card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--brass-soft);
+  border-radius: 0 2px 2px 0;
+  box-shadow: var(--shadow);
+  transition: transform .15s ease, box-shadow .15s ease, border-left-color .15s ease;
+}
+.card:hover, .card:focus-within { transform: translateY(-2px); box-shadow: var(--shadow-lift); border-left-color: var(--brass); }
 .card__link { display: block; padding: 1.25rem; text-decoration: none; color: inherit; height: 100%; }
 .card__marks { display: flex; gap: .5rem; align-items: center; }
 .card__region { font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); }
@@ -174,14 +492,24 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 
 /* ---- detail ---- */
 .record { margin-top: 1rem; }
-.record__head h1 { font-size: clamp(2rem, 5.5vw, 3.25rem); margin: .3rem 0; }
+/* The record's own plate, ruled off the page the way the nameplate is ruled off
+   the wall: marks, name, summary, then the line the record proper begins under. */
+.record__head { padding-bottom: clamp(1.25rem, 3vw, 2rem); border-bottom: 1px solid var(--brass-soft); }
+.record__head h1 { font-size: clamp(2.1rem, 6vw, 3.6rem); margin: .3rem 0; letter-spacing: .01em; }
 .record__alt { color: var(--brass); font-size: .95rem; margin: 0; }
 .record__summary { max-width: var(--measure); color: var(--ink-soft); font-size: 1.05rem; }
 .record__block { margin-top: 2.75rem; }
 .record__block h2 { font-size: .8rem; font-family: var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--ink-soft); border-bottom: 1px solid var(--rule); padding-bottom: .6rem; }
 .block-note { font-size: .88rem; color: var(--ink-soft); font-style: italic; max-width: var(--measure); }
 .record__columns { display: grid; gap: 2.5rem; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); }
-@media (max-width: 720px) { .record__columns { grid-template-columns: 1fr; } .hall__vault { display: none; } }
+/* A five-bay arcade does not survive a narrow viewport. Rather than drop the
+   architecture, the hall loses its side bays and keeps the crossing, so a phone
+   gets one tall arch over the nameplate instead of a clutter of small ones. */
+@media (max-width: 720px) {
+  .record__columns { grid-template-columns: 1fr; }
+  .hall__arch { display: none; }
+  .hall__arch--crossing { display: block; width: min(66vw, 320px); height: clamp(230px, 62vw, 380px); }
+}
 
 .variants { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .variant { padding: 1rem; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--brass-soft); border-radius: 2px; }
@@ -217,7 +545,14 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .history__version { font-family: var(--mono); color: var(--brass); }
 .history__date { font-size: .8rem; color: var(--ink-soft); margin-left: .5rem; }
 
-.record-nav { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); font-size: .95rem; }
+/* The return rail: where this record sits on the shelf, then the three ways off
+   it. The position line is the catalogue coordinate; prev/index/next is the
+   walk it describes, in the same manifest order. */
+.record-nav { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--brass-soft); font-size: .95rem; }
+/* The coordinate is set in the catalogue's own hand: monospaced, brass, sitting
+   above the walk it describes. */
+.record-nav__position { margin: 0 0 1.25rem; font-family: var(--mono); font-size: .76rem; letter-spacing: .06em; color: var(--brass-ink); }
+.record-nav__rail { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1rem; align-items: center; }
 .record-nav a { text-decoration: none; }
 .record-nav span { display: block; font-family: var(--sans); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
 .record-nav__next { text-align: right; }
@@ -293,21 +628,25 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 
 /* ---- stories: a quiet shelf, and a page built for reading and nothing else ---- */
 
-.story-shelf__count { font-family: var(--sans); font-size: .8rem; letter-spacing: .06em; color: var(--ink-soft); margin: 2rem 0 0; }
-.story-shelf__scope { max-width: var(--measure); margin-top: 2.5rem; font-size: .9rem; color: var(--ink-soft); }
+/* Room 2 is the alcove: one narrow column, wide margins, and nothing competing
+   for the eye. Where the archive gets a grid of spines, the alcove gets a
+   single work set out on a page. */
+.page--stories main, .page--story main { max-width: 900px; }
+.story-shelf__count { font-family: var(--mono); font-size: .76rem; letter-spacing: .06em; color: var(--brass-ink); margin: clamp(2rem, 4vw, 2.75rem) 0 0; }
+.story-shelf__scope { max-width: 56ch; margin-top: clamp(2.5rem, 5vw, 3.5rem); padding-top: 1.25rem; border-top: 1px solid var(--rule); font-size: .9rem; color: var(--ink-soft); }
 .story-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: 1.25rem; }
-.story-card { min-width: 0; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--brass); border-radius: 2px; box-shadow: var(--shadow); }
-.story-card__link { display: block; min-width: 0; overflow-wrap: anywhere; padding: 1.4rem 1.5rem; text-decoration: none; color: inherit; }
+.story-card { min-width: 0; background: var(--card); border: 1px solid var(--rule); border-left: 3px solid var(--brass); border-radius: 0 2px 2px 0; box-shadow: var(--shadow); }
+.story-card__link { display: block; min-width: 0; overflow-wrap: anywhere; padding: clamp(1.5rem, 4vw, 2.4rem) clamp(1.5rem, 4vw, 2.6rem); text-decoration: none; color: inherit; }
 .story-card__marks { display: flex; gap: .5rem; align-items: center; }
 .story-card__title { margin: .6rem 0 .3rem; font-size: 1.5rem; max-width: var(--measure); }
 .story-card__original { margin: 0; font-size: .95rem; color: var(--brass); }
 .story-card__abstract { margin: .7rem 0 0; color: var(--ink-soft); font-size: .95rem; max-width: var(--measure); }
 .story-card__meta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.1rem; padding-top: .75rem; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: .72rem; letter-spacing: .06em; color: var(--ink-soft); }
 
-.story { margin-top: 1rem; }
-.story__head { max-width: var(--measure); }
+.story { margin-top: clamp(1rem, 3vw, 2rem); }
+.story__head { max-width: 58ch; padding-bottom: clamp(1.25rem, 3vw, 2rem); border-bottom: 1px solid var(--brass-soft); }
 .story__marks { display: flex; gap: .5rem; align-items: center; margin: 0; }
-.story__head h1 { font-size: clamp(1.9rem, 5vw, 3rem); margin: .5rem 0 .3rem; }
+.story__head h1 { font-size: clamp(1.9rem, 5.2vw, 3.1rem); margin: .6rem 0 .3rem; }
 .story__original { margin: 0; color: var(--brass); font-size: 1rem; }
 .story__byline { margin: .8rem 0 0; font-family: var(--sans); font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
 .story__abstract { margin: 1rem 0 0; color: var(--ink-soft); }
@@ -323,6 +662,9 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .story__body strong { font-weight: 600; color: var(--ink); }
 
 .story-nav { margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+/* The shelf's own census, then the way back to it. A shelf holding one work has
+   no next work, so the rail offers none. */
+.story-nav__context { margin: 0 0 .8rem; font-family: var(--mono); font-size: .76rem; letter-spacing: .06em; color: var(--brass-ink); }
 .story-nav__index { font-family: var(--sans); font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; }
 
 @media (max-width: 600px) {
@@ -351,6 +693,34 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
   .collection-head, .fixture-banner, .lens { min-width: 0; }
   .collection-head p, .fixture-banner, .lens, .lens__intro { overflow-wrap: anywhere; }
   .lens__action { display: block; text-align: center; }
+
+  /* A phone walks the hall instead of seeing it at once: the wall and the two
+     thresholds keep reaching the screen edges, and each doorway is tall enough
+     to be its own stop on the way down. The order is the plan's order. */
+  .hall, .collection-head--room, .threshold { margin-left: -1rem; margin-right: -1rem; padding-left: 1rem; padding-right: 1rem; }
+  .hall__plaque { padding-top: clamp(3rem, 16vw, 5rem); }
+  .hall__title { max-width: 9ch; margin-left: auto; margin-right: auto; font-size: clamp(1.7rem, 7vw, 2.2rem); letter-spacing: .04em; overflow-wrap: normal; }
+  .hall__title-alt { letter-spacing: .34em; }
+  .shelf-list { gap: 1.75rem; }
+  .shelf__link { min-height: 18.5rem; }
+  .shelf--room-2 .shelf__link { min-height: 16rem; }
+  .shelf { border-radius: 46% 46% 3px 3px / 16% 16% 3px 3px; }
+  .shelf--room-2 { border-radius: 50% 50% 3px 3px / 24% 24% 3px 3px; }
+  .shelf { min-width: 0; }
+  .shelf__body { width: 100%; max-width: 100%; padding: 1.15rem 1.15rem 1.35rem; overflow: hidden; overflow-wrap: anywhere; }
+  .shelf__title { font-size: 1.45rem; }
+  .shelf__alt { margin-left: 0; display: block; }
+  .shelf__desc { width: 100%; max-width: 100%; white-space: normal; word-break: break-all; }
+  .collection-head--room-1::after, .collection-head--room-2::after { width: 92vw; border-radius: 50% 50% 0 0 / 22% 22% 0 0; }
+  .collection-head--room-2::after { width: 74vw; border-radius: 50% 50% 0 0 / 34% 34% 0 0; }
+  .threshold--room-1::after, .threshold--room-2::after { width: 92vw; border-radius: 50% 50% 0 0 / 70% 70% 0 0; }
+  .threshold--room-2::after { width: 72vw; }
+  /* The trail wraps step by step rather than clipping a long record name. */
+  .trail__path { gap: .3rem .5rem; font-size: .74rem; }
+  .trail__step + .trail__step::before { margin-right: .15rem; }
+  /* Three columns of prev/index/next do not fit a phone; stack them instead. */
+  .record-nav__rail { grid-template-columns: 1fr; gap: .75rem; text-align: left; }
+  .record-nav__next, .record-nav__index { text-align: left; }
   .fixture-banner { flex-direction: column; }
   .filters input, .filters select { min-width: 0; width: 100%; }
   .filters__field { flex: 1 1 100%; min-width: 0; }

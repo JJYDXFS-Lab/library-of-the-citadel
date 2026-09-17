@@ -378,13 +378,42 @@ test('the reading page ends with a way back to the shelf, and no other navigatio
       assert.match(html, /<nav class="story-nav"/, `${label}/${loc.code}: no return navigation`);
       assert.ok(html.includes(`<a class="story-nav__index" href="${base}${loc.prefix}stories/">`),
         `${label}/${loc.code}: the return link does not point at the shelf`);
-      // The crumb also goes back, through the shelf's own name.
+      // The location trail also goes back, through the shelf's own name.
       assert.ok(html.includes(`<a href="${base}${loc.prefix}stories/">${esc(shelf.locales[loc.code].title)}</a>`),
-        `${label}/${loc.code}: the breadcrumb does not name the shelf`);
+        `${label}/${loc.code}: the trail does not name the shelf`);
       // Nothing a reading page has no business carrying.
       for (const unwanted of ['data-grid', 'data-filters', 'record-nav__prev', 'record-nav__next', 'autoplay', '<iframe', '<video', '<audio']) {
         assert.ok(!html.includes(unwanted), `${label}/${loc.code}: the reading page carries "${unwanted}"`);
       }
+    }
+  }
+});
+
+test('the reading page keeps the shelf\'s identity and returns to it without inventing a next work', () => {
+  const story = onlyStory();
+  const { shelf } = loaded();
+  for (const [label, r, base] of DEPLOYMENTS()) {
+    for (const loc of LOCALES) {
+      const html = read(r, pageAt(loc, `stories/${story.story_id}/index.html`));
+      const trail = /<nav class="trail"[\s\S]*?<\/nav>/.exec(html);
+      assert.ok(trail, `${label}/${loc.code}: the reading page has no location trail`);
+      // Hall, then the shelf wearing its room mark, then this work.
+      assert.match(trail[0], new RegExp(`<a href="${base}${loc.prefix}">`),
+        `${label}/${loc.code}: the trail does not start at the hall`);
+      assert.match(trail[0], new RegExp(`<span class="room-mark">[^<]+</span> <a href="${base}${loc.prefix}stories/">`),
+        `${label}/${loc.code}: the trail does not carry the shelf's room identity`);
+      assert.ok(trail[0].includes(esc(shelf.locales[loc.code].title)), `${label}/${loc.code}: the room step is not in this locale`);
+      assert.ok(trail[0].includes(esc(story.locales[loc.code].title)), `${label}/${loc.code}: the trail does not end at this work`);
+
+      // The return rail states the shelf's own census — the number of works a
+      // reader can actually open — and offers one way off the page.
+      const context = /<p class="story-nav__context">([^<]*)<\/p>/.exec(html);
+      assert.ok(context, `${label}/${loc.code}: the return rail gives no shelf context`);
+      assert.match(context[1], new RegExp(`\\b${PUBLISHED.length}\\b`),
+        `${label}/${loc.code}: the return context reports a count the shelf cannot show`);
+      const navBlock = /<nav class="story-nav"[\s\S]*?<\/nav>/.exec(html)[0];
+      assert.equal([...navBlock.matchAll(/<a /g)].length, 1,
+        `${label}/${loc.code}: the return rail offers something other than the single way back`);
     }
   }
 });

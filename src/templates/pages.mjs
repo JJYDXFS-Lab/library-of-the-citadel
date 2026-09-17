@@ -35,6 +35,40 @@ const SECTION_PARAM = 'section';
 
 export const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
 
+/**
+ * The hall's public rooms, in hall order. A room mark is a presentation
+ * coordinate — where a shelf stands in this hall — and nothing else: it makes
+ * no claim about the records a room holds, the way `region.label_basis` makes
+ * none about a dish. It exists so the identity a reader picks up in the hall is
+ * the same one they still see on a single record three clicks later.
+ */
+export const ROOM = { collection: 1, stories: 2 };
+
+export const roomMark = (L, index) => `<span class="room-mark">${esc(L.t('room.mark', { index }))}</span>`;
+
+/**
+ * The location trail: one ordered list from the hall down to the page the
+ * reader is on, so "where am I" and "how do I get back" are the same control on
+ * every page below the hall. A step is `[label, href|null, markHtml|null]`; the
+ * last step is the current page and is never a link. The room's own index page
+ * carries its mark in the heading instead, so the mark shows exactly once.
+ *
+ * The separator is drawn in CSS rather than emitted as text, so the trail reads
+ * as a list of places rather than as a line of slashes.
+ */
+export function trail(L, steps) {
+  const items = steps.map(([label, href, mark], i) => {
+    const current = i === steps.length - 1;
+    const body = href ? `<a href="${href}">${esc(label)}</a>` : `<span>${esc(label)}</span>`;
+    return `    <li class="trail__step${current ? ' trail__step--current' : ''}"${current ? ' aria-current="page"' : ''}>${mark ? `${mark} ` : ''}${body}</li>`;
+  }).join('\n');
+  return `<nav class="trail" aria-label="${esc(L.t('trail.label'))}">
+  <ol class="trail__path">
+${items}
+  </ol>
+</nav>`;
+}
+
 export function head(cfg, L, { title, description }) {
   return `<!DOCTYPE html>
 <html lang="${esc(L.htmlLang)}">
@@ -174,6 +208,32 @@ export function withShelfTitles(L, { collection, stories }) {
 
 // ---------------------------------------------------------------- hall
 
+/**
+ * One room on the hall's plan, drawn as the doorway into it: the arch head
+ * carrying the room's number, the rhythm of what stands inside, then its own
+ * title in the reader's language, what it holds, and how much of it. The whole
+ * doorway is the link, so the room is one target rather than a card with a link
+ * somewhere inside it.
+ *
+ * The numeral over the arch is the room mark's own index drawn at architectural
+ * scale. It is decoration over a label that already says the same thing in
+ * words, so it is hidden from assistive technology rather than read twice.
+ */
+function roomShelf(L, { index, href, title, alt, desc, count }) {
+  return `      <li class="shelf shelf--room-${index}">
+        <a class="shelf__link" href="${href}">
+          <span class="shelf__head" aria-hidden="true"><span class="shelf__numeral">${esc(index)}</span></span>
+          <span class="shelf__spine" aria-hidden="true"></span>
+          <span class="shelf__body">
+            ${roomMark(L, index)}
+            <span class="shelf__title">${esc(title)}${alt ? `<span class="shelf__alt">${esc(alt)}</span>` : ''}</span>
+            <span class="shelf__desc">${esc(desc)}</span>
+            <span class="shelf__count">${esc(count)}</span>
+          </span>
+        </a>
+      </li>`;
+}
+
 export function hallPage(cfg, L, view, { stories }) {
   const collection = view.collection.record;
   const items = view.entries.map((e) => e.record);
@@ -183,48 +243,42 @@ ${chrome(cfg, L, { nav: '', route: '' })}
 <main id="main">
   <section class="hall" aria-labelledby="hall-title">
     <div class="hall__vault" aria-hidden="true">
-      <span class="hall__arch"></span><span class="hall__arch"></span><span class="hall__arch"></span>
+      <span class="hall__arch hall__arch--outer"></span>
+      <span class="hall__arch"></span>
+      <span class="hall__arch hall__arch--crossing"></span>
+      <span class="hall__arch"></span>
+      <span class="hall__arch hall__arch--outer"></span>
     </div>
     <div class="hall__plaque">
       <h1 id="hall-title" class="hall__title">${esc(cfg.siteName)}${cfg.siteNameAlt ? `<span class="hall__title-alt">${esc(cfg.siteNameAlt)}</span>` : ''}</h1>
       <p class="hall__tagline">${esc(L.site.tagline)}</p>
     </div>
+
+    <section class="rooms" aria-labelledby="rooms-title">
+      <h2 id="rooms-title" class="section-title">${esc(L.t('hall.rooms_title'))}</h2>
+      <ul class="shelf-list">
+${roomShelf(L, {
+    index: ROOM.collection,
+    href: L.path('recipes/'),
+    title: collection.title.primary,
+    alt: (collection.title.alt ?? [])[0] ?? '',
+    desc: collection.description,
+    count: plural(L, 'hall.count', items.length),
+  })}
+${roomShelf(L, {
+    index: ROOM.stories,
+    href: L.path('stories/'),
+    title: stories.shelf.text.title,
+    alt: stories.shelf.text.title_alt ?? '',
+    desc: stories.shelf.text.description,
+    count: plural(L, 'hall.stories_count', stories.stories.length),
+  })}
+      </ul>
+      <p class="rooms__further"><span class="rooms__further-title">${esc(L.t('hall.further_title'))}</span> ${esc(L.t('hall.further_desc'))}</p>
+    </section>
   </section>
 
   ${noticeBanner(L, L.site.buildNotice)}
-
-  <section class="shelves" aria-labelledby="shelves-title">
-    <h2 id="shelves-title" class="section-title">${esc(L.t('hall.collections_title'))}</h2>
-    <ul class="shelf-list">
-      <li class="shelf">
-        <a class="shelf__link" href="${L.path('recipes/')}">
-          <span class="shelf__spine" aria-hidden="true"></span>
-          <span class="shelf__body">
-            <span class="shelf__title">${esc(collection.title.primary)}${(collection.title.alt ?? []).length ? `<span class="shelf__alt">${esc(collection.title.alt[0])}</span>` : ''}</span>
-            <span class="shelf__desc">${esc(collection.description)}</span>
-            <span class="shelf__count">${esc(plural(L, 'hall.count', items.length))}</span>
-          </span>
-        </a>
-      </li>
-      <li class="shelf">
-        <a class="shelf__link" href="${L.path('stories/')}">
-          <span class="shelf__spine" aria-hidden="true"></span>
-          <span class="shelf__body">
-            <span class="shelf__title">${esc(stories.shelf.text.title)}${stories.shelf.text.title_alt ? `<span class="shelf__alt">${esc(stories.shelf.text.title_alt)}</span>` : ''}</span>
-            <span class="shelf__desc">${esc(stories.shelf.text.description)}</span>
-            <span class="shelf__count">${esc(plural(L, 'hall.stories_count', stories.stories.length))}</span>
-          </span>
-        </a>
-      </li>
-      <li class="shelf shelf--empty" aria-disabled="true">
-        <span class="shelf__spine" aria-hidden="true"></span>
-        <span class="shelf__body">
-          <span class="shelf__title">${esc(L.t('hall.further_title'))}</span>
-          <span class="shelf__desc">${esc(L.t('hall.further_desc'))}</span>
-        </span>
-      </li>
-    </ul>
-  </section>
 
   <section class="reading-room" aria-labelledby="reading-room-title">
     <h2 id="reading-room-title" class="section-title">${esc(L.t('hall.what_title'))}</h2>
@@ -322,8 +376,9 @@ export function galleryPage(cfg, L, view, { regions }) {
 <body class="page page--gallery">
 ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
 <main id="main">
-  <header class="collection-head">
-    <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> ${esc(collection.title.primary)}</p>
+  <header class="collection-head collection-head--room collection-head--room-${ROOM.collection}">
+    ${trail(L, [[L.t('nav.hall'), L.path('')], [collection.title.primary, null]])}
+    <p class="collection-head__room">${roomMark(L, ROOM.collection)}</p>
     <h1>${esc(collection.title.primary)}${(collection.title.alt ?? []).length ? `<span class="collection-head__alt">${esc(collection.title.alt[0])}</span>` : ''}</h1>
     <p class="collection-head__desc">${esc(collection.description)}</p>
   </header>
@@ -384,7 +439,7 @@ const TRANSLATION_FACT = {
   none: 'facts.translation_none',
 };
 
-export function detailPage(cfg, L, view, { entry, neighbours }) {
+export function detailPage(cfg, L, view, { entry, neighbours, position }) {
   const item = entry.record;
   const collection = view.collection.record;
   const sources = item.sources.length
@@ -395,7 +450,13 @@ export function detailPage(cfg, L, view, { entry, neighbours }) {
 <body class="page page--detail">
 ${chrome(cfg, L, { nav: 'recipes/', route: itemPath(item) })}
 <main id="main">
-  <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> <a href="${L.path('recipes/')}">${esc(collection.title.primary)}</a> <span aria-hidden="true">/</span> ${esc(item.name.primary)}</p>
+  <div class="threshold threshold--room-${ROOM.collection}">
+    ${trail(L, [
+    [L.t('nav.hall'), L.path('')],
+    [collection.title.primary, L.path('recipes/'), roomMark(L, ROOM.collection)],
+    [item.name.primary, null],
+  ])}
+  </div>
 
   ${noticeBanner(L, item.record_notice, classTag(item.record_class))}
   ${translationNotice(L, entry.state)}
@@ -462,9 +523,14 @@ ${item.change_history.map((h) => `        <li><span class="history__version">v${
   </article>
 
   <nav class="record-nav" aria-label="${esc(L.t('record_nav.label'))}">
-    ${neighbours.prev ? `<a class="record-nav__prev" href="${L.path(itemPath(neighbours.prev))}"><span>${esc(L.t('record_nav.prev'))}</span>${esc(neighbours.prev.name.primary)}</a>` : '<span></span>'}
-    <a class="record-nav__index" href="${L.path('recipes/')}">${esc(L.t('record_nav.index'))}</a>
-    ${neighbours.next ? `<a class="record-nav__next" href="${L.path(itemPath(neighbours.next))}"><span>${esc(L.t('record_nav.next'))}</span>${esc(neighbours.next.name.primary)}</a>` : '<span></span>'}
+    <p class="record-nav__position">${esc(L.t('record_nav.position', {
+      index: position.index, total: position.total, collection: collection.title.primary,
+    }))}</p>
+    <div class="record-nav__rail">
+      ${neighbours.prev ? `<a class="record-nav__prev" href="${L.path(itemPath(neighbours.prev))}"><span>${esc(L.t('record_nav.prev'))}</span>${esc(neighbours.prev.name.primary)}</a>` : '<span></span>'}
+      <a class="record-nav__index" href="${L.path('recipes/')}">${esc(L.t('record_nav.index'))}</a>
+      ${neighbours.next ? `<a class="record-nav__next" href="${L.path(itemPath(neighbours.next))}"><span>${esc(L.t('record_nav.next'))}</span>${esc(neighbours.next.name.primary)}</a>` : '<span></span>'}
+    </div>
   </nav>
 </main>
 ${foot(cfg, L)}`;
@@ -482,7 +548,7 @@ export function aboutPage(cfg, L, view, { stories }) {
 ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
 <main id="main">
   <header class="collection-head">
-    <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> ${esc(L.t('page.title.about'))}</p>
+    ${trail(L, [[L.t('nav.hall'), L.path('')], [L.t('page.title.about'), null]])}
     <h1>${esc(L.t('page.title.about'))}</h1>
   </header>
 

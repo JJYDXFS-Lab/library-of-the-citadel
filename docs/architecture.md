@@ -102,10 +102,12 @@ text must also not lose a paragraph, so `body_block_count` is written down and
 checked against the array on every build, and an `emphasis` phrase that no
 longer occurs in its block fails the build rather than rendering nothing.
 
-The reading page is deliberately spare: title, byline, abstract, the language
-note, the text, the colophon, and one link back to the shelf. It has no
-prev/next, no counter, no comment thread, no tracking, and — as everywhere in
-this build — no external asset.
+The reading page is deliberately spare: the location trail, title, byline,
+abstract, the language note, the text, the colophon, and one link back to the
+shelf. It has no prev/next, no reader metric, no comment thread, no tracking,
+and — as everywhere in this build — no external asset. The one number it ends on
+is the shelf's own census, the same count the shelf index shows: a shelf holding
+a single work has no next work, so the return rail invents none.
 
 ## Localization
 
@@ -155,13 +157,49 @@ it is a source constant, not a configuration key.
   keystroke. The search, the region and the curated lens are three filters over
   one catalogue; `?section=` names a lens, an unknown value is dropped the same
   way an unknown region is, and the single reset clears all three.
+- **The hall is a plan of rooms, and a room mark is a coordinate.** The hall
+  stands exactly the public rooms it holds — currently two — as its shelf list;
+  what it does not hold yet is a note under the plan rather than a card standing
+  empty beside them. Each room wears a mark (`ROOM` in `src/templates/pages.mjs`,
+  rendered through the `room.mark` interface string) that says where it stands
+  in the hall and nothing about what it holds, the way `region.label_basis` says
+  nothing about a dish. The mark is the identity a reader carries from the hall
+  into a room and down to a single item.
+- **One location trail on every page below the hall.** `trail()` emits an
+  ordered list from the hall to the current page: the current step is never a
+  link and is the page's only `aria-current="page"` outside the masthead, and
+  the room step wears the room's mark. A room's own index page carries its mark
+  beside its heading instead, so the mark shows exactly once per page. The
+  separator is a CSS `::before`, so the markup stays a list of places rather
+  than a line of slashes.
+- **A detail page states its shelf coordinate.** The return rail opens with the
+  record's position in the collection — "Record 7 of 16 in World Recipes" — read
+  from the same manifest order `prev`/`next` walks, so the coordinate and the
+  walk agree by construction rather than by a second ordering.
+- **The hall is drawn as one section, not a banner over a card list.** The
+  masthead, the arcade, the name cut into the wall and the two doorways are one
+  elevation on one wall; the notice, the build note and everything below them
+  are the paper carried out of it. The two doorways are deliberately unequal —
+  the working archive gets the broad, shallow opening and a shelf rhythm
+  standing inside it, the reading alcove gets the narrow, taller opening and a
+  lamp — because the plan is what the reader is being shown. A room's own index
+  page, and the item pages below it, reopen a band of the same wall under that
+  room's arch, so the identity carries by geometry and palette rather than by a
+  breadcrumb alone. On a narrow viewport the elevation becomes a walk: one arch,
+  then one doorway at a time, in the plan's order.
 - **Nothing is fetched.** The "hall" look is gradients, rules, and type; there
-  are no web fonts, images, or third-party scripts.
+  are no web fonts, images, or third-party scripts. Brass is three tokens rather
+  than one — accent, wall, and paper — because a single warm value cannot stay
+  legible as small type on both parchment and walnut.
 - **Responsive and accessible by construction:** a skip link on every page, one
   `<h1>` per page, a single `<main>` landmark, `aria-current` on the active nav
-  item, `aria-live` on the result count, `aria-hidden` on the decorative vault,
-  visible focus rings, a `prefers-reduced-motion` opt-out, and a dark scheme
-  that restates surfaces as well as ink.
+  item and on the current trail step, `aria-live` on the result count,
+  `aria-hidden` on the decorative vault, the room spines and the numeral over
+  each doorway — which repeats in figures what the room mark beside it already
+  says in words — visible focus rings drawn inside the doorway that clips them,
+  a `prefers-reduced-motion` opt-out, and a dark scheme that restates surfaces
+  as well as ink. The trail, the hall's doorways and the record return rail all
+  wrap or stack on a narrow viewport rather than clipping.
 
 ## Checks
 
@@ -174,6 +212,8 @@ canonical card per record in the catalogue, the curated-lens rendering of a
 collection section and its affordance at both base paths,
 base-path normalization, the output-directory guard, both the root and subpath
 builds, generated link/base-path correctness, detail prev/next navigation, the
+hall standing exactly its two marked public rooms, the location trail on every
+page below the hall, a record page's room identity and shelf coordinate, the
 search/filter/empty-state hooks, build stability, and the exclusion of run
 receipts, secrets, and local paths from the output.
 
@@ -199,7 +239,9 @@ equality between the two page sets' reading columns — rather than a translatio
 of it, the per-locale metadata parity a story needs because it has no original
 to fall back to, the genre note naming both what the work is and what it is not,
 the authorship/provenance/rights/publication facts, the shelf and reading-page
-navigation and the language switch on both story routes, the return link, the
+navigation and the language switch on both story routes, the reading page's
+trail back through the marked shelf and its return rail offering exactly one way
+off the page with no fabricated next work, the return link, the
 exact footer credit with both holders linked, each honesty gate under tampering,
 the absence of operational paths and run receipts from every story source and
 output file, and that the World Recipes collection did not move.

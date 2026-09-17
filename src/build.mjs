@@ -68,6 +68,9 @@ export function build(env = process.env) {
           prev: view.entries[i - 1]?.record ?? null,
           next: view.entries[i + 1]?.record ?? null,
         },
+        // Where this record stands on the shelf, in manifest order — the same
+        // order prev/next walks, so the two agree by construction.
+        position: { index: i + 1, total: view.entries.length },
       }));
     });
 

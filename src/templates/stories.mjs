@@ -3,16 +3,21 @@
 // They share the site chrome, the colophon and the notice banner with the
 // knowledge pages, so a story sits inside the same building rather than beside
 // it. What they deliberately do not share is everything a reading page has no
-// business carrying: there is no timeline, no counter, no comment thread, no
-// tracking, nothing that autoplays, and — as everywhere in this build — no
+// business carrying: there is no timeline, no reader metric, no comment thread,
+// no tracking, nothing that autoplays, and — as everywhere in this build — no
 // external asset. A reader gets the title, who wrote it, what kind of text it
 // is, the text, where it came from, and the way back to the shelf.
+//
+// The one number the reading page ends on is the shelf's own census — how many
+// works a reader can open from here — which is the same count the shelf index
+// shows. It is the honest return context for a shelf holding a single work:
+// there is no next story, so none is invented.
 //
 // The body is rendered from the record's plain block list. A story's canonical
 // language is the same in every locale, so the body is marked with its own
 // `lang` and is never translated; the metadata around it is the reader's.
 
-import { esc, fill, code, plural, head, chrome, foot, noticeBanner } from './pages.mjs';
+import { esc, fill, code, plural, head, chrome, foot, noticeBanner, trail, roomMark, ROOM } from './pages.mjs';
 import { storyRoute, STORIES_ROUTE } from '../stories.mjs';
 
 const defList = (rows) => `<dl class="facts">
@@ -72,8 +77,9 @@ export function storiesShelfPage(cfg, L, view) {
 <body class="page page--stories">
 ${chrome(cfg, L, { nav: 'stories/', route: STORIES_ROUTE })}
 <main id="main">
-  <header class="collection-head">
-    <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> ${esc(text.title)}</p>
+  <header class="collection-head collection-head--room collection-head--room-${ROOM.stories}">
+    ${trail(L, [[L.t('nav.hall'), L.path('')], [text.title, null]])}
+    <p class="collection-head__room">${roomMark(L, ROOM.stories)}</p>
     <h1>${esc(text.title)}${text.title_alt ? `<span class="collection-head__alt">${esc(text.title_alt)}</span>` : ''}</h1>
     <p class="collection-head__desc">${esc(text.description)}</p>
   </header>
@@ -103,7 +109,13 @@ export function storyPage(cfg, L, view, { entry }) {
 <body class="page page--story">
 ${chrome(cfg, L, { nav: 'stories/', route: storyRoute(story) })}
 <main id="main">
-  <p class="crumb"><a href="${L.path('')}">${esc(L.t('nav.hall'))}</a> <span aria-hidden="true">/</span> <a href="${L.path(STORIES_ROUTE)}">${esc(shelfTitle)}</a> <span aria-hidden="true">/</span> ${esc(text.title)}</p>
+  <div class="threshold threshold--room-${ROOM.stories}">
+    ${trail(L, [
+    [L.t('nav.hall'), L.path('')],
+    [shelfTitle, L.path(STORIES_ROUTE), roomMark(L, ROOM.stories)],
+    [text.title, null],
+  ])}
+  </div>
 
   ${noticeBanner(L, text.genre_note)}
 
@@ -146,6 +158,7 @@ ${story.change_history.map((h) => `        <li><span class="history__version">v$
   </article>
 
   <nav class="story-nav" aria-label="${esc(L.t('story.nav_label'))}">
+    <p class="story-nav__context">${esc(plural(L, 'stories.count', view.stories.length))}</p>
     <a class="story-nav__index" href="${L.path(STORIES_ROUTE)}">${esc(L.t('story.return'))}</a>
   </nav>
 </main>

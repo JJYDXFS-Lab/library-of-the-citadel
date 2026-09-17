@@ -5,6 +5,8 @@
   "locale.switch_hint": "Switch the interface language",
 
   "skip_link": "Skip to content",
+  "trail.label": "Where you are",
+  "room.mark": "Room {index}",
   "nav.hall": "Hall",
   "nav.about": "About this build",
   "citadel.unset_suffix": "link not configured",
@@ -24,7 +26,7 @@
   "meta.hall": "{siteName} — {tagline}",
   "meta.about": "How this {siteName} build is configured and what its content status is.",
 
-  "hall.collections_title": "Collections",
+  "hall.rooms_title": "Public rooms",
   "hall.count.one": "{count} record",
   "hall.count.other": "{count} records",
   "hall.stories_count.one": "{count} story",
@@ -125,6 +127,7 @@
   "story.facts.license": "Rights",
 
   "record_nav.label": "Other records in this collection",
+  "record_nav.position": "Record {index} of {total} in {collection}.",
   "record_nav.prev": "Previous",
   "record_nav.next": "Next",
   "record_nav.index": "All records",

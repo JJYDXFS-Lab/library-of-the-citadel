@@ -10,6 +10,8 @@
   "locale.switch_hint": "切换界面语言",
 
   "skip_link": "跳到正文",
+  "trail.label": "当前位置",
+  "room.mark": "第 {index} 室",
   "nav.hall": "大厅",
   "nav.about": "关于本次构建",
   "citadel.unset_suffix": "链接尚未配置",
@@ -29,7 +31,7 @@
   "meta.hall": "{siteName} —— {tagline}",
   "meta.about": "本次 {siteName} 构建的配置方式，以及其内容所处的状态。",
 
-  "hall.collections_title": "合集",
+  "hall.rooms_title": "公开展室",
   "hall.count.one": "{count} 条记录",
   "hall.count.other": "{count} 条记录",
   "hall.stories_count.one": "{count} 篇作品",
@@ -130,6 +132,7 @@
   "story.facts.license": "权利",
 
   "record_nav.label": "本合集中的其他记录",
+  "record_nav.position": "{collection}：共 {total} 条记录，这是第 {index} 条。",
   "record_nav.prev": "上一条",
   "record_nav.next": "下一条",
   "record_nav.index": "全部记录",
