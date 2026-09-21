@@ -53,11 +53,12 @@ const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
   ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS, ...EXPECTED_FIXTURE_IDS,
 ];
-// The one published story. Its bilingual behaviour differs from a record's by
-// design — the body is one canonical language in both page sets — so it is
-// covered in tests/stories.mjs; here it only has to appear in every per-locale
-// page-set assertion, like any other route.
-const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation'];
+// The published stories. Their bilingual behaviour differs from a record's by
+// design — the body is the same canonical text in both page sets, whether that
+// text is in one language or two — so it is covered in tests/stories.mjs; here
+// they only have to appear in every per-locale page-set assertion, like any
+// other route.
+const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation', 'the-third-chair'];
 
 // Each class states what it is in its own words, in each language. A reader
 // must never have to guess which kind of record they are looking at.

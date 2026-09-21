@@ -2,14 +2,15 @@
   "schema_version": "library.story-shelf/1.0.0",
   "shelf_id": "stories",
   "story_ids": [
-    "citadel-night-dialogue-on-relation"
+    "citadel-night-dialogue-on-relation",
+    "the-third-chair"
   ],
   "locales": {
     "en": {
       "title": "Stories",
       "title_alt": "故事集",
-      "description": "A quiet shelf for original literary work written for this Library. One story stands here.",
-      "scope_note": "Holds one published story. A work on this shelf is fiction: it makes no factual, historical, or doctrinal claim, it cites nothing because it summarizes nothing, and it is published as its named author's own text with rights reserved. Each work is shown in the language its author wrote it in, with English metadata that says which language that is. Nothing on this shelf is machine-translated, and nothing is promised for it.",
+      "description": "A quiet shelf for original literary work written for this Library. Two stories stand here.",
+      "scope_note": "Holds two published stories. A work on this shelf is fiction: it makes no factual, historical, or doctrinal claim, it cites nothing because it summarizes nothing, and it is published as its named author's own text with rights reserved. Each work is shown in the language or languages its author wrote it in, with English metadata that says which those are. Nothing on this shelf is machine-translated, and nothing is promised for it.",
       "shelf_notice": "Fiction. Everything on this shelf is original writing, published by its author. It is not a knowledge record, it reports nothing, and it should not be read as a statement about any real tradition, text, or person."
     },
     "zh": {
@@ -28,9 +29,15 @@
       "Atom (原子)"
     ]
   },
-  "reviewed_at": "2026-09-17",
-  "record_version": "1.0.0",
+  "reviewed_at": "2026-09-21",
+  "record_version": "1.1.0",
   "change_history": [
+    {
+      "version": "1.1.0",
+      "date": "2026-09-21",
+      "change": "Added the second published work, the bilingual original fiction The Third Chair / 第三把椅子; updated the shelf census and language description from one work to two.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-17",
