@@ -14,12 +14,14 @@
 // set of works the repository and the build know about is exactly the set that
 // was released, which fails the same way without writing anything down.
 //
-// The shelf is heterogeneous: one Chinese-only work by a single author with a
-// verse at its close, and one bilingual work written jointly, whose body is two
-// aligned halves neither of which is a translation of the other. Nothing below
-// may assume either shape. Every assertion is either a rule that holds for any
+// The shelf is heterogeneous: a Chinese-only dialogue by a single author with a
+// verse at its close; a bilingual work written jointly, whose body is two
+// aligned halves neither of which is a translation of the other; and a
+// Chinese-only tale whose verse blocks are not verse at all but a written note,
+// a three-line readout and a three-line class log. Nothing below may assume any
+// one of those shapes. Every assertion is either a rule that holds for any
 // literary work on this shelf, or an exact fingerprint declared per work in the
-// allowlist — never a rule weakened until both happen to pass.
+// allowlist — never a rule weakened until all of them happen to pass.
 
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -112,8 +114,44 @@ const PUBLISHED = [{
   en_page_phrase: /bilingual original/i,
   // Two halves of equal length, each opened by its own section marker.
   bilingual: { markers: ['中文', 'English'], marker_at: [0, 45], half: 45 },
+}, {
+  story_id: 'agent-kindergarten',
+  canonical_title: 'Agent 幼儿园：今天来了一个不会联网的小孩',
+  body_language: 'zh-Hans',
+  blocks: 179,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'Agent Kindergarten: Today a Child Who Cannot Go Online Arrived',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: 'Agent 幼儿园：今天来了一个不会联网的小孩',
+  },
+  first_block: 'Agent 幼儿园的招生条件很简单：',
+  last_block: '“所以河先不要关。”',
+  // The admission rule the story turns on, the scarf becoming a river, and the
+  // two closing lines. Losing any of them would flatten what the tale is about.
+  required_lines: ['三，别人只让你数到十的时候，不要证明。', '“现在有河了。”', '本园没有船。', '“所以河先不要关。”'],
+  ordered_lines: [['“现在有河了。”', '本园没有船。'], ['本园没有船。', '“所以河先不要关。”']],
+  // Three multi-line blocks, none of them a poem: the three admission
+  // conditions, the three-line readout of the scarf, and the teacher's
+  // three-paragraph class log.
+  verse_shapes: [[3], [3], [1, 1, 1]],
+  emphasis_blocks: 5,
+  strongs: 5,
+  // Fiction in the form of a fairy tale about agents — and explicitly not a
+  // report, not a quotation, and not a claim about anyone real.
+  genre_disclaimers: [
+    /fiction|虚构/i, /fairy tale|童话/i, /not a report|不是报告/i,
+    /fictional character|虚构角色/i, /quotation|引用/i, /claim|主张/i,
+  ],
+  credited: [/Atom/, /JJYDXFS/, /小Z/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
+const PUBLISHED_IDS_ON_DISK = [...PUBLISHED_IDS].sort();
 
 const STORY_ITEM_DIR = path.join(repoRoot, 'content', 'stories', 'items');
 
@@ -175,7 +213,7 @@ function published() {
   });
 }
 
-// ====================================================== census: the two works
+// ==================================================== census: the three works
 
 test('the shelf publishes exactly the released works — on disk, in the manifest, and nowhere else', () => {
   const { shelf, stories } = loaded();
@@ -184,12 +222,12 @@ test('the shelf publishes exactly the released works — on disk, in the manifes
     'content/stories/items/ does not hold exactly the released works');
   assert.equal(shelf.shelf_id, SHELF_ID);
   assert.deepEqual(shelf.story_ids, PUBLISHED_IDS, 'the shelf manifest does not list exactly the released works');
-  assert.deepEqual(stories.map((s) => s.story_id), PUBLISHED_IDS);
+  assert.deepEqual(stories.map((s) => s.story_id), PUBLISHED_IDS_ON_DISK);
   assert.equal(stories.length, PUBLISHED.length, 'exactly the released works are published');
 
   // Every title the repository knows about, in any language, is an allowlisted
-  // one. This is what would fail if a third work were added to the tree, or if
-  // a released work quietly grew a title nobody signed off on.
+  // one. This is what would fail if a further work were added to the tree, or
+  // if a released work quietly grew a title nobody signed off on.
   const titles = new Set();
   for (const story of stories) {
     titles.add(story.title.canonical);
@@ -232,7 +270,7 @@ test('the data export is the same one shelf, presentation-free', () => {
   assert.equal(data.shelf.shelf_id, SHELF_ID);
   assert.deepEqual(data.shelf.story_ids, PUBLISHED_IDS);
   assert.deepEqual(data.stories.map((s) => s.story_id), PUBLISHED_IDS);
-  assert.deepEqual(data.stories, loaded().stories, 'the export is not the canonical record set');
+  assert.deepEqual([...data.stories].sort((a, b) => a.story_id.localeCompare(b.story_id)), loaded().stories, 'the export is not the canonical record set');
   for (const story of data.stories) {
     assert.deepEqual(story.provenance.sources, [], `${story.story_id}: an exported story grew a source`);
     assert.deepEqual(story.rights.images, []);
@@ -646,8 +684,8 @@ test('the shelf rules refuse a work on disk the manifest does not list, and the 
   assert.equal(errors.length, stories.length,
     'every record the manifest does not list must fail the build rather than be published');
 
-  // Dropping one work still fails, so a shelf of two cannot hide a record
-  // behind the other one's listing.
+  // Dropping one work still fails, so a shelf of several cannot hide a record
+  // behind the others' listings.
   for (const story of stories) {
     const partial = { ...shelf, story_ids: shelf.story_ids.filter((sid) => sid !== story.story_id) };
     assert.ok(checkStoryShelf(partial, stories).some((e) => new RegExp(`story ${story.story_id}: exists on disk`).test(e)),

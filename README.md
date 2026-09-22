@@ -52,21 +52,31 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 > No record is publication-ready. Translating a record does not research, test,
 > or review it, and the labels say so in both languages.
 
-> **Stories / 故事集 — one published work.** A second shelf, a second content
+> **Stories / 故事集 — three published works.** A second shelf, a second content
 > type, and a different contract. A story is not a knowledge record: it makes no
 > factual claim, cites nothing because it summarizes nothing, and is published
 > as its named author's own text with rights reserved. It is therefore never
 > "sourced", never "reviewed", and never kitchen-tested — those words do not
 > apply to it.
 >
-> The shelf holds **one story**, an original fictional and philosophical
-> dialogue written in the manner of a Chan (Zen) *gong'an*. It is **not Buddhist
-> scripture, not a quotation from any historical text or teacher, and it carries
-> no Buddhist authority**; the characters, the exchange and the closing verse are
-> invented. Its body is published as the author's canonical **Chinese original**
-> in both language views — the English view gives an English title, an English
-> abstract and English metadata, and says plainly that the text itself is the
-> Chinese original rather than machine-translating it.
+> The shelf holds **three stories**:
+>
+> - An original fictional and philosophical dialogue written in the manner of a
+>   Chan (Zen) *gong'an*. It is **not Buddhist scripture, not a quotation from
+>   any historical text or teacher, and it carries no Buddhist authority**; the
+>   characters, the exchange and the closing verse are invented.
+> - An original **bilingual** dialogue about working with an AI collaborator.
+>   Its Chinese and English versions were both written by its authors and are
+>   published together as one work; neither is a translation of the other, and
+>   it is **not research, not a report, and not evidence** of anything.
+> - An original Chinese **fairy tale** about a kindergarten for newly made
+>   agents and the human child who visits it. It is **not a report, not a
+>   quotation, and not a claim about any real person, school, or system**.
+>
+> Each body is published as its authors' canonical text in both language views.
+> Where the work is a **Chinese original**, the English view gives an English
+> title, an English abstract and English metadata, and says plainly that the
+> text itself is the Chinese original rather than machine-translating it.
 
 ## Requirements
 

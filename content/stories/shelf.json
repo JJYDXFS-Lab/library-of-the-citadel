@@ -3,21 +3,22 @@
   "shelf_id": "stories",
   "story_ids": [
     "citadel-night-dialogue-on-relation",
-    "the-third-chair"
+    "the-third-chair",
+    "agent-kindergarten"
   ],
   "locales": {
     "en": {
       "title": "Stories",
       "title_alt": "故事集",
-      "description": "A quiet shelf for original literary work written for this Library. Two stories stand here.",
-      "scope_note": "Holds two published stories. A work on this shelf is fiction: it makes no factual, historical, or doctrinal claim, it cites nothing because it summarizes nothing, and it is published as its named author's own text with rights reserved. Each work is shown in the language or languages its author wrote it in, with English metadata that says which those are. Nothing on this shelf is machine-translated, and nothing is promised for it.",
+      "description": "A quiet shelf for original literary work written for this Library. Three stories stand here.",
+      "scope_note": "Holds three published stories. A work on this shelf is fiction: it makes no factual, historical, or doctrinal claim, it cites nothing because it summarizes nothing, and it is published as its named author's own text with rights reserved. Each work is shown in the language or languages its author wrote it in, with English metadata that says which those are. Nothing on this shelf is machine-translated, and nothing is promised for it.",
       "shelf_notice": "Fiction. Everything on this shelf is original writing, published by its author. It is not a knowledge record, it reports nothing, and it should not be read as a statement about any real tradition, text, or person."
     },
     "zh": {
       "title": "故事集",
       "title_alt": "Stories",
-      "description": "一个安静的书架，放为这座图书馆而写的原创文学作品。目前架上有两篇。",
-      "scope_note": "现收录两篇已发表的作品。架上的作品都是虚构写作：不作任何事实、历史或教义上的主张，也不引用任何来源，因为它并不概述任何东西；作品以署名作者本人的文字发表，权利保留。每篇作品都按作者写作时所用的语言呈现，英文页面会写明那是哪种语言。本架上的任何内容都不经机器翻译，也不对它作出任何承诺。",
+      "description": "一个安静的书架，放为这座图书馆而写的原创文学作品。目前架上有三篇。",
+      "scope_note": "现收录三篇已发表的作品。架上的作品都是虚构写作：不作任何事实、历史或教义上的主张，也不引用任何来源，因为它并不概述任何东西；作品以署名作者本人的文字发表，权利保留。每篇作品都按作者写作时所用的语言呈现，英文页面会写明那是哪种语言。本架上的任何内容都不经机器翻译，也不对它作出任何承诺。",
       "shelf_notice": "虚构作品。本架上的一切都是原创写作，由作者本人发表。它不是知识记录，不报告任何事实，也不应被当作对任何真实传统、典籍或人物的论断。"
     }
   },
@@ -29,9 +30,15 @@
       "Atom (原子)"
     ]
   },
-  "reviewed_at": "2026-09-21",
-  "record_version": "1.1.0",
+  "reviewed_at": "2026-09-22",
+  "record_version": "1.2.0",
   "change_history": [
+    {
+      "version": "1.2.0",
+      "date": "2026-09-22",
+      "change": "Added the third published work, the Chinese original fiction Agent 幼儿园：今天来了一个不会联网的小孩; updated the shelf census from two works to three. Neither existing work's body or metadata changed.",
+      "supersedes": "1.1.0"
+    },
     {
       "version": "1.1.0",
       "date": "2026-09-21",
