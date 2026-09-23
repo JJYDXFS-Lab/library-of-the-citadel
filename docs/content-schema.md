@@ -52,7 +52,7 @@ affordance is a real link carrying `?section=<section_id>` — so the lens is
 shareable, keyboard-operable, and inert rather than broken without scripting. `src/rules.mjs` requires every section member
 to be listed in `item_ids`, rejects a duplicate `section_id`, rejects a record
 listed twice inside one section, and refuses a record claimed by two sections.
-This build declares one section, `quick-air-fryer`, holding the seven practical
+This build declares one section, `quick-air-fryer`, holding the eight practical
 notes.
 
 ## Sourced records

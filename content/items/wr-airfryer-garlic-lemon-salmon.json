@@ -1,0 +1,84 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-airfryer-garlic-lemon-salmon",
+  "collection_id": "world-recipes",
+  "record_class": "practical-note",
+  "publication_ready": false,
+  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. This note is written for food carried somewhere and shared, so it carries a measured temperature, a transport rule and a holding clock as well as a recipe.",
+
+  "name": {
+    "primary": "Air-Fryer Garlic-Lemon Salmon",
+    "alt": ["Salmon for a Shared Table", "空气炸锅蒜香柠檬三文鱼"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Air-fryer fish, for sharing",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Salmon fillets under a garlic and lemon-zest paste, cooked in batches so nothing crowds the basket, and finished with fresh lemon juice off the heat. Written for a potluck, which changes two things: a thermometer decides when it is cooked, and a clock decides how long it may stand on the table.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Salmon fillets, skin on, fresh or fully thawed", "quantity": "4, about 150 g each and 2.5 cm at the thickest point", "note": "Fish allergen. Thickness sets the timing, not weight: a thin tail piece is done several minutes before a centre cut. Thaw frozen fillets in the fridge overnight rather than on the counter, and pour the liquid away." },
+    { "item": "Garlic", "quantity": "4 cloves, finely grated or crushed", "note": "Grated garlic belongs in the paste and on the fish. Loose garlic in the basket scorches in the airflow and turns bitter long before the salmon is ready." },
+    { "item": "Olive oil, or softened unsalted butter", "quantity": "2 tablespoons", "note": "Butter browns faster and tastes richer. If you use it, the dish contains milk, and whatever you write on the label at the table has to say so." },
+    { "item": "Unwaxed lemons", "quantity": "2", "note": "The zest of one goes into the paste before cooking. The other is halved and squeezed over after cooking, which is where the fresh lemon flavour actually comes from." },
+    { "item": "Salt and black pepper", "quantity": "1 teaspoon salt, pepper to taste" },
+    { "item": "Flat-leaf parsley, chopped", "quantity": "a small handful, optional", "note": "Optional, and it introduces no allergen of its own. Dill or chives do the same job." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Unwrap the salmon and check that it is fresh or fully thawed. A part-frozen fillet heats unevenly, and its outside is finished long before its middle. Pat every piece dry. The timings below assume fillets of about 2.5 cm at the thickest point; thinner tail pieces are ready sooner and want checking earlier." },
+    { "step": 2, "instruction": "Make the paste. Grate the 4 garlic cloves into the 2 tablespoons of oil or softened butter, add the zest of 1 lemon, the salt and the pepper, and stir it thick. Spread it over the flesh side of each fillet. Keep the garlic in the paste and on the fish rather than scattering it in the basket, where the airflow burns it." },
+    { "step": 3, "instruction": "Do not marinate the fish in lemon juice. Acid firms and whitens the surface without heating anything, so a fillet that has sat in juice looks further along than it is, and a long soak leaves the outside chalky. The zest goes on now; the juice waits until the fish is off the heat." },
+    { "step": 4, "instruction": "Set the air fryer to 190°C, preheating only if your appliance manual says your model needs it. Lay the fillets skin down in a single layer with a gap between them. Most small baskets hold 2 fillets and not 4, so cook the rest as a second batch: crowded fish steams instead of roasting and heats unevenly, which is a safety problem and not only a texture one." },
+    { "step": 5, "instruction": "Cook for 9 to 13 minutes. Treat that as a starting point rather than a setting — thickness, your model and how full the basket is all move it. Then measure: slide a probe thermometer into the thickest part of a fillet, held clear of the basket and any metal, and look for 63°C at the centre. That is the figure these notes are written to, and because this record cites no source you should confirm it against the guidance your own food-safety authority publishes. Elapsed time and colour are not doneness tests; salmon turns opaque before it is up to temperature. If it reads low, give it 2 more minutes and measure again, and measure each batch on its own." },
+    { "step": 6, "instruction": "Off the heat, squeeze the halved second lemon over the fillets and scatter the parsley. The skin usually stays behind in the basket: lift it out while it is still warm and the basket needs nothing more than hot water. Keep the first batch covered and warm while the second cooks, rather than letting it stand out while you finish." },
+    { "step": 7, "instruction": "Pack it the moment it is done. Anything not leaving with you straight away goes into the fridge promptly rather than cooling on the counter. Carry it either cold — in an insulated cooler with ice packs, at 5°C or below — or hot, in a preheated insulated container held at 60°C or above. A covered tray on the back seat is neither of those things." },
+    { "step": 8, "instruction": "Count the time on the table, because the count is cumulative and it does not reset when the dish goes back into the cooler. Add up every stretch the salmon spends between 5°C and 60°C — the drive, the wait, the meal itself. Under 2 hours in total: refrigerate it again or serve it immediately. Between 2 and 4 hours: serve it immediately and do not put it back in the fridge. Over 4 hours: throw it out." }
+  ],
+
+  "yield_note": "Four fillets, cooked in 2 batches in a small basket. Serves four as a main course, or six to eight as one dish on a shared table alongside others. About 35 minutes from fridge to packed container. To make more, add batches rather than fillets: every extra 2 fillets is another cycle of 9 to 13 minutes, and a fuller basket is not a shortcut.",
+
+  "sources": [],
+  "source_state": "none-authored-here",
+  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. The 63°C figure, the cold and hot holding temperatures, and the two-hour and four-hour limits are stated as the numbers these notes are written to, and are handed back to the reader's own food-safety authority rather than attributed to one here, because attributing them without a checked citation would be inventing provenance.",
+
+  "reviewed_at": "2026-09-23",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-09-23",
+      "change": "Record written for the Quick Air-Fryer section: an original practical note for salmon cooked to be carried and shared, adding a measured cook-to temperature, a transport rule and a cumulative holding clock alongside the section's existing air-fryer notes.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original practical notes authored for this repository; reusable under the repository's own terms once the owner sets them. No outside text, photograph or recipe page is reproduced.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Cook the salmon until a probe thermometer reads 63°C at the centre of the thickest part, with the probe clear of the basket and any metal. That is the figure these notes are written to, not a claim of this project's own: check it against the food-safety guidance published where you live. Time and colour are not tests, because salmon turns opaque before it is up to temperature.",
+      "Measure every batch, and the thickest fillet in each one. A centre cut and a thin tail piece will never be ready at the same minute.",
+      "Use fresh or fully thawed fish. Thaw frozen fillets in the fridge overnight rather than on the counter, and pour the liquid away before the paste goes on.",
+      "Do not crowd the basket. Piled-up fillets steam rather than roast and heat unevenly, which is a safety problem as much as a texture one; cook a second batch instead.",
+      "A shared table is where cooked fish spends its riskiest hours. Refrigerate it promptly, carry it cold in an insulated cooler at 5°C or below or hot in an insulated container at 60°C or above, and add up the total time it spends between 5°C and 60°C: under 2 hours, refrigerate it again or serve it immediately; 2 to 4 hours, serve it immediately and do not re-refrigerate it; over 4 hours, discard it. That total is cumulative across the drive and the table.",
+      "Raw fish and its packaging contaminate surfaces. Wash hands, board and knife, and never put cooked fillets back on the plate or into the container that held them raw.",
+      "Allergen: fish. Butter in place of oil adds milk. Nothing else written here introduces an allergen, and no dipping sauce is included on purpose: soy sauce carries soy and usually wheat, mayonnaise carries egg, tahini carries sesame, and pesto often carries nuts and cheese. If you bring one, bring its ingredient list with it and say so on the dish.",
+      "These are practical notes: this project has not cooked this recipe, it has had no professional food-safety review, and it is not a substitute for the guidance published where you live."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["salmon", "fish", "air-fryer", "quick", "potluck", "sharing", "practical-note"]
+}

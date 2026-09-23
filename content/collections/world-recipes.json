@@ -3,13 +3,13 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection of three kinds. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Seven are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "Mixed collection of three kinds. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains sixteen records of three kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Seven are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
+  "scope_note": "Contains seventeen records of three kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
@@ -24,6 +24,7 @@
     "wr-airfryer-sweet-potato-wedges",
     "wr-airfryer-bean-cheese-quesadilla",
     "wr-airfryer-frozen-veg-dumplings",
+    "wr-airfryer-garlic-lemon-salmon",
     "wr-fixture-griddle-flatbread",
     "wr-fixture-rice-porridge",
     "wr-fixture-simmered-bean-soup"
@@ -32,7 +33,7 @@
     {
       "section_id": "quick-air-fryer",
       "title": "Quick Air-Fryer",
-      "intro": "Seven original practical notes for one small air fryer and an ordinary supermarket shop, five of them vegetarian. Each gives a temperature in Celsius, a time, and the single check that actually decides when the food is done. None has been cooked in a test kitchen or reviewed by a food-safety professional, and none cites a source, because none is claiming one.",
+      "intro": "Eight original practical notes for one small air fryer and an ordinary supermarket shop, five of them vegetarian. Each gives a temperature in Celsius, a time, and the single check that actually decides when the food is done; the one written for a shared table also says how long the dish may stand. None has been cooked in a test kitchen or reviewed by a food-safety professional, and none cites a source, because none is claiming one.",
       "item_ids": [
         "wr-airfryer-crispy-tofu",
         "wr-airfryer-chicken-thigh-bites",
@@ -40,13 +41,20 @@
         "wr-airfryer-broccoli-mixed-veg",
         "wr-airfryer-sweet-potato-wedges",
         "wr-airfryer-bean-cheese-quesadilla",
-        "wr-airfryer-frozen-veg-dumplings"
+        "wr-airfryer-frozen-veg-dumplings",
+        "wr-airfryer-garlic-lemon-salmon"
       ]
     }
   ],
-  "reviewed_at": "2026-09-16",
-  "record_version": "1.4.0",
+  "reviewed_at": "2026-09-23",
+  "record_version": "1.5.0",
   "change_history": [
+    {
+      "version": "1.5.0",
+      "date": "2026-09-23",
+      "change": "Added an eighth original practical note to the Quick Air-Fryer section: a garlic and lemon salmon written for a shared table, carrying a measured cook-to temperature, a transport rule and a cumulative holding clock. It is a new record placed at the end of the section and of the air-fryer run in the manifest; the existing salmon note, which deliberately states no temperature of its own, is unchanged, as is every other record.",
+      "supersedes": "1.4.0"
+    },
     {
       "version": "1.4.0",
       "date": "2026-09-16",

@@ -47,14 +47,15 @@ const EXPECTED_PRACTICAL_IDS = [
   'wr-airfryer-sweet-potato-wedges',
   'wr-airfryer-bean-cheese-quesadilla',
   'wr-airfryer-frozen-veg-dumplings',
+  'wr-airfryer-garlic-lemon-salmon',
 ];
 const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
   ...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS,
 ].sort();
-const TOTAL_RECORDS = 16;
+const TOTAL_RECORDS = 17;
 
-// The story shelf is a second content type, not a seventeenth recipe. Its
+// The story shelf is a second content type, not an eighteenth recipe. Its
 // census lives in tests/stories.mjs; this file only needs to know which routes
 // the build is allowed to emit. Two stories are published: a Chinese-only work
 // and a bilingual one, which are the same shape as far as routing is concerned.
@@ -109,7 +110,7 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds sixteen records in one collection: six sourced, seven practical notes, three fixtures', () => {
+test('the repository holds seventeen records in one collection: six sourced, eight practical notes, three fixtures', () => {
   const { items, collections } = loadContent();
   assert.equal(items.length, TOTAL_RECORDS);
   assert.equal(collections.length, 1);
@@ -141,9 +142,9 @@ test('the existing sourced and fixture records are untouched by the air-fryer ad
     'wr-oven-halloumi-chickpea-traybake',
     'wr-oven-root-veg-traybake',
   ], 'the sourced oven records no longer open the manifest in their original order');
-  assert.deepEqual(order.slice(6, 13), EXPECTED_PRACTICAL_IDS,
+  assert.deepEqual(order.slice(6, 14), EXPECTED_PRACTICAL_IDS,
     'the Quick Air-Fryer records are not in manifest order between the oven set and the fixtures');
-  assert.deepEqual(order.slice(13), EXPECTED_FIXTURE_IDS,
+  assert.deepEqual(order.slice(14), EXPECTED_FIXTURE_IDS,
     'the fixtures no longer close the manifest');
 
   for (const id of EXPECTED_SOURCED_IDS) {
@@ -175,7 +176,7 @@ test('the fixture gates still hold: no fixture has grown a source or a review', 
 test('the practical-note gate holds: original notes cite nothing and claim nothing', () => {
   const { items } = loadContent();
   const notes = items.filter((i) => i.record_class === 'practical-note');
-  assert.equal(notes.length, 7);
+  assert.equal(notes.length, 8);
 
   for (const item of notes) {
     const where = item.item_id;
@@ -212,7 +213,7 @@ test('the practical-note gate holds: original notes cite nothing and claim nothi
 });
 
 test('the air-fryer section keeps vegetarian options visible, and marks them', () => {
-  // Five of the seven are vegetarian. The section's lens copy says so, and the
+  // Five of the eight are vegetarian. The section's lens copy says so, and the
   // facet a reader filters and skims by is the cuisine label on the card, so
   // both are checked rather than left to the prose.
   const { items } = loadContent();
@@ -224,7 +225,8 @@ test('the air-fryer section keeps vegetarian options visible, and marks them', (
     'wr-airfryer-bean-cheese-quesadilla',
     'wr-airfryer-frozen-veg-dumplings',
   ];
-  const NOT_VEGETARIAN = ['wr-airfryer-chicken-thigh-bites', 'wr-airfryer-salmon-fillet'];
+  const NOT_VEGETARIAN = ['wr-airfryer-chicken-thigh-bites', 'wr-airfryer-salmon-fillet',
+    'wr-airfryer-garlic-lemon-salmon'];
 
   const tagged = EXPECTED_PRACTICAL_IDS.filter((id) => byId.get(id).tags.includes('vegetarian'));
   assert.deepEqual(tagged, VEGETARIAN, 'the vegetarian tagging of the section has drifted');
@@ -447,7 +449,7 @@ test('the collection declares exactly one section, holding exactly the practical
   assert.equal(sections[0].section_id, QUICK_AIR_FRYER);
   assert.equal(sections[0].title, 'Quick Air-Fryer');
   assert.deepEqual(sections[0].item_ids, EXPECTED_PRACTICAL_IDS,
-    'the section does not hold exactly the seven practical notes, in order');
+    'the section does not hold exactly the eight practical notes, in order');
   assert.ok(sections[0].intro.trim().length > 0);
   // A section is discovery, not a second membership list.
   for (const id of sections[0].item_ids) {
@@ -633,7 +635,7 @@ test('every record has exactly one canonical card in the one catalogue', () => {
     for (const id of EXPECTED_ITEM_IDS) {
       assert.equal(ids.filter((seen) => seen === id).length, 1, `${label}: ${id} is rendered as more than one card`);
     }
-    // The seven section members are the case this guards: they used to be
+    // The eight section members are the case this guards: they used to be
     // rendered once as a full section list and again as cards.
     for (const id of EXPECTED_PRACTICAL_IDS) {
       assert.equal(ids.filter((seen) => seen === id).length, 1,
@@ -658,7 +660,7 @@ test('a collection section renders as a lens over the catalogue, not as a second
     assert.ok(html.includes(`aria-labelledby="section-${QUICK_AIR_FRYER}"`),
       `${label}: the lens is not labelled by its own heading`);
     assert.match(html, /<h2 id="section-quick-air-fryer"[^>]*>Quick Air-Fryer /, `${label}: wrong lens heading`);
-    assert.match(html, /7 records/, `${label}: the lens does not count its own members`);
+    assert.match(html, /8 records/, `${label}: the lens does not count its own members`);
 
     // Compact by construction: context and one affordance, no member list and
     // no per-member link.
@@ -680,12 +682,12 @@ test('a collection section renders as a lens over the catalogue, not as a second
     assert.ok(html.includes(`aria-describedby="section-${QUICK_AIR_FRYER}"`),
       `${label}: the affordance is not described by its own lens heading`);
 
-    // The affordance targets exactly the section's seven members, through the
+    // The affordance targets exactly the section's eight members, through the
     // membership facet on the cards rather than through anything in the copy.
     const sections = cardSections(gallery);
     const members = [...sections.entries()].filter(([, ids]) => ids.includes(target)).map(([id]) => id);
     assert.deepEqual(members, EXPECTED_PRACTICAL_IDS,
-      `${label}: the cards the lens targets are not the seven section members, in order`);
+      `${label}: the cards the lens targets are not the eight section members, in order`);
     for (const [id, ids] of sections) {
       if (!EXPECTED_PRACTICAL_IDS.includes(id)) {
         assert.deepEqual(ids, [], `${label}: ${id} claims a section it is not a member of`);
@@ -914,7 +916,7 @@ test('only the released recipe routes are emitted', () => {
       .filter((rel) => /^(zh\/)?recipes\/[^/]+\/index\.html$/.test(rel))
       .map((rel) => rel.replace(/^(zh\/)?recipes\//, '').replace(/\/index\.html$/, ''))
       .sort();
-    // Sixteen records, two page sets.
+    // Seventeen records, two page sets.
     assert.deepEqual(detailRoutes, [...EXPECTED_ITEM_IDS, ...EXPECTED_ITEM_IDS].sort(),
       'the emitted detail routes are not exactly the released records, once per locale');
   }
@@ -946,7 +948,7 @@ test('the published data file is presentation-free content and nothing else', ()
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
   assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 6);
-  assert.equal(data.items.filter((i) => i.record_class === 'practical-note').length, 7);
+  assert.equal(data.items.filter((i) => i.record_class === 'practical-note').length, 8);
   assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
   for (const item of data.items) assert.equal(item.publication_ready, false);
   // The section travels with the manifest, so a consumer of the data file can

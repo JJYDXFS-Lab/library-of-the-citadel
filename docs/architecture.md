@@ -205,7 +205,7 @@ it is a source constant, not a configuration key.
 
 `tests/check.mjs` uses `node:test` and `node:assert` only. It covers the
 official display name on every generated page, content
-integrity and the sixteen-record, three-class census (six sourced, seven
+integrity and the seventeen-record, three-class census (six sourced, eight
 original practical notes, three fixtures), the honesty rules for each class
 under tampering — including the practical-note gate and the section rules — one
 canonical card per record in the catalogue, the curated-lens rendering of a

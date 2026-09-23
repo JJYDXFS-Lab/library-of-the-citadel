@@ -48,6 +48,7 @@ const EXPECTED_PRACTICAL_IDS = [
   'wr-airfryer-sweet-potato-wedges',
   'wr-airfryer-bean-cheese-quesadilla',
   'wr-airfryer-frozen-veg-dumplings',
+  'wr-airfryer-garlic-lemon-salmon',
 ];
 const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
@@ -659,9 +660,9 @@ test('the per-locale data files are the same records with the same IDs', () => {
   }
   const classes = zh.items.map((i) => i.record_class);
   assert.equal(classes.filter((c) => c === 'sourced').length, 6);
-  assert.equal(classes.filter((c) => c === 'practical-note').length, 7);
+  assert.equal(classes.filter((c) => c === 'practical-note').length, 8);
   assert.equal(classes.filter((c) => c === 'fixture').length, 3);
-  assert.equal(zh.items.length, 16);
+  assert.equal(zh.items.length, 17);
   // The section travels into both data files, with untranslated membership.
   for (const data of [en, zh]) {
     assert.deepEqual(data.collection.sections.map((s) => s.section_id), [QUICK_AIR_FRYER]);
@@ -864,21 +865,21 @@ test('each locale gallery renders its own lens heading, context, and affordance'
     }
     assert.equal(cards.size, EXPECTED_ITEM_IDS.length, `${loc.code}: the catalogue is not one card per record`);
 
-    // Membership is marked on the cards, so the affordance targets all seven
+    // Membership is marked on the cards, so the affordance targets all eight
     // members in this locale without depending on one word of the copy.
     const targeted = [...cards.entries()]
       .filter(([, block]) => (/data-sections="([^"]*)"/.exec(block)?.[1] ?? '').split(' ').includes(target))
       .map(([id]) => id);
     assert.deepEqual(targeted, EXPECTED_PRACTICAL_IDS,
-      `${loc.code}: the affordance does not target exactly the seven section members`);
+      `${loc.code}: the affordance does not target exactly the eight section members`);
   }
 
   // The label is interface text, so each locale carries its own.
   assert.notEqual(labels.zh, labels.en, 'the zh lens affordance was never translated');
   assert.match(labels.zh, HAN, 'the zh lens affordance still reads as English');
   assert.doesNotMatch(labels.zh, /[A-Za-z]/, 'the zh lens affordance still carries English words');
-  assert.match(labels.en, /7/, 'the en lens affordance does not say how many records it shows');
-  assert.match(labels.zh, /7/, 'the zh lens affordance does not say how many records it shows');
+  assert.match(labels.en, /8/, 'the en lens affordance does not say how many records it shows');
+  assert.match(labels.zh, /8/, 'the zh lens affordance does not say how many records it shows');
 });
 
 test('the catalogue surfaces the vegetarian options in both locales', () => {

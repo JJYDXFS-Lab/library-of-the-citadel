@@ -25,7 +25,7 @@ fragment. The switch is a real link and works with scripting disabled.
 **Live fixture site:** <https://jjydxfs-lab.github.io/library-of-the-citadel/> —
 public repository and GitHub Actions deployment verified on 2026-09-13.
 
-> **Mixed build.** Sixteen records, of three kinds, every one of them translated
+> **Mixed build.** Seventeen records, of three kinds, every one of them translated
 > into Chinese and labelled with which kind it is.
 >
 > - **Six sourced** beginner oven recipes. Each cites the page its quantities,
@@ -35,7 +35,7 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 >   source text or photograph is reproduced. They have been checked against
 >   their sources, but **nothing has been cooked or tested here and none has had
 >   a professional food-safety review**.
-> - **Seven original practical notes**, grouped as the **Quick Air-Fryer**
+> - **Eight original practical notes**, grouped as the **Quick Air-Fryer**
 >   section of the collection. They were written here for a small air fryer and
 >   an ordinary supermarket shop, and they **cite nothing, because they claim
 >   nothing that needs a citation** — they are not summarized from anyone's page
