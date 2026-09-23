@@ -81,7 +81,9 @@ different kinds of thing:
   `copyright.holders` empty renders no line at all; the build states a holder
   only where one is configured. The deployed value is
   `© 2026 JJYDXFS & Atom (原子). All rights reserved.`, and `tests/locale.mjs`
-  asserts it character for character on every page of every locale.
+  asserts it character for character on every page of every locale. The fixed
+  development credit immediately below it reads `Developed by Atom (原子) &
+  Claude.` and is likewise present on every generated page.
 - **The rights note** is prose and is localized like any other interface string
   (`footer.rights_note` in each dictionary). It records that a record citing
   sources summarizes cooking facts in this project's own words, that no source

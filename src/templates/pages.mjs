@@ -166,6 +166,7 @@ export function foot(cfg, L) {
 <p>${esc(L.site.footerNote)}</p>
 <p class="colophon__rights">${esc(L.t('footer.rights_note'))}</p>
 ${copyright}
+<p class="colophon__development">Developed by Atom (原子) &amp; Claude.</p>
 <p class="colophon__meta">${fill(L.t.raw('footer.base_path'), { basePath: code(cfg.basePath) })}</p>
 </footer>
 <script src="${cfg.withBase('assets/app.js')}" defer></script>

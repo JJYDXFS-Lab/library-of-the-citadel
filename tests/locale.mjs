@@ -441,6 +441,7 @@ test('each page set declares its own language and keeps the shared slugs', () =>
 const REQUIRED_COPYRIGHT = '© 2026 JJYDXFS & Atom (原子). All rights reserved.';
 const JJYDXFS_LINK = '<a href="https://jjydxfs.github.io/">JJYDXFS</a>';
 const ATOM_LINK = '<a href="https://atom-of-jjydxfs.github.io/">Atom (原子)</a>';
+const REQUIRED_DEVELOPMENT_CREDIT = '<p class="colophon__development">Developed by Atom (原子) &amp; Claude.</p>';
 
 test('every page in both locales carries the exact required footer credit and its own rights note', () => {
   const r = localeBuild();
@@ -469,6 +470,11 @@ test('every page in both locales carries the exact required footer credit and it
       // links must not change one character of it.
       const visible = line[1].replace(/<[^>]*>/g, '').replace(/&amp;/g, '&');
       assert.equal(visible, REQUIRED_COPYRIGHT, `${rel}: the visible copyright text is not the required line`);
+      assert.equal(
+        html.split(REQUIRED_DEVELOPMENT_CREDIT).length - 1,
+        1,
+        `${rel}: the development credit is missing or duplicated`,
+      );
       // The superseded credit must be gone from the page entirely, not merely
       // from the copyright element.
       assert.ok(!html.includes('Atom &amp; Claude'), `${rel}: the old "Atom & Claude" credit survives`);
