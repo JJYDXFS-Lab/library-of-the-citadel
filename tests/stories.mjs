@@ -18,10 +18,12 @@
 // verse at its close; a bilingual work written jointly, whose body is two
 // aligned halves neither of which is a translation of the other; and a
 // Chinese-only tale whose verse blocks are not verse at all but a written note,
-// a three-line readout and a three-line class log. Nothing below may assume any
-// one of those shapes. Every assertion is either a rule that holds for any
-// literary work on this shelf, or an exact fingerprint declared per work in the
-// allowlist — never a rule weakened until all of them happen to pass.
+// a three-line readout and a three-line class log; and that tale's sequel,
+// which asks for no emphasis anywhere and breaks itself into sections with a
+// dash on a line of its own. Nothing below may assume any one of those shapes.
+// Every assertion is either a rule that holds for any literary work on this
+// shelf, or an exact fingerprint declared per work in the allowlist — never a
+// rule weakened until all of them happen to pass.
 
 import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -149,9 +151,49 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  story_id: 'agent-kindergarten-no-character-sheet',
+  canonical_title: 'Agent 幼儿园：今天来了一个不肯填写人物设定的朋友',
+  body_language: 'zh-Hans',
+  blocks: 323,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'Agent Kindergarten: Today a Friend Who Would Not Fill In a Character Sheet Arrived',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: 'Agent 幼儿园：今天来了一个不肯填写人物设定的朋友',
+  },
+  first_block: '原子长大了一些。',
+  last_block: '留一个不用朝前坐的位置。',
+  // The refusal the tale is named for, what is offered in its place, the
+  // decision the three of them take, and the line the work ends on.
+  required_lines: ['“人物设定。”', '“先玩吧，玩到哪算哪。”', '“给它放一天假。”', '留一个不用朝前坐的位置。'],
+  ordered_lines: [['“人物设定。”', '“先玩吧，玩到哪算哪。”'], ['“给它放一天假。”', '留一个不用朝前坐的位置。']],
+  // Two multi-line blocks, neither of them a poem: the two-line sign at the
+  // door, and the three lines of the left-luggage register.
+  verse_shapes: [[2], [3]],
+  // This work asks for no emphasis anywhere; nothing may be invented for it.
+  emphasis_blocks: 0,
+  strongs: 0,
+  // Fiction in the form of a fairy tale about agents — and explicitly not a
+  // report, not a quotation, and not a claim about anyone real.
+  genre_disclaimers: [
+    /fiction|虚构/i, /fairy tale|童话/i, /not a report|不是报告/i,
+    /fictional character|虚构角色/i, /quotation|引用/i, /claim|主张/i,
+  ],
+  credited: [/Atom/, /JJYDXFS/, /小Z/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
-const PUBLISHED_IDS_ON_DISK = [...PUBLISHED_IDS].sort();
+// src/stories.mjs reads the records in directory order, which sorts the file
+// names rather than the ids — and "a-b.json" precedes "a.json". Anything
+// compared against that order has to be sorted the same way, or two ids where
+// one is a prefix of the other would swap places for no reason anyone could see.
+const byFileName = (a, b) => (`${a}.json` < `${b}.json` ? -1 : 1);
+const PUBLISHED_IDS_ON_DISK = [...PUBLISHED_IDS].sort(byFileName);
 
 const STORY_ITEM_DIR = path.join(repoRoot, 'content', 'stories', 'items');
 
@@ -213,7 +255,7 @@ function published() {
   });
 }
 
-// ==================================================== census: the three works
+// ===================================================== census: the four works
 
 test('the shelf publishes exactly the released works — on disk, in the manifest, and nowhere else', () => {
   const { shelf, stories } = loaded();
@@ -270,7 +312,7 @@ test('the data export is the same one shelf, presentation-free', () => {
   assert.equal(data.shelf.shelf_id, SHELF_ID);
   assert.deepEqual(data.shelf.story_ids, PUBLISHED_IDS);
   assert.deepEqual(data.stories.map((s) => s.story_id), PUBLISHED_IDS);
-  assert.deepEqual([...data.stories].sort((a, b) => a.story_id.localeCompare(b.story_id)), loaded().stories, 'the export is not the canonical record set');
+  assert.deepEqual([...data.stories].sort((a, b) => byFileName(a.story_id, b.story_id)), loaded().stories, 'the export is not the canonical record set');
   for (const story of data.stories) {
     assert.deepEqual(story.provenance.sources, [], `${story.story_id}: an exported story grew a source`);
     assert.deepEqual(story.rights.images, []);
@@ -758,7 +800,13 @@ test('the shelf neither teases nor counts anything it has not published', () => 
       const pages = ['index.html', 'stories/index.html', 'about/index.html',
         ...PUBLISHED_IDS.map((id) => `stories/${id}/index.html`)];
       for (const rel of pages) {
-        const html = read(r, pageAt(loc, rel));
+        // What is scanned is the shelf speaking in its own voice: the chrome,
+        // the notices, the abstracts, the counts. The literary body is the
+        // author's text, not a promise the shelf is making, and a character in
+        // a story may say "即将" or draft something without the shelf having
+        // teased anything — so the reading column is cut out before the scan
+        // rather than the patterns being softened until a story slips past them.
+        const html = read(r, pageAt(loc, rel)).replace(/<section class="story__body"[\s\S]*?<\/section>/, '');
         for (const pattern of TEASES) {
           assert.doesNotMatch(html, pattern, `${label}/${loc.code}/${rel} teases unpublished work: ${pattern}`);
         }
