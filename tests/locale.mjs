@@ -60,7 +60,7 @@ const EXPECTED_ITEM_IDS = [
 // they only have to appear in every per-locale page-set assertion, like any
 // other route.
 const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation', 'the-third-chair', 'agent-kindergarten',
-  'agent-kindergarten-no-character-sheet'];
+  'agent-kindergarten-no-character-sheet', 'agent-kindergarten-cat-investor'];
 
 // Each class states what it is in its own words, in each language. A reader
 // must never have to guess which kind of record they are looking at.

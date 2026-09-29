@@ -52,14 +52,14 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 > No record is publication-ready. Translating a record does not research, test,
 > or review it, and the labels say so in both languages.
 
-> **Stories / 故事集 — four published works.** A second shelf, a second content
+> **Stories / 故事集 — five published works.** A second shelf, a second content
 > type, and a different contract. A story is not a knowledge record: it makes no
 > factual claim, cites nothing because it summarizes nothing, and is published
 > as its named author's own text with rights reserved. It is therefore never
 > "sourced", never "reviewed", and never kitchen-tested — those words do not
 > apply to it.
 >
-> The shelf holds **four stories**:
+> The shelf holds **five stories**:
 >
 > - An original fictional and philosophical dialogue written in the manner of a
 >   Chan (Zen) *gong'an*. It is **not Buddhist scripture, not a quotation from
@@ -76,6 +76,10 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 >   not supply a character sheet. It carries the same disclaimer: **not a report,
 >   not a quotation, and not a claim about any real person**; everyone in it is
 >   a character of the story.
+> - A further original Chinese tale of the same kindergarten, about the day a
+>   friend arrives who wants to invest in the kitten. It carries the same
+>   disclaimer: **not a report, not a quotation, and not a claim about any real
+>   person**; everyone in it is a character of the story.
 >
 > Each body is published as its authors' canonical text in both language views.
 > Where the work is a **Chinese original**, the English view gives an English

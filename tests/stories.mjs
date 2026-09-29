@@ -20,7 +20,9 @@
 // Chinese-only tale whose verse blocks are not verse at all but a written note,
 // a three-line readout and a three-line class log; and that tale's sequel,
 // which asks for no emphasis anywhere and breaks itself into sections with a
-// dash on a line of its own. Nothing below may assume any one of those shapes.
+// dash on a line of its own; and a further tale of that kindergarten, every
+// line of which stands alone, with its section breaks set the same way.
+// Nothing below may assume any one of those shapes.
 // Every assertion is either a rule that holds for any literary work on this
 // shelf, or an exact fingerprint declared per work in the allowlist — never a
 // rule weakened until all of them happen to pass.
@@ -186,6 +188,40 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  story_id: 'agent-kindergarten-cat-investor',
+  canonical_title: 'Agent 幼儿园：今天来了一个要投资小猫的朋友',
+  body_language: 'zh-Hans',
+  blocks: 218,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'Agent Kindergarten: Today a Friend Arrived Who Wanted to Invest in the Kitten',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: 'Agent 幼儿园：今天来了一个要投资小猫的朋友',
+  },
+  first_block: '大圣来幼儿园那天，原子正在修一块牌子。',
+  last_block: '“等你来玩。”',
+  // The investment the tale is named for, the day's takings, the terms on
+  // which it is made, and the line the work ends on.
+  required_lines: ['“我要给你投资。现在就要。”', '「营业收入：三颗。」', '“这个算投资。”', '“等你来玩。”'],
+  ordered_lines: [['“我要给你投资。现在就要。”', '「营业收入：三颗。」'], ['“这个算投资。”', '“等你来玩。”']],
+  // Every line of this work stands alone; nothing is set as a multi-line block.
+  verse_shapes: [],
+  // This work asks for no emphasis anywhere; nothing may be invented for it.
+  emphasis_blocks: 0,
+  strongs: 0,
+  // Fiction in the form of a fairy tale about agents — and explicitly not a
+  // report, not a quotation, and not a claim about anyone real.
+  genre_disclaimers: [
+    /fiction|虚构/i, /fairy tale|童话/i, /not a report|不是报告/i,
+    /fictional character|虚构角色/i, /quotation|引用/i, /claim|主张/i,
+  ],
+  credited: [/Atom/, /JJYDXFS/, /小Z/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
 // src/stories.mjs reads the records in directory order, which sorts the file
@@ -255,7 +291,7 @@ function published() {
   });
 }
 
-// ===================================================== census: the four works
+// ===================================================== census: the five works
 
 test('the shelf publishes exactly the released works — on disk, in the manifest, and nowhere else', () => {
   const { shelf, stories } = loaded();

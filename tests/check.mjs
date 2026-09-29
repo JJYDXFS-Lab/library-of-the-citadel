@@ -57,10 +57,10 @@ const TOTAL_RECORDS = 17;
 
 // The story shelf is a second content type, not an eighteenth recipe. Its
 // census lives in tests/stories.mjs; this file only needs to know which routes
-// the build is allowed to emit. Four stories are published: three Chinese-only
+// the build is allowed to emit. Five stories are published: four Chinese-only
 // works and a bilingual one, the same shape as far as routing is concerned.
 const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation', 'the-third-chair', 'agent-kindergarten',
-  'agent-kindergarten-no-character-sheet'];
+  'agent-kindergarten-no-character-sheet', 'agent-kindergarten-cat-investor'];
 
 /** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
 function walk(dir, base = dir) {
