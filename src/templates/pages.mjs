@@ -42,7 +42,7 @@ export const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : '
  * none about a dish. It exists so the identity a reader picks up in the hall is
  * the same one they still see on a single record three clicks later.
  */
-export const ROOM = { collection: 1, stories: 2 };
+export const ROOM = { collection: 1, stories: 2, nursery: 3 };
 
 export const roomMark = (L, index) => `<span class="room-mark">${esc(L.t('room.mark', { index }))}</span>`;
 
@@ -116,6 +116,7 @@ export function chrome(cfg, L, { nav: current, route }) {
     ['', L.t('nav.hall')],
     ['recipes/', L.collectionTitle],
     ['stories/', L.storiesTitle],
+    ['collections/agent-nursery/', L.nurseryTitle],
     ['about/', L.t('nav.about')],
   ];
   return `<a class="skip-link" href="#main">${esc(L.t('skip_link'))}</a>
@@ -203,8 +204,13 @@ function translationNotice(L, state) {
  * chrome() does not have to be handed a manifest on every page. Each title
  * comes from the manifest that owns it, already in this locale.
  */
-export function withShelfTitles(L, { collection, stories }) {
-  return { ...L, collectionTitle: collection.title.primary, storiesTitle: stories.shelf.text.title };
+export function withShelfTitles(L, { collection, stories, nursery }) {
+  return {
+    ...L,
+    collectionTitle: collection.title.primary,
+    storiesTitle: stories.shelf.text.title,
+    nurseryTitle: nursery.collection.text.title,
+  };
 }
 
 // ---------------------------------------------------------------- hall
@@ -235,7 +241,7 @@ function roomShelf(L, { index, href, title, alt, desc, count }) {
       </li>`;
 }
 
-export function hallPage(cfg, L, view, { stories }) {
+export function hallPage(cfg, L, view, { stories, nursery }) {
   const collection = view.collection.record;
   const items = view.entries.map((e) => e.record);
   return `${head(cfg, L, { title: L.t('page.title.hall'), description: L.t('meta.hall', { siteName: cfg.siteName, tagline: L.site.tagline }) })}
@@ -273,6 +279,14 @@ ${roomShelf(L, {
     alt: stories.shelf.text.title_alt ?? '',
     desc: stories.shelf.text.description,
     count: plural(L, 'hall.stories_count', stories.stories.length),
+  })}
+${roomShelf(L, {
+    index: ROOM.nursery,
+    href: L.path('collections/agent-nursery/'),
+    title: nursery.collection.text.title,
+    alt: nursery.collection.text.title_alt ?? '',
+    desc: nursery.collection.text.description,
+    count: plural(L, 'hall.nursery_count', nursery.handbooks.length),
   })}
       </ul>
       <p class="rooms__further"><span class="rooms__further-title">${esc(L.t('hall.further_title'))}</span> ${esc(L.t('hall.further_desc'))}</p>
@@ -539,7 +553,7 @@ ${foot(cfg, L)}`;
 
 // --------------------------------------------------------------- about
 
-export function aboutPage(cfg, L, view, { stories }) {
+export function aboutPage(cfg, L, view, { stories, nursery }) {
   const collection = view.collection.record;
   const items = view.entries;
   const languages = LOCALES.map((loc) => `${loc.endonym} (${loc.englishName}, ${loc.prefix === '' ? cfg.basePath : `${cfg.basePath}${loc.prefix}`})`).join('; ');
@@ -571,6 +585,10 @@ ${chrome(cfg, L, { nav: 'about/', route: 'about/' })}
       shelf: stories.shelf.text.title,
       works: plural(L, 'about.stories_count', stories.stories.length),
     }))} ${esc(stories.shelf.text.scope_note)}</p>
+    <p>${esc(L.t('about.nursery_body', {
+      collection: nursery.collection.text.title,
+      works: plural(L, 'about.nursery_count', nursery.handbooks.length),
+    }))} ${esc(nursery.collection.text.scope_note)}</p>
 
     <h2>${esc(L.t('about.sourced_title'))}</h2>
     <ul>

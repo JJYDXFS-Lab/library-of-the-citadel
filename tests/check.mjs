@@ -563,6 +563,7 @@ test('esc neutralizes every character that could break out of markup', () => {
 
 // The default-locale page set, at the output root.
 const PAGES = ['index.html', 'recipes/index.html', 'stories/index.html', 'about/index.html',
+  'collections/agent-nursery/index.html', 'collections/agent-nursery/handbook/index.html',
   ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`),
   ...EXPECTED_STORY_IDS.map((id) => `stories/${id}/index.html`)];
 // One full page set per non-default locale, under its own route prefix, with
@@ -575,7 +576,8 @@ const PAGE_LANG = new Map([
   ...ZH_PAGES.map((rel) => [rel, 'zh-Hans']),
 ]);
 const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll',
-  'data/world-recipes.json', 'data/world-recipes.zh.json', 'data/stories.json'];
+  'data/world-recipes.json', 'data/world-recipes.zh.json', 'data/stories.json',
+  'data/agent-nursery.json'];
 
 for (const [label, run, base] of [['root', rootBuild, '/'], ['subpath', previewBuild, '/library-preview/']]) {
   test(`the ${label} build emits every page, asset, and data file`, () => {
@@ -806,17 +808,17 @@ test('hiding a grid actually hides it: the stylesheet overrides its own display 
 
 // --------------------------------------------- the hall, its rooms, the trail
 
-test('the hall opens exactly two public rooms, each carrying its own room mark', () => {
+test('the hall opens exactly three public rooms, each carrying its own room mark', () => {
   const r = rootBuild();
   for (const [hallPage, prefix] of [['index.html', ''], ['zh/index.html', 'zh/']]) {
     const hall = read(r, hallPage);
     const shelves = [...hall.matchAll(/<li class="shelf[\s\S]*?<\/li>/g)].map((m) => m[0]);
-    assert.equal(shelves.length, 2, `${hallPage}: the hall should stand exactly two public rooms`);
+    assert.equal(shelves.length, 3, `${hallPage}: the hall should stand exactly three public rooms`);
 
     // Each room is a real link to its own index, and wears one room mark.
     const hrefs = shelves.map((s) => /class="shelf__link" href="([^"]+)"/.exec(s)?.[1]);
-    assert.deepEqual(hrefs, [`/${prefix}recipes/`, `/${prefix}stories/`],
-      `${hallPage}: the rooms are not the collection and the story shelf, in hall order`);
+    assert.deepEqual(hrefs, [`/${prefix}recipes/`, `/${prefix}stories/`, `/${prefix}collections/agent-nursery/`],
+      `${hallPage}: the rooms are not the collection, the story shelf and Agent Nursery, in hall order`);
     shelves.forEach((shelf, i) => {
       assert.equal([...shelf.matchAll(/class="room-mark"/g)].length, 1,
         `${hallPage}: room ${i + 1} does not carry exactly one room mark`);

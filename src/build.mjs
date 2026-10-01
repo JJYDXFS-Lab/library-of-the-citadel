@@ -16,14 +16,17 @@ import path from 'node:path';
 import { loadConfig, repoRoot } from './config.mjs';
 import { loadContentOrThrow } from './content.mjs';
 import { loadStoriesOrThrow, storyView, storyRoute, STORIES_ROUTE } from './stories.mjs';
+import { loadNurseryOrThrow, nurseryView, handbookRoute, NURSERY_ROUTE } from './nursery.mjs';
 import { LOCALES, DEFAULT_LOCALE, loadDictionaries, makeLocale, localizeView, localizedRegions } from './i18n.mjs';
 import { hallPage, galleryPage, detailPage, aboutPage, withShelfTitles } from './templates/pages.mjs';
 import { storiesShelfPage, storyPage } from './templates/stories.mjs';
+import { nurseryLandingPage, handbookPage } from './templates/nursery.mjs';
 
 export function build(env = process.env) {
   const cfg = loadConfig(env);
   const { collections, items } = loadContentOrThrow();
   const { shelf, stories } = loadStoriesOrThrow();
+  const nursery = loadNurseryOrThrow();
   // Fails closed: a missing or empty interface string stops the build here
   // rather than reaching a page as a raw dotted key.
   const dicts = loadDictionaries();
@@ -53,14 +56,22 @@ export function build(env = process.env) {
     // records carry their own per-locale metadata, so a view is a selection
     // rather than an overlay merge.
     const shelfView = storyView(loc.code, { shelf, stories });
-    const L = withShelfTitles(base, { collection: view.collection.record, stories: shelfView });
+    // The Agent Nursery collection is bilingual at source: each manuscript is
+    // its own edition rather than a translation overlay, so a view is again a
+    // selection — of the metadata block and of the manuscript for this locale.
+    const nurseryViewForLocale = nurseryView(loc.code, nursery);
+    const L = withShelfTitles(base, {
+      collection: view.collection.record,
+      stories: shelfView,
+      nursery: nurseryViewForLocale,
+    });
     // The locale's route prefix is a directory under the output root; the
     // default locale has none and therefore owns the root itself.
     const at = (rel) => path.join(loc.prefix === '' ? '.' : loc.prefix, rel);
 
-    emit(at('.'), hallPage(cfg, L, view, { stories: shelfView }));
+    emit(at('.'), hallPage(cfg, L, view, { stories: shelfView, nursery: nurseryViewForLocale }));
     emit(at('recipes'), galleryPage(cfg, L, view, { regions: localizedRegions(view.entries) }));
-    emit(at('about'), aboutPage(cfg, L, view, { stories: shelfView }));
+    emit(at('about'), aboutPage(cfg, L, view, { stories: shelfView, nursery: nurseryViewForLocale }));
     view.entries.forEach((entry, i) => {
       emit(at(path.join('recipes', entry.record.item_id)), detailPage(cfg, L, view, {
         entry,
@@ -77,6 +88,11 @@ export function build(env = process.env) {
     emit(at(STORIES_ROUTE), storiesShelfPage(cfg, L, shelfView));
     for (const entry of shelfView.stories) {
       emit(at(storyRoute(entry.record)), storyPage(cfg, L, shelfView, { entry }));
+    }
+
+    emit(at(NURSERY_ROUTE), nurseryLandingPage(cfg, L, nurseryViewForLocale));
+    for (const entry of nurseryViewForLocale.handbooks) {
+      emit(at(handbookRoute(entry.record)), handbookPage(cfg, L, nurseryViewForLocale, { entry }));
     }
 
     // A machine-readable copy of the content, so the records stay consumable by
@@ -108,6 +124,20 @@ export function build(env = process.env) {
   );
   written.push(path.join('data', 'stories.json'));
 
+  // Agent Nursery exports once too, and for the same reason: its records
+  // already carry every locale. The manuscripts themselves are not copied into
+  // the export — they are the canonical files under content/, the export names
+  // them and carries their digests, and the reader pages render them in full.
+  writeFileSync(
+    path.join(cfg.outDir, 'data', 'agent-nursery.json'),
+    `${JSON.stringify({
+      collection: nursery.collection,
+      handbooks: nursery.collection.handbook_ids.map((id) => nursery.handbooks.find((h) => h.handbook_id === id)),
+    }, null, 2)}\n`,
+    'utf8',
+  );
+  written.push(path.join('data', 'agent-nursery.json'));
+
   cpSync(path.join(repoRoot, 'src', 'assets'), path.join(cfg.outDir, 'assets'), { recursive: true });
   for (const f of readdirSync(path.join(cfg.outDir, 'assets'))) written.push(path.join('assets', f));
 
@@ -124,6 +154,7 @@ export function build(env = process.env) {
     bytes,
     itemCount: ordered.length,
     storyCount: stories.length,
+    handbookCount: nursery.handbooks.length,
     locales: LOCALES.map((l) => l.code),
   };
 }
@@ -135,6 +166,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     console.log(`Built ${r.written.length} files (${kb} KB) for base path "${r.cfg.basePath}"`);
     console.log(`  records: ${r.itemCount}`);
     console.log(`  stories: ${r.storyCount}`);
+    console.log(`  handbooks: ${r.handbookCount}`);
     console.log(`  locales: ${r.locales.join(', ')}`);
     console.log(`  output:  ${path.relative(repoRoot, r.outDir)}/`);
   } catch (err) {

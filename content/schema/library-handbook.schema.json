@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "library.handbook/1.0.0",
+  "title": "Library of the Citadel — handbook record",
+  "description": "A handbook is a long authored text held in this repository as its authors' own Markdown manuscript, one per language, plus the metadata needed to publish it honestly. The record never restates the prose: the manuscript files under content/ are the canonical text, and every field here is either a pointer to them, a checksum over them, or reader-facing metadata the manuscript does not carry. src/nursery.mjs recomputes the checksums on every build, so a manuscript cannot drift from the record that describes it, and the declared structure cannot drift from the headings the manuscript actually has.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "handbook_id",
+    "collection_id",
+    "record_class",
+    "edition",
+    "edition_date",
+    "authorship",
+    "manuscripts",
+    "language_links",
+    "structure",
+    "holder_links",
+    "locales",
+    "provenance",
+    "rights",
+    "first_published",
+    "reviewed_at",
+    "record_version",
+    "publication_ready",
+    "change_history"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "library.handbook/1.0.0" },
+    "handbook_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "collection_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "record_class": {
+      "type": "string",
+      "description": "authored-handbook: a text written by its named authors and published here as their own. It summarizes no outside page, so it cites none.",
+      "const": "authored-handbook"
+    },
+    "edition": { "type": "string", "pattern": "^v[0-9]+\\.[0-9]+$" },
+    "edition_date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "authorship": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authors"],
+      "properties": {
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "pattern": "^https://" }
+            }
+          }
+        }
+      }
+    },
+    "manuscripts": {
+      "type": "object",
+      "description": "One manuscript per interface locale. `file` is repository-relative to content/agent-nursery/; nothing outside content/ is ever named.",
+      "additionalProperties": false,
+      "required": ["en", "zh"],
+      "properties": {
+        "en": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "sha256", "bytes", "manuscript_role", "preface_marker", "preface_sha256", "copyright_line"],
+          "properties": {
+            "file": { "type": "string", "pattern": "^sources/[a-z0-9/.-]+\\.md$" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "bytes": { "type": "integer" },
+            "manuscript_role": { "type": "string", "enum": ["source", "translation"] },
+            "preface_marker": { "type": "string", "minLength": 1 },
+            "preface_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "copyright_line": { "type": "string", "minLength": 1 }
+          }
+        },
+        "zh": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["file", "sha256", "bytes", "manuscript_role", "preface_marker", "preface_sha256", "copyright_line"],
+          "properties": {
+            "file": { "type": "string", "pattern": "^sources/[a-z0-9/.-]+\\.md$" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "bytes": { "type": "integer" },
+            "manuscript_role": { "type": "string", "enum": ["source", "translation"] },
+            "preface_marker": { "type": "string", "minLength": 1 },
+            "preface_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "copyright_line": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "language_links": {
+      "type": "array",
+      "description": "The manuscripts link to each other by their own filenames. Each one is mapped to the locale it means, so the reader gets a working site URL instead of a dead file link, and an unmapped target fails the build rather than rendering a broken href.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["target", "locale"],
+        "properties": {
+          "target": { "type": "string", "minLength": 1 },
+          "locale": { "type": "string", "enum": ["en", "zh"] }
+        }
+      }
+    },
+    "structure": {
+      "type": "object",
+      "description": "The section spine, declared once and shared by every language. Section ids are language-independent, which is what makes a fragment survive the language switch; src/nursery.mjs checks each manuscript's headings against this list.",
+      "additionalProperties": false,
+      "required": ["chapter_count", "exercise_count", "appendix_count", "sections"],
+      "properties": {
+        "chapter_count": { "type": "integer" },
+        "exercise_count": { "type": "integer" },
+        "appendix_count": { "type": "integer" },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["section_id", "kind"],
+            "properties": {
+              "section_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+              "kind": { "type": "string", "enum": ["preface", "opening", "chapter", "appendix", "revision-notes"] },
+              "subsections": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["section_id", "kind"],
+                  "properties": {
+                    "section_id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+                    "kind": { "type": "string", "enum": ["exercise"] }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "holder_links": {
+      "type": "array",
+      "description": "Names inside the manuscript's own closing copyright line that are rendered as links. Only that one line is linked, so the holders are reachable from the end of the text without turning every mention of a name in the prose into a link.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "url"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "url": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    },
+    "locales": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "zh"],
+      "properties": {
+        "en": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "abstract", "nature_note", "edition_note", "language_note", "publication_note", "rights_note"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "title_alt": { "type": "string", "minLength": 1 },
+            "abstract": { "type": "string", "minLength": 1 },
+            "nature_note": { "type": "string", "minLength": 20 },
+            "edition_note": { "type": "string", "minLength": 1 },
+            "language_note": { "type": "string", "minLength": 1 },
+            "publication_note": { "type": "string", "minLength": 1 },
+            "rights_note": { "type": "string", "minLength": 1 }
+          }
+        },
+        "zh": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["title", "abstract", "nature_note", "edition_note", "language_note", "publication_note", "rights_note"],
+          "properties": {
+            "title": { "type": "string", "minLength": 1 },
+            "title_alt": { "type": "string", "minLength": 1 },
+            "abstract": { "type": "string", "minLength": 1 },
+            "nature_note": { "type": "string", "minLength": 20 },
+            "edition_note": { "type": "string", "minLength": 1 },
+            "language_note": { "type": "string", "minLength": 1 },
+            "publication_note": { "type": "string", "minLength": 1 },
+            "rights_note": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "sources"],
+      "properties": {
+        "origin": { "type": "string", "enum": ["original-work"] },
+        "sources": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content_license", "license_review_state", "holders", "images", "image_rights_review_state"],
+      "properties": {
+        "content_license": { "type": "string", "minLength": 1 },
+        "license_review_state": {
+          "type": "string",
+          "enum": ["not-reviewed", "author-original-text", "cleared", "blocked"]
+        },
+        "holders": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "images": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "image_rights_review_state": {
+          "type": "string",
+          "enum": ["not-reviewed", "no-images", "cleared", "blocked"]
+        }
+      }
+    },
+    "first_published": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "reviewed_at": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+    "record_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "publication_ready": { "type": "boolean" },
+    "change_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["version", "date", "change", "supersedes"],
+        "properties": {
+          "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+          "date": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$" },
+          "change": { "type": "string", "minLength": 1 },
+          "supersedes": { "type": ["string", "null"] }
+        }
+      }
+    }
+  }
+}

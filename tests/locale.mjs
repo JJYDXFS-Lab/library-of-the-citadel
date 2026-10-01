@@ -397,9 +397,13 @@ test('a locale view keeps manifest order and pairs every record with its state',
 // ==================================================== the generated page sets
 
 const PAGE_ROUTES = ['index.html', 'recipes/index.html', 'stories/index.html', 'about/index.html',
+  'collections/agent-nursery/index.html', 'collections/agent-nursery/handbook/index.html',
   ...EXPECTED_ITEM_IDS.map((id) => `recipes/${id}/index.html`),
   ...EXPECTED_STORY_IDS.map((id) => `stories/${id}/index.html`)];
 const pagesFor = (loc) => PAGE_ROUTES.map((rel) => `${loc.prefix}${rel}`);
+// The nursery publishes manuscripts rather than recipes and carries its own
+// compact colophon; what every page shares is checked below either way.
+const isNurseryPage = (rel) => rel.includes('collections/agent-nursery/');
 
 test('the build emits one complete page set per locale, plus one data file each', () => {
   const r = localeBuild();
@@ -414,8 +418,10 @@ test('the build emits one complete page set per locale, plus one data file each'
   // The story shelf exports once rather than once per locale: a story record
   // already carries its own metadata for every locale, and its body is the same
   // canonical text in all of them.
+  // Agent Nursery exports once for the same reason: each handbook already
+  // carries a manuscript and a metadata block per locale.
   assert.deepEqual(readdirSync(path.join(r.outDir, 'data')).sort(),
-    ['stories.json', 'world-recipes.json', 'world-recipes.zh.json']);
+    ['agent-nursery.json', 'stories.json', 'world-recipes.json', 'world-recipes.zh.json']);
 });
 
 test('each page set declares its own language and keeps the shared slugs', () => {
@@ -479,7 +485,13 @@ test('every page in both locales carries the exact required footer credit and it
       // The superseded credit must be gone from the page entirely, not merely
       // from the copyright element.
       assert.ok(!html.includes('Atom &amp; Claude'), `${rel}: the old "Atom & Claude" credit survives`);
-      assert.ok(html.includes(`<p class="colophon__rights">${note}</p>`), `${rel}: no ${loc.code} rights note`);
+      // The cooking rights note belongs to the recipe build. The nursery pages
+      // carry their own footer instead, which tests/nursery.mjs pins; what they
+      // must still share is the credit above and the absence of the other
+      // locale's prose.
+      if (!isNurseryPage(rel)) {
+        assert.ok(html.includes(`<p class="colophon__rights">${note}</p>`), `${rel}: no ${loc.code} rights note`);
+      }
       assert.ok(!html.includes(foreign), `${rel}: shows the ${other.code} rights note instead of its own`);
     }
   }

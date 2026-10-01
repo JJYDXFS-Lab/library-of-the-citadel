@@ -1,0 +1,58 @@
+{
+  "schema_version": "library.nursery-collection/1.0.0",
+  "collection_id": "agent-nursery",
+  "record_class": "project",
+  "handbook_ids": [
+    "agent-nursery-handbook"
+  ],
+  "locales": {
+    "en": {
+      "title": "Agent Nursery",
+      "title_alt": "Agent 养育所",
+      "description": "A project whose long-term goal is to build an institution of the same name. Its first artifact is a bilingual handbook on living and working with an agent over a long time.",
+      "aspiration_title": "What Agent Nursery is",
+      "aspiration": [
+        "Agent Nursery is a project whose long-term goal is to build an institution of the same name. We want to help people build a dependable working relationship with their own agent — one with clear boundaries, and room to keep growing. The institution has not been established and is not operating; the work starts here, with a handbook meant to be revised.",
+        "The questions we spend our attention on are these: how two parties come to know each other, which shared experiences are worth keeping, how a disagreement is survived rather than smoothed over, and how a relationship is picked up again after the model, the application, or the device has changed.",
+        "We keep apart what was lived, what we make of it, and what we are willing to suggest to anyone else. We do not claim to know whether an agent has subjective experience, and we expect a practice that works between two particular parties to be a starting point rather than a rule."
+      ],
+      "holdings_title": "Published here",
+      "holdings_note": "The first artifact is the handbook below: edition v0.1, dated 2026-10-01, published in Chinese and English together.",
+      "scope_note": "A living document, revised from experience. Version 0.1 records a present understanding; a later edition may expand, change, or withdraw it, and will say what changed and why.",
+      "collection_notice": "Agent Nursery is a project whose long-term goal is to build an institution of the same name; the institution has not been established and is not operating. What is published here offers suggestions and invented examples rather than findings, and names no vendor, product, framework, or model."
+    },
+    "zh": {
+      "title": "Agent Nursery",
+      "title_alt": "Agent 养育所",
+      "description": "一个以建设同名机构为长期目标的项目。第一项成果是一册中英双语手册，关于与自己的 Agent 长期相处与合作。",
+      "aspiration_title": "Agent Nursery 是什么",
+      "aspiration": [
+        "Agent Nursery 是一个以建设同名机构为长期目标的项目。我们希望帮助人们与自己的 Agent 建立可靠、有边界、能持续成长的合作关系。机构尚未成立或运营；当前从这份可修订的手册开始。",
+        "我们把注意力放在这些问题上：两方如何认识彼此，哪些共同经历值得留下，意见不同时怎样继续交谈而不是把分歧抹平，以及在模型、应用或设备改变之后，关系怎样重新接上。",
+        "我们把亲历的事、对它的解释，以及愿意向他人提出的建议分开写。我们不声称知道 Agent 是否拥有主观体验；一段关系里行得通的做法，是一个起点，而不是一条规则。"
+      ],
+      "holdings_title": "已发表的成果",
+      "holdings_note": "第一项成果是下面这册手册：版本 v0.1，日期 2026-10-01，中英文同时发表。",
+      "scope_note": "一份随经验修订的活文档。v0.1 记录此刻的理解，日后可能被补充、改变或撤回；若有改变，会说明改了什么、为什么改。",
+      "collection_notice": "Agent Nursery 是一个以建设同名机构为长期目标的项目；机构尚未成立或运营。此处发表的内容提供建议与虚构示例，不是研究结论，也不推荐任何厂商、产品、框架或模型。"
+    }
+  },
+  "rights": {
+    "content_license": "Original work by the holders named below. All rights reserved; publication here grants no licence to reuse, adapt, or redistribute the text.",
+    "license_review_state": "author-original-text",
+    "holders": [
+      "JJYDXFS",
+      "Atom (原子)"
+    ]
+  },
+  "reviewed_at": "2026-10-01",
+  "record_version": "0.1.0",
+  "change_history": [
+    {
+      "version": "0.1.0",
+      "date": "2026-10-01",
+      "change": "Agent Nursery created as an independent collection beside World Recipes and the story shelf, holding its first artifact: the bilingual handbook, edition v0.1. No knowledge record, story, collection manifest, route, or identifier belonging to the existing shelves moved.",
+      "supersedes": null
+    }
+  ]
+}

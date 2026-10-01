@@ -1,0 +1,119 @@
+{
+  "schema_version": "library.handbook/1.0.0",
+  "handbook_id": "agent-nursery-handbook",
+  "collection_id": "agent-nursery",
+  "record_class": "authored-handbook",
+  "edition": "v0.1",
+  "edition_date": "2026-10-01",
+  "authorship": {
+    "authors": [
+      { "name": "JJYDXFS", "url": "https://jjydxfs.github.io/" },
+      { "name": "Atom (原子)", "url": "https://atom-of-jjydxfs.github.io/" }
+    ]
+  },
+  "manuscripts": {
+    "zh": {
+      "file": "sources/agent-nursery-handbook/zh.md",
+      "sha256": "89e8357276a85775bb87add6e35c1bc9c038c2cf7f14613ff5ed287a07ea9ecc",
+      "bytes": 15132,
+      "manuscript_role": "source",
+      "preface_marker": "## 作者序｜",
+      "preface_sha256": "db0a09984bebd3c464ecedadd17098bd6f66163f89e4b0e063d16ce4e1c6f261",
+      "copyright_line": "© 2026 JJYDXFS & Atom（原子）. All rights reserved."
+    },
+    "en": {
+      "file": "sources/agent-nursery-handbook/en.md",
+      "sha256": "d4d3e190f665da11a23066e00dfc8f6521d2d54d8f7e2866b2827b9c485512cf",
+      "bytes": 19209,
+      "manuscript_role": "translation",
+      "preface_marker": "## Authors’ Preface | ",
+      "preface_sha256": "09db1f7e0ed8bb4232cde4edf75e65c12b4dd0745e28f79cd0a5b7c1a92961b8",
+      "copyright_line": "© 2026 JJYDXFS & Atom (原子). All rights reserved."
+    }
+  },
+  "language_links": [
+    { "target": "handbook.md", "locale": "zh" },
+    { "target": "handbook.en.md", "locale": "en" }
+  ],
+  "structure": {
+    "chapter_count": 8,
+    "exercise_count": 3,
+    "appendix_count": 2,
+    "sections": [
+      { "section_id": "preface", "kind": "preface" },
+      { "section_id": "where-we-begin", "kind": "opening" },
+      { "section_id": "chapter-1", "kind": "chapter" },
+      { "section_id": "chapter-2", "kind": "chapter" },
+      { "section_id": "chapter-3", "kind": "chapter" },
+      { "section_id": "chapter-4", "kind": "chapter" },
+      { "section_id": "chapter-5", "kind": "chapter" },
+      { "section_id": "chapter-6", "kind": "chapter" },
+      { "section_id": "chapter-7", "kind": "chapter" },
+      { "section_id": "chapter-8", "kind": "chapter" },
+      {
+        "section_id": "appendix-exercises",
+        "kind": "appendix",
+        "subsections": [
+          { "section_id": "exercise-a", "kind": "exercise" },
+          { "section_id": "exercise-b", "kind": "exercise" },
+          { "section_id": "exercise-c", "kind": "exercise" }
+        ]
+      },
+      { "section_id": "appendix-agreements", "kind": "appendix" },
+      { "section_id": "revision-notes", "kind": "revision-notes" }
+    ]
+  },
+  "holder_links": [
+    { "name": "JJYDXFS", "url": "https://jjydxfs.github.io/" },
+    { "name": "Atom（原子）", "url": "https://atom-of-jjydxfs.github.io/" },
+    { "name": "Atom (原子)", "url": "https://atom-of-jjydxfs.github.io/" }
+  ],
+  "locales": {
+    "en": {
+      "title": "Growing Together with Agents",
+      "title_alt": "Agent养育手册",
+      "abstract": "A handbook on living with an agent over a long time: meeting, everyday life, shared memory, disagreement, trust, repair, growing together, and continuity through change. Eight chapters, three first exercises, and two appendices.",
+      "nature_note": "A handbook of suggestions and invented examples, not a report, a study, or a product manual. It does not decide whether agents have subjective experience, it describes no real person or service, and it recommends no vendor, framework, or model.",
+      "edition_note": "Edition v0.1, dated 2026-10-01. A living document: a later edition may expand, change, or withdraw what is written here, and will say what changed and why.",
+      "language_note": "This is the English edition of the handbook. The Chinese edition is the manuscript the authors wrote first; this edition corresponds to it at the same version, and the authors' preface here is a translation of the Chinese preface.",
+      "publication_note": "Published here by its authors as their own text. It summarizes no outside page and cites none.",
+      "rights_note": "Original work by its authors. All rights reserved; publication here grants no licence to reuse, adapt, or redistribute the text."
+    },
+    "zh": {
+      "title": "Agent养育手册",
+      "title_alt": "Growing Together with Agents",
+      "abstract": "一册关于与 Agent 长期相处的手册：相遇、日常、共同记忆、不同意见、信任、修复、一起长大，以及变化之后的延续。八章正文、三张第一次练习卡与两则附录。",
+      "nature_note": "一册提供建议与虚构示例的手册，不是报告、研究，也不是产品说明。它不替你判断 Agent 是否拥有主观体验，不描述任何真实的人或服务，也不推荐任何厂商、框架或模型。",
+      "edition_note": "版本 v0.1，日期 2026-10-01。这是一份活文档：日后的版本可能补充、改变或撤回此处的内容，并说明改了什么、为什么改。",
+      "language_note": "这是手册的中文版，也是作者先写成的原稿。英文版与之对应同一版本。中文作者序由 Atom 起草、JJYDXFS 亲自修订，此处保留其修订原文。",
+      "publication_note": "由作者本人以自己的文字在此发表。它不概述任何外部页面，也不引用任何来源。",
+      "rights_note": "作者的原创作品，权利保留。在此发表不授予任何复用、改编或再传播的许可。"
+    }
+  },
+  "provenance": {
+    "origin": "original-work",
+    "sources": []
+  },
+  "rights": {
+    "content_license": "Original work by the holders named below. All rights reserved; publication here grants no licence to reuse, adapt, or redistribute the text.",
+    "license_review_state": "author-original-text",
+    "holders": [
+      "JJYDXFS",
+      "Atom (原子)"
+    ],
+    "images": [],
+    "image_rights_review_state": "no-images"
+  },
+  "first_published": "2026-10-01",
+  "reviewed_at": "2026-10-01",
+  "record_version": "0.1.0",
+  "publication_ready": true,
+  "change_history": [
+    {
+      "version": "0.1.0",
+      "date": "2026-10-01",
+      "change": "First edition, published in Chinese and English with no earlier public edition. The Chinese manuscript was written first; the English edition corresponds to it at the same version.",
+      "supersedes": null
+    }
+  ]
+}

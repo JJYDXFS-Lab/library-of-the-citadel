@@ -9,6 +9,9 @@ they mean this project's framework layer, never Atom-KB's.
   Schema subset, and the cross-record rules.
 - [configuration.md](configuration.md) — configuration keys, environment
   overrides, base paths, and deployment notes.
+- [agent-nursery.md](agent-nursery.md) — the Agent Nursery collection: where its
+  manuscripts live, how the two language editions are held together, and what a
+  revision has to record.
 - [STATUS.md](STATUS.md) — current completed/pending checkpoint and next step.
 - [../CLAUDE.md](../CLAUDE.md) — public-safe contribution and resume policy.
 

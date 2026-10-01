@@ -115,6 +115,7 @@ root build. **Nothing here starts a server**, and the deployed output needs none
 | `content/collections/` | Collection manifests; membership is by `item_id`. |
 | `content/stories/items/` | One JSON file per story, named for its `story_id`. |
 | `content/stories/shelf.json` | The story shelf manifest; membership is by `story_id`. |
+| `content/agent-nursery/` | The Agent Nursery manifest, its handbook records, and the authors' manuscripts under `sources/`. |
 | `content/schema/` | JSON Schema documents — the source of truth for shape. |
 | `content/locales/` | Interface dictionaries and additive record-translation overlays, keyed by stable record IDs. |
 | `config/site.config.json` | Deployment configuration; deployment values plus documented environment overrides. |
@@ -127,6 +128,8 @@ root build. **Nothing here starts a server**, and the deployed output needs none
 
 - [`docs/architecture.md`](docs/architecture.md) — how a build runs, and why.
 - [`docs/content-schema.md`](docs/content-schema.md) — the record contract.
+- [`docs/agent-nursery.md`](docs/agent-nursery.md) — the Agent Nursery
+  collection: manuscripts, bilingual projection, and revision rules.
 - [`docs/configuration.md`](docs/configuration.md) — base paths and deployment.
 - [`docs/STATUS.md`](docs/STATUS.md) — small resumable project checkpoint.
 - [`CLAUDE.md`](CLAUDE.md) — public-safe contribution and checkpoint policy.
