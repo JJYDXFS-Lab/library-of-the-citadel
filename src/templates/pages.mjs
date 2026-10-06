@@ -32,6 +32,24 @@ const itemPath = (item) => `recipes/${item.item_id}/`;
  */
 const CATALOGUE_ID = 'catalogue';
 const SECTION_PARAM = 'section';
+const METHOD_OPTIONS = [
+  ['oven', 'gallery.method_oven'],
+  ['air-fryer', 'gallery.method_air_fryer'],
+];
+const SOURCE_OPTIONS = [
+  ['sourced', 'gallery.source_sourced'],
+  ['practical-note', 'gallery.source_practical'],
+  ['fixture', 'gallery.source_fixture'],
+];
+// These values are an intentionally small, closed vocabulary over canonical
+// tags already present in the catalogue. They are presentation facets, not new
+// claims about a recipe or an attempt to infer a primary ingredient.
+const INGREDIENT_OPTIONS = [
+  ['lamb', 'gallery.ingredient_lamb'],
+  ['chicken', 'gallery.ingredient_chicken'],
+  ['fish', 'gallery.ingredient_fish'],
+  ['potato', 'gallery.ingredient_potato'],
+];
 
 export const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
 
@@ -310,18 +328,26 @@ ${foot(cfg, L)}`;
 function card(L, entry, sectionIds = []) {
   const item = entry.record;
   const en = entry.english;
+  const tags = new Set(item.tags ?? []);
+  const method = METHOD_OPTIONS.find(([value]) => tags.has(value))?.[0] ?? '';
+  const ingredients = INGREDIENT_OPTIONS.filter(([value]) => tags.has(value)).map(([value]) => value);
   // The haystack carries the localized text and the English original, so a
-  // search typed in either language finds the record.
+  // search typed in either language finds the record. Searchable prose is
+  // generated at build time; the browser never fetches or reconstructs data.
+  const ingredientTerms = (record) => record.ingredients.flatMap((row) => Object.values(row));
+  const methodTerms = (record) => record.method.map((step) => step.instruction);
   const terms = [
     item.name.primary, ...(item.name.alt ?? []), item.region.label, item.region.cuisine_label, item.summary,
     en.name.primary, ...(en.name.alt ?? []), en.region.label, en.region.cuisine_label, en.summary,
     ...(item.tags ?? []), ...item.variants.map((v) => v.label), ...en.variants.map((v) => v.label),
+    ...ingredientTerms(item), ...ingredientTerms(en), ...methodTerms(item), ...methodTerms(en),
+    item.yield_note, en.yield_note, item.record_class,
   ];
   // Section membership rides on the card as a machine facet, keyed by
   // section_id. That is what a lens filters on, so the lens mechanism is data
   // driven and works for any section the manifest declares.
   const sections = sectionIds.length ? ` data-sections="${esc(sectionIds.join(' '))}"` : '';
-  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}"${sections} data-haystack="${esc([...new Set(terms)].join(' ').toLowerCase())}">
+  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}" data-method="${esc(method)}" data-class="${esc(item.record_class)}" data-ingredients="${esc(ingredients.join(' '))}" data-tags="${esc([...(item.tags ?? [])].join(' '))}"${sections} data-haystack="${esc([...new Set(terms.filter(Boolean))].join(' ').toLowerCase())}">
   <a class="card__link" href="${L.path(itemPath(item))}">
     <span class="card__marks">
       <span class="card__region">${esc(item.region.label)}</span>
@@ -386,6 +412,7 @@ function collectionLenses(L, view) {
 export function galleryPage(cfg, L, view, { regions }) {
   const collection = view.collection.record;
   const total = view.entries.length;
+  const fixtureCount = view.entries.filter((entry) => entry.record.record_class === 'fixture').length;
   const sections = sectionsByItem(collection);
   return `${head(cfg, L, { title: collection.title.primary, description: collection.description })}
 <body class="page page--gallery">
@@ -406,8 +433,11 @@ ${collectionLenses(L, view)}
   <form class="filters" id="${CATALOGUE_ID}" role="search" aria-label="${esc(L.t('gallery.filters_label'))}" data-filters
     data-status-all="${esc(L.t.raw('gallery.status_all'))}"
     data-status-some="${esc(L.t.raw('gallery.status_some'))}"
-    data-status-none="${esc(L.t.raw('gallery.status_none'))}">
-    <div class="filters__field">
+    data-status-none="${esc(L.t.raw('gallery.status_none'))}"
+    data-status-fixtures-hidden="${esc(L.t.raw('gallery.status_fixtures_hidden'))}"
+    data-active-filters-template="${esc(L.t.raw('gallery.active_filters'))}"
+    data-fixture-count="${fixtureCount}">
+    <div class="filters__field filters__field--search">
       <label for="q">${esc(L.t('gallery.search_label'))}</label>
       <input type="search" id="q" name="q" autocomplete="off" placeholder="${esc(L.t('gallery.search_placeholder'))}" data-search>
     </div>
@@ -416,6 +446,27 @@ ${collectionLenses(L, view)}
       <select id="region" name="region" data-region>
         <option value="">${esc(L.t('gallery.region_all'))}</option>
 ${regions.map((r) => `        <option value="${esc(r.value)}">${esc(r.label)}</option>`).join('\n')}
+      </select>
+    </div>
+    <div class="filters__field">
+      <label for="method">${esc(L.t('gallery.method_label'))}</label>
+      <select id="method" name="method" data-method>
+        <option value="">${esc(L.t('gallery.method_all'))}</option>
+${METHOD_OPTIONS.map(([value, key]) => `        <option value="${esc(value)}">${esc(L.t(key))}</option>`).join('\n')}
+      </select>
+    </div>
+    <div class="filters__field">
+      <label for="class">${esc(L.t('gallery.source_label'))}</label>
+      <select id="class" name="class" data-class>
+        <option value="">${esc(L.t('gallery.source_all'))}</option>
+${SOURCE_OPTIONS.map(([value, key]) => `        <option value="${esc(value)}">${esc(L.t(key))}</option>`).join('\n')}
+      </select>
+    </div>
+    <div class="filters__field">
+      <label for="ingredient">${esc(L.t('gallery.ingredient_label'))}</label>
+      <select id="ingredient" name="ingredient" data-ingredient>
+        <option value="">${esc(L.t('gallery.ingredient_all'))}</option>
+${INGREDIENT_OPTIONS.map(([value, key]) => `        <option value="${esc(value)}">${esc(L.t(key))}</option>`).join('\n')}
       </select>
     </div>
     <button type="button" class="filters__reset" data-reset hidden>${esc(L.t('gallery.clear'))}</button>
@@ -429,6 +480,7 @@ ${view.entries.map((entry) => card(L, entry, sections.get(entry.record.item_id) 
   <div class="empty-state" data-empty hidden>
     <p class="empty-state__title">${esc(L.t('gallery.empty_title'))}</p>
     <p>${esc(L.t('gallery.empty_body', { total }))}</p>
+    <p class="empty-state__filters" data-active-filters hidden></p>
     <p class="empty-state__hint">${fill(L.t.raw('gallery.empty_hint'), {
       reset: `<button type="button" class="text-link" data-reset-inline>${esc(L.t('gallery.reset_both'))}</button>`,
     })}</p>

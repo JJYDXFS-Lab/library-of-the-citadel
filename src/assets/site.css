@@ -480,9 +480,10 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 /* ---- gallery ---- */
 
 .filters { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; padding: 1rem 0 1.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.filters__field { display: flex; flex-direction: column; gap: .3rem; }
+.filters__field { display: flex; flex: 1 1 10rem; min-width: 0; flex-direction: column; gap: .3rem; }
+.filters__field--search { flex-basis: 16rem; }
 .filters label { font-family: var(--sans); font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
-.filters input, .filters select { font: inherit; font-size: .95rem; padding: .5rem .7rem; min-width: 15rem; background: var(--card); color: var(--ink); border: 1px solid var(--rule); border-radius: 2px; }
+.filters input, .filters select { width: 100%; min-width: 0; font: inherit; font-size: .95rem; padding: .5rem .7rem; background: var(--card); color: var(--ink); border: 1px solid var(--rule); border-radius: 2px; }
 .filters input:focus-visible, .filters select:focus-visible, a:focus-visible, button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .filters__reset { font-family: var(--sans); font-size: .78rem; padding: .55rem .9rem; background: none; border: 1px solid var(--rule); border-radius: 2px; color: var(--ink-soft); cursor: pointer; }
 .filters__status { flex: 1 1 100%; margin: .25rem 0 0; font-family: var(--sans); font-size: .8rem; color: var(--ink-soft); }

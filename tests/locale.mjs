@@ -555,6 +555,8 @@ test('no raw interface key and no dotted placeholder reaches a generated page', 
       ['data-status-all', ['{total}']],
       ['data-status-some', ['{shown}', '{total}']],
       ['data-status-none', []],
+      ['data-status-fixtures-hidden', ['{count}']],
+      ['data-active-filters-template', ['{filters}']],
     ]) {
       const template = new RegExp(`${attr}="([^"]*)"`).exec(gallery);
       assert.ok(template, `${loc.code} gallery: no "${attr}" template for the script to fill in`);
@@ -994,7 +996,7 @@ class El {
 class Select extends El {
   constructor(attrs, options) {
     super(attrs);
-    this.options = options;
+    this.options = options.map((option) => typeof option === 'string' ? { value: option, text: option } : option);
     this._value = '';
   }
 
@@ -1003,7 +1005,7 @@ class Select extends El {
   set value(v) { this._value = String(v); }
 
   /** -1 for a value that is not one of the rendered options, as in a browser. */
-  get selectedIndex() { return this.options.indexOf(this._value); }
+  get selectedIndex() { return this.options.findIndex((option) => option.value === this._value); }
 }
 
 /**
@@ -1038,6 +1040,9 @@ function runApp({
   const searchInput = new El({ 'data-search': '' });
   searchInput.value = '';
   const region = new Select({ 'data-region': '' }, ['', 'East Asia', 'Mediterranean', 'West Asia']);
+  const method = new Select({ 'data-method': '' }, ['', 'oven', 'air-fryer']);
+  const sourceType = new Select({ 'data-class': '' }, ['', 'sourced', 'practical-note', 'fixture']);
+  const ingredient = new Select({ 'data-ingredient': '' }, ['', 'lamb', 'chicken', 'fish', 'potato']);
   const status = new El({ 'data-status': '' });
   const reset = new El({ 'data-reset': '' });
   const form = new El({
@@ -1045,22 +1050,31 @@ function runApp({
     'data-status-all': 'Showing all {total} records.',
     'data-status-some': 'Showing {shown} of {total} records.',
     'data-status-none': 'No records match.',
-  }, [searchInput, region, status, reset]);
+    'data-status-fixtures-hidden': '{count} fixture records are excluded from food facets.',
+    'data-active-filters-template': 'Current filters: {filters}.',
+    'data-fixture-count': '1',
+  }, [searchInput, region, method, sourceType, ingredient, status, reset]);
   // Two of the three cards belong to a section, so a lens can be distinguished
   // from "everything" and from a single record.
   const cards = [
     new El({
-      class: 'card', 'data-haystack': 'griddle flatbread west asia', 'data-region': 'West Asia',
-      'data-sections': 'quick-things',
+      class: 'card', 'data-haystack': 'oven slow roast lamb shoulder potato cod fish flatbread west asia',
+      'data-region': 'West Asia', 'data-method': 'oven', 'data-class': 'sourced',
+      'data-ingredients': 'lamb potato', 'data-tags': 'fish lamb potato oven', 'data-sections': 'quick-things',
     }),
-    new El({ class: 'card', 'data-haystack': 'rice porridge east asia', 'data-region': 'East Asia' }),
     new El({
-      class: 'card', 'data-haystack': 'simmered bean soup mediterranean', 'data-region': 'Mediterranean',
-      'data-sections': 'quick-things',
+      class: 'card', 'data-haystack': 'rice porridge potato east asia', 'data-region': 'East Asia',
+      'data-method': '', 'data-class': 'fixture', 'data-ingredients': 'potato', 'data-tags': '',
+    }),
+    new El({
+      class: 'card', 'data-haystack': 'air fryer salmon fish chicken bean soup mediterranean',
+      'data-region': 'Mediterranean', 'data-method': 'air-fryer', 'data-class': 'practical-note',
+      'data-ingredients': 'fish', 'data-tags': 'salmon fish air-fryer', 'data-sections': 'quick-things',
     }),
   ];
   const grid = new El({ 'data-grid': '' }, cards);
-  const empty = new El({ 'data-empty': '' });
+  const activeFilters = new El({ 'data-active-filters': '', hidden: '' });
+  const empty = new El({ 'data-empty': '' }, [activeFilters]);
   const inlineReset = new El({ 'data-reset-inline': '' });
   const lensLink = new El({
     class: 'lens__action',
@@ -1131,12 +1145,15 @@ function runApp({
 
   const linkFor = (code) => links.find((l) => l.getAttribute('data-locale-code') === code);
   return {
-    links, linkFor, box, form, search: searchInput, region, status, reset, grid, empty,
+    links, linkFor, box, form, search: searchInput, region, method, sourceType, ingredient, status, reset, grid, empty, activeFilters,
     inlineReset, cards, store, location, replaced, pushed, lensLink,
     shown: () => cards.filter((c) => !c.hidden).length,
     href: (code) => linkFor(code).getAttribute('href'),
     type(value) { searchInput.value = value; searchInput.fire('input'); },
     pick(value) { region.value = value; region.fire('change'); },
+    pickMethod(value) { method.value = value; method.fire('change'); },
+    pickClass(value) { sourceType.value = value; sourceType.fire('change'); },
+    pickIngredient(value) { ingredient.value = value; ingredient.fire('change'); },
   };
 }
 
@@ -1289,6 +1306,96 @@ test('the filter reads the URL on load, and drops a region that is not on offer'
   assert.equal(all.status.textContent, 'Showing all 3 records.');
   assert.equal(all.reset.hidden, true);
   assert.equal(all.empty.hidden, true);
+});
+
+test('search matches every token and expands the supported bilingual cooking aliases', () => {
+  const multiword = runApp({ locale: 'en' });
+  multiword.type('lamb shoulder');
+  assert.equal(multiword.shown(), 1, 'two matching tokens should retain the lamb shoulder card');
+  assert.equal(multiword.cards[0].hidden, false);
+
+  multiword.type('lamb salmon');
+  assert.equal(multiword.shown(), 0, 'tokens found on different cards must not be ORed together');
+
+  for (const query of ['羊肉 羊肩', '烤箱', 'air fryer', 'air-fryer', 'airfryer', '空气炸锅', 'salmon', '三文鱼']) {
+    const page = runApp({ locale: 'en' });
+    page.type(query);
+    assert.equal(page.shown(), 1, `alias query ${JSON.stringify(query)} did not resolve to one card`);
+  }
+
+  for (const query of ['fish', '鱼']) {
+    const page = runApp({ locale: 'en' });
+    page.type(query);
+    assert.equal(page.shown(), 2, `broad fish query ${JSON.stringify(query)} should include fish and salmon cards`);
+  }
+
+  for (const [query, expectedCard] of [['鸡肉', 2], ['土豆', 0]]) {
+    const page = runApp({ locale: 'en' });
+    // The fixture also contains potato, so add a second token to pin the food
+    // card while still exercising the potato alias.
+    page.type(query === '土豆' ? `${query} lamb` : query);
+    assert.equal(page.shown(), 1, `alias query ${JSON.stringify(query)} did not resolve`);
+    assert.equal(page.cards[expectedCard].hidden, false);
+  }
+});
+
+test('method, source type, and ingredient facets intersect and keep counts and URL state current', () => {
+  const page = runApp({ locale: 'en' });
+  page.pickMethod('oven');
+  assert.equal(page.shown(), 1);
+  assert.equal(page.status.textContent,
+    'Showing 1 of 3 records. 1 fixture records are excluded from food facets.');
+  assert.equal(page.location.search, '?method=oven');
+
+  page.pickClass('sourced');
+  page.pickIngredient('lamb');
+  assert.equal(page.shown(), 1, 'the three facets should retain their common sourced lamb record');
+  assert.equal(page.location.search, '?method=oven&class=sourced&ingredient=lamb');
+
+  page.pickClass('practical-note');
+  assert.equal(page.shown(), 0, 'source type must intersect with method and ingredient');
+  assert.equal(page.status.textContent, 'No records match.');
+  assert.equal(page.activeFilters.textContent,
+    'Current filters: method: oven · class: practical-note · ingredient: lamb.');
+
+  page.reset.fire('click');
+  assert.equal(page.shown(), 3);
+  assert.equal(page.method.value, '');
+  assert.equal(page.sourceType.value, '');
+  assert.equal(page.ingredient.value, '');
+  assert.equal(page.location.search, '');
+});
+
+test('food facets suppress fixture recommendations unless fixture source type is explicit', () => {
+  const page = runApp({ locale: 'en' });
+  page.pickIngredient('potato');
+  assert.equal(page.shown(), 1, 'the fixture sharing this test tag should be suppressed by the food facet');
+  assert.equal(page.cards[0].hidden, false);
+  assert.equal(page.cards[1].hidden, true);
+
+  page.pickClass('fixture');
+  assert.equal(page.shown(), 1, 'an explicit fixture request should permit a matching fixture');
+  assert.equal(page.cards[1].hidden, false);
+
+  page.pickMethod('oven');
+  assert.equal(page.shown(), 0, 'method, source type, and ingredient must still combine with AND');
+});
+
+test('a shared URL restores every catalogue facet and carries it through the language switch', () => {
+  const query = '?q=lamb&region=West+Asia&section=quick-things&method=oven&class=sourced&ingredient=lamb';
+  const page = runApp({ locale: 'en', search: query });
+  assert.equal(page.search.value, 'lamb');
+  assert.equal(page.region.value, 'West Asia');
+  assert.equal(page.method.value, 'oven');
+  assert.equal(page.sourceType.value, 'sourced');
+  assert.equal(page.ingredient.value, 'lamb');
+  assert.equal(page.shown(), 1);
+  assert.equal(page.location.search, query);
+  assert.equal(page.href('zh'), `/zh/recipes/${query}`);
+
+  const bogus = runApp({ search: '?method=smoker&class=rumour&ingredient=dragonfruit' });
+  assert.equal(bogus.shown(), 3);
+  assert.equal(bogus.location.search, '', 'unknown facet values must be removed from a shared URL');
 });
 
 test('a lens narrows the one catalogue instead of navigating to a second one', () => {

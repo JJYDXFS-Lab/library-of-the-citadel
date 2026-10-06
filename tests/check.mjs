@@ -733,18 +733,14 @@ test('a collection section renders as a lens over the catalogue, not as a second
   }
 });
 
-test('the lens mechanism is generic: no source file knows this section exists', () => {
+test('the lens mechanism is generic: no source file knows this section id', () => {
   // A collection section is a content decision. The templates, the script and
-  // the stylesheet may only know that sections exist at all.
+  // the stylesheet may know the air-fryer cooking method, but not which records
+  // the editorial Quick Air-Fryer section happens to hold.
   for (const rel of [['src', 'templates', 'pages.mjs'], ['src', 'assets', 'app.js'],
     ['src', 'assets', 'site.css'], ['src', 'i18n.mjs'], ['src', 'rules.mjs']]) {
     const source = readFileSync(path.join(repoRoot, ...rel), 'utf8');
     assert.ok(!source.includes(QUICK_AIR_FRYER), `${rel.join('/')} hard-codes the "${QUICK_AIR_FRYER}" section id`);
-    assert.doesNotMatch(source, /air.fryer/i, `${rel.join('/')} branches on air-fryer content`);
-  }
-  for (const [code, value] of Object.entries(JSON.parse(
-    readFileSync(path.join(repoRoot, 'content', 'locales', 'ui', 'en.json'), 'utf8')))) {
-    assert.doesNotMatch(`${code} ${value}`, /air.fryer/i, 'an interface string names one collection section');
   }
 });
 
@@ -806,7 +802,8 @@ test('every internal link in the root build resolves to a file that was actually
 test('the gallery exposes the search, filter, and empty-state hooks the script binds to', () => {
   const html = read(rootBuild(), 'recipes/index.html');
   for (const hook of ['data-filters', 'data-search', 'data-region', 'data-status',
-    'data-reset', 'data-grid', 'data-empty', 'data-reset-inline', 'data-lens-filter', 'data-sections']) {
+    'data-method', 'data-class', 'data-ingredient', 'data-reset', 'data-grid', 'data-empty',
+    'data-reset-inline', 'data-lens-filter', 'data-sections', 'data-ingredients']) {
     assert.ok(html.includes(hook), `gallery is missing the "${hook}" hook`);
   }
   assert.match(html, /<p class="filters__status" aria-live="polite"/);
@@ -820,9 +817,25 @@ test('the gallery exposes the search, filter, and empty-state hooks the script b
     'every card needs a search haystack');
   assert.equal([...html.matchAll(/class="card"/g)].length, TOTAL_RECORDS);
 
+  const { items } = loadContent();
+  const blocks = new Map(cardBlocks(html).map((block) => [/data-item-id="([^"]+)"/.exec(block)[1], block]));
+  for (const item of items) {
+    const block = blocks.get(item.item_id);
+    const haystack = /data-haystack="([^"]*)"/.exec(block)?.[1] ?? '';
+    assert.ok(block.includes(`data-class="${item.record_class}"`), `${item.item_id}: no record-class facet`);
+    assert.ok(haystack.includes(esc(item.ingredients[0].item.toLowerCase())),
+      `${item.item_id}: the first ingredient is absent from its search haystack`);
+    assert.ok(haystack.includes(esc(item.method[0].instruction.toLowerCase())),
+      `${item.item_id}: the first method step is absent from its search haystack`);
+    assert.ok(haystack.includes(item.record_class), `${item.item_id}: record_class is absent from its search haystack`);
+    const expectedMethod = item.tags.includes('air-fryer') ? 'air-fryer' : item.tags.includes('oven') ? 'oven' : '';
+    assert.ok(block.includes(`data-method="${expectedMethod}"`), `${item.item_id}: wrong method facet`);
+  }
+
   const app = readFileSync(path.join(repoRoot, 'src', 'assets', 'app.js'), 'utf8');
   for (const hook of ['[data-filters]', '[data-search]', '[data-region]', '[data-status]',
-    '[data-reset]', '[data-grid]', '[data-empty]', '[data-reset-inline]', '[data-lens-filter]']) {
+    '[data-method]', '[data-class]', '[data-ingredient]', '[data-reset]', '[data-grid]',
+    '[data-empty]', '[data-reset-inline]', '[data-lens-filter]']) {
     assert.ok(app.includes(hook), `app.js never queries "${hook}"`);
   }
 });
