@@ -37,7 +37,18 @@ const EXPECTED_SOURCED_IDS = [
   'wr-oven-salmon-traybake',
   'wr-oven-halloumi-chickpea-traybake',
   'wr-oven-root-veg-traybake',
+  'wr-oven-portuguese-chicken-potato-bake',
+  'wr-oven-puttanesca-fish-traybake',
+  'wr-oven-roasted-veg-gnocchi-bake',
+  'wr-oven-baked-ziti',
+  'wr-oven-cumin-lamb-rack-roast',
+  'wr-oven-rosemary-garlic-lamb-mini-roast',
+  'wr-oven-slow-roast-lamb-shoulder',
 ];
+// The second oven batch and the lamb batch after it were read on a later date
+// than the first six.
+const SECOND_OVEN_BATCH_IDS = EXPECTED_SOURCED_IDS.slice(6);
+const sourceAccessDate = (id) => (SECOND_OVEN_BATCH_IDS.includes(id) ? '2026-10-06' : '2026-09-14');
 // The Quick Air-Fryer section: original practical notes, a third record class
 // that is neither sourced nor fixture. In manifest order.
 const EXPECTED_PRACTICAL_IDS = [
@@ -678,10 +689,10 @@ test('the per-locale data files are the same records with the same IDs', () => {
     }
   }
   const classes = zh.items.map((i) => i.record_class);
-  assert.equal(classes.filter((c) => c === 'sourced').length, 6);
+  assert.equal(classes.filter((c) => c === 'sourced').length, 13);
   assert.equal(classes.filter((c) => c === 'practical-note').length, 8);
   assert.equal(classes.filter((c) => c === 'fixture').length, 3);
-  assert.equal(zh.items.length, 17);
+  assert.equal(zh.items.length, 24);
   // The section travels into both data files, with untranslated membership.
   for (const data of [en, zh]) {
     assert.deepEqual(data.collection.sections.map((s) => s.section_id), [QUICK_AIR_FRYER]);
@@ -744,7 +755,7 @@ test('every sourced record carries a source, an attribution and one access date'
     assert.ok(item.sources.length >= 1, `${id}: no source`);
     for (const source of item.sources) {
       assert.match(source.url, /^https:\/\//, `${id}: source URL is not https`);
-      assert.equal(source.accessed_at, '2026-09-14', `${id}: unexpected access date`);
+      assert.equal(source.accessed_at, sourceAccessDate(id), `${id}: unexpected access date`);
       assert.ok(source.title.trim(), `${id}: a source has no title`);
     }
     // A safety threshold in the method must come with the authority behind it.
@@ -763,7 +774,7 @@ test('the generated pages show each sourced record its source and access date, i
       for (const source of baseItem(id).sources) {
         assert.ok(html.includes(source.url), `${loc.code}/${id}: the page does not show ${source.url}`);
       }
-      assert.ok(html.includes('2026-09-14'), `${loc.code}/${id}: the page shows no access date`);
+      assert.ok(html.includes(sourceAccessDate(id)), `${loc.code}/${id}: the page shows no access date`);
     }
   }
 });

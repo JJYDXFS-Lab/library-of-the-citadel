@@ -1,0 +1,97 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-roasted-veg-gnocchi-bake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. The doneness cues are visual ones, as the source gives them.",
+
+  "name": {
+    "primary": "Roasted Vegetable Gnocchi Bake",
+    "alt": ["Easy Roasted Vegetable Gnocchi Bake", "烤蔬菜土豆团子烤盘"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Vegetarian oven traybakes",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Shop-bought gnocchi roasted straight on the tray with capsicum, onion and mushrooms until the edges colour, then finished with sweetcorn, cherry tomatoes and feta and dressed with thinned pesto. No pot of boiling water is needed, which makes it one of the quicker dinners in this collection.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Ready-made gnocchi", "quantity": "400 g", "note": "Shop-bought or homemade, per the source. Most shop-bought gnocchi contains wheat; check the packet." },
+    { "item": "Mushrooms, sliced", "quantity": "200 g", "note": "They shrink as they roast, so the source says they can be cut larger than the rest." },
+    { "item": "Red capsicums, cut into chunks", "quantity": "2" },
+    { "item": "Red onion, halved and thickly sliced", "quantity": "1" },
+    { "item": "Cherry tomatoes", "quantity": "200 g" },
+    { "item": "Sweetcorn kernels", "quantity": "165 g", "note": "The source does not say whether tinned or frozen; drain tinned corn well." },
+    { "item": "Feta", "quantity": "100 g", "note": "Milk allergen. For a strictly vegetarian dish, check the label for the type of rennet; the source suggests a plant-based feta for a vegan version." },
+    { "item": "Olive oil, for the tray", "quantity": "1 tablespoon" },
+    { "item": "Salt and pepper", "quantity": "The source seasons to taste and gives no weight." },
+    { "item": "Pesto", "quantity": "2 tablespoons", "note": "Shop-bought or homemade. Many pestos contain tree nuts and parmesan; check the label for allergens and, if it matters to you, for animal rennet." },
+    { "item": "Olive oil, for the dressing", "quantity": "2 tablespoons" },
+    { "item": "Fresh basil", "quantity": "A handful" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan (gas mark 6). Both figures are stated by the source; neither is a conversion made here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "Cut the vegetables into pieces of roughly the same size, leaving the mushrooms a little larger, and toss them with the 1 tablespoon of oil and some salt and pepper." },
+    { "step": 3, "instruction": "Spread the gnocchi, capsicum, onion and mushrooms over a large sheet pan or roasting tin in a single layer, using 2 or 3 smaller trays if one would crowd them. Crowded vegetables steam instead of roasting. The gnocchi goes on straight from its packet; the source has no boiling step." },
+    { "step": 4, "instruction": "Bake for 15 to 20 minutes, until the vegetables are starting to char at the edges." },
+    { "step": 5, "instruction": "Scatter the sweetcorn and cherry tomatoes over the tray and bake for 10 minutes more, adding the feta for the last few minutes so it warms and softens." },
+    { "step": 6, "instruction": "While the tray is in the oven, loosen the pesto with the 2 tablespoons of oil until it pours. Take the tray out, drizzle over the dressing, tear over the basil and serve hot, with a green salad or garlic bread if you like." }
+  ],
+
+  "yield_note": "Serves 3 to 4, as stated by the source. Source times: 5 minutes preparation and 30 minutes cooking. The source gives no resting time and no storage advice, and none is invented here.",
+
+  "sources": [
+    {
+      "url": "https://www.tinnedtomatoes.com/2020/04/easy-roasted-vegetable-gnocchi-bake.html",
+      "title": "Easy Roasted Vegetable Gnocchi Bake",
+      "accessed_at": "2026-10-06",
+      "note": "Author: Jacqueline Meldrum. Publisher: Tinned Tomatoes. Quantities, tray guidance, oven temperatures, step timings, the visual doneness cue and the vegan swap are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 74°C leftovers threshold used in the safety notes; the recipe itself states no internal temperature."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Jacqueline Meldrum's page at Tinned Tomatoes, accessed 2026-10-06. One gap in the source is filled and labelled rather than hidden: the mushrooms are in the ingredient list and in the oil toss, but the step that loads the tray names only the gnocchi, peppers and onion. This record puts the mushrooms on with that first batch, which is this project's reading, not the source's wording. The source's sweetcorn line reads '165g cup', which is carried as 165 g. 'Red peppers' is written here as red capsicums, the Australian name. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited source as part of the second sourced oven batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Nothing here needs a cook-to temperature on the first cook: the source's cues are visual — vegetables charring at the edges and the tomatoes softened — and this record does not invent a number for them.",
+      "Allergens to check on the packets: wheat in the gnocchi, milk in the feta and pesto, and tree nuts in many pestos.",
+      "The source gives no storage advice. If you keep leftovers, chill them promptly and reheat until the centre reaches 74°C (Health Canada's figure for leftovers).",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["vegetarian", "gnocchi", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

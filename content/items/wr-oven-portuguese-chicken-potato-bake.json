@@ -1,0 +1,106 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-portuguese-chicken-potato-bake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Portuguese-Style Chicken and Potato Bake",
+    "alt": ["One-pan Portuguese Chicken and Potato Bake", "葡式鸡腿土豆烤盘"]
+  },
+
+  "region": {
+    "label": "Europe",
+    "cuisine_label": "Paprika-and-lemon chicken bakes in a Portuguese style",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Thinly sliced potatoes, onion and capsicum get a head start in a garlicky lemon dressing, then bone-in chicken thighs rubbed with paprika and oregano roast on top of them. The potatoes cook in the chicken's drippings, so one pan gives the whole meal and a thin broth for mopping with bread.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Chicken thighs, bone in and skin on", "quantity": "5, about 1.2 kg in total", "note": "The source also lists drumsticks or Marylands (whole leg quarters) as suitable; see the safety notes on timing." },
+    { "item": "Paprika", "quantity": "3½ teaspoons", "note": "Sweet, plain or smoked; the source allows any of the three." },
+    { "item": "Garlic powder", "quantity": "1½ teaspoons" },
+    { "item": "Dried oregano, for the chicken", "quantity": "1½ teaspoons" },
+    { "item": "Ground coriander", "quantity": "½ teaspoon", "note": "The source lists it simply as coriander within a dry spice mix; ground is this project's reading." },
+    { "item": "Cayenne pepper", "quantity": "¼ teaspoon", "note": "Optional in the source." },
+    { "item": "Brown sugar", "quantity": "1 tablespoon, firmly packed" },
+    { "item": "Cooking salt, for the chicken", "quantity": "¾ teaspoon" },
+    { "item": "Extra virgin olive oil, for the chicken", "quantity": "1½ tablespoons" },
+    { "item": "Lemon juice, for the chicken", "quantity": "1½ tablespoons" },
+    { "item": "Waxy potatoes, skin on, sliced 5 mm thick", "quantity": "700 g", "note": "The source prefers waxy potatoes; floury ones also work but break up more easily." },
+    { "item": "Red onion, cut into wedges", "quantity": "1 large" },
+    { "item": "Red capsicum, seeded and cut into 3.5 cm squares", "quantity": "1 large" },
+    { "item": "Garlic cloves, crushed", "quantity": "6" },
+    { "item": "Dried oregano, for the potatoes", "quantity": "2 teaspoons" },
+    { "item": "Cooking salt, for the potatoes", "quantity": "1 teaspoon" },
+    { "item": "Black pepper", "quantity": "¼ teaspoon" },
+    { "item": "Extra virgin olive oil, for the potatoes", "quantity": "2½ tablespoons" },
+    { "item": "Lemon juice, for the potatoes", "quantity": "3 tablespoons" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan-forced. Both figures are stated by the source; neither is a conversion made here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "Put all the potato-bake ingredients — potatoes, onion, capsicum, garlic, the 2 teaspoons of oregano, salt, pepper, oil and lemon juice — into a large roasting pan and toss well, pulling apart any potato slices stuck together. The source gives no pan dimensions." },
+    { "step": 3, "instruction": "Bake the vegetables on their own for 25 minutes." },
+    { "step": 4, "instruction": "Meanwhile, mix all the chicken seasoning ingredients in a bowl, add the thighs and turn them until coated all over. Wash your hands and anything the raw chicken touched before handling the hot pan." },
+    { "step": 5, "instruction": "Take the pan out, set the thighs on top of the potatoes and tuck any loose skin underneath, then bake for 40 minutes, until the skin is golden." },
+    { "step": 6, "instruction": "Check the thickest thigh at the centre, clear of the bone. The source cooks to an internal 76°C; Health Canada's threshold for poultry pieces is 74°C internal (Safe cooking temperatures), so the source's figure already clears it. Use the thermometer, not the 40 minutes, as the test." },
+    { "step": 7, "instruction": "If the chicken is done but the potatoes are still firm, cover the chicken loosely with foil and return the potatoes to the oven until tender. Serve with the pan juices and bread." }
+  ],
+
+  "yield_note": "Serves 5, as stated by the source. Source times: 15 minutes preparation and 1 hour 5 minutes cooking (25 minutes for the vegetables alone, then 40 minutes with the chicken). The source gives no resting time, and none is invented here. Leftovers: the source says 3 days in the fridge or 3 months in the freezer.",
+
+  "sources": [
+    {
+      "url": "https://www.recipetineats.com/one-pan-portuguese-chicken-and-potato-bake/",
+      "title": "One-pan Portuguese Chicken and Potato Bake",
+      "accessed_at": "2026-10-06",
+      "note": "Author: Nagi Maehashi. Publisher: RecipeTin Eats. Quantities, slice and piece sizes, oven temperatures, step timings, the 76°C endpoint, cut substitutions and storage times are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 74°C poultry-pieces threshold and the 74°C leftovers threshold used in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source states its own 76°C endpoint, which sits above Health Canada's 74°C for poultry pieces; both are shown and neither is altered. The source gives Fahrenheit alongside Celsius; only the Celsius figures are carried here. The source names no pan size and no shelf position: the middle shelf in step 1 is labelled as this project's default. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here; spoon volumes differ by country, so measure with a single spoon set.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited source as part of the second sourced oven batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Poultry must be cooked all the way through. Health Canada gives 74°C internal for poultry pieces; the source aims for 76°C. Measure the thickest piece at its centre, not touching bone, and do not rely on juice colour.",
+      "Raw chicken contaminates whatever it touches. Coat it in a bowl you then wash, and wash hands, board and knife before touching the vegetables or the serving dish.",
+      "Changing the cut changes the timing. The source says Marylands take longer and can go into the oven with the potatoes from the start; it also lists drumsticks as suitable. Whatever the cut, the thermometer decides, not the clock.",
+      "Leftovers: chill promptly once the steam has died down, keep no longer than the source's 3 days in the fridge, and reheat until the centre reaches 74°C (Health Canada's figure for leftovers).",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["chicken", "poultry", "potato", "traybake", "oven", "one-pan", "beginner", "sourced"]
+}

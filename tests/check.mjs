@@ -30,13 +30,37 @@ const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-simmered-bean-soup',
 ];
 const EXPECTED_SOURCED_IDS = [
+  'wr-oven-baked-ziti',
   'wr-oven-chicken-thigh-traybake',
+  'wr-oven-cumin-lamb-rack-roast',
   'wr-oven-halloumi-chickpea-traybake',
   'wr-oven-lamb-kofta-traybake',
   'wr-oven-lamb-potato-bake',
+  'wr-oven-portuguese-chicken-potato-bake',
+  'wr-oven-puttanesca-fish-traybake',
+  'wr-oven-roasted-veg-gnocchi-bake',
   'wr-oven-root-veg-traybake',
+  'wr-oven-rosemary-garlic-lamb-mini-roast',
   'wr-oven-salmon-traybake',
+  'wr-oven-slow-roast-lamb-shoulder',
 ];
+// The second sourced oven batch, in manifest order. Its sources were read on a
+// later date than the first six, and each record must say so.
+const SECOND_OVEN_BATCH_IDS = [
+  'wr-oven-portuguese-chicken-potato-bake',
+  'wr-oven-puttanesca-fish-traybake',
+  'wr-oven-roasted-veg-gnocchi-bake',
+  'wr-oven-baked-ziti',
+];
+// The third sourced oven batch — three lamb dishes — in manifest order, read on
+// the same date as the second.
+const LAMB_OVEN_BATCH_IDS = [
+  'wr-oven-cumin-lamb-rack-roast',
+  'wr-oven-rosemary-garlic-lamb-mini-roast',
+  'wr-oven-slow-roast-lamb-shoulder',
+];
+const sourceAccessDate = (id) => (
+  [...SECOND_OVEN_BATCH_IDS, ...LAMB_OVEN_BATCH_IDS].includes(id) ? '2026-10-06' : '2026-09-14');
 // The Quick Air-Fryer section, in the order the manifest's section lists it.
 // Membership is asserted against the manifest below rather than assumed.
 const EXPECTED_PRACTICAL_IDS = [
@@ -53,7 +77,7 @@ const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
   ...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS,
 ].sort();
-const TOTAL_RECORDS = 17;
+const TOTAL_RECORDS = 24;
 
 // The story shelf is a second content type, not an eighteenth recipe. Its
 // census lives in tests/stories.mjs; this file only needs to know which routes
@@ -111,7 +135,7 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds seventeen records in one collection: six sourced, eight practical notes, three fixtures', () => {
+test('the repository holds twenty-four records in one collection: thirteen sourced, eight practical notes, three fixtures', () => {
   const { items, collections } = loadContent();
   assert.equal(items.length, TOTAL_RECORDS);
   assert.equal(collections.length, 1);
@@ -143,9 +167,13 @@ test('the existing sourced and fixture records are untouched by the air-fryer ad
     'wr-oven-halloumi-chickpea-traybake',
     'wr-oven-root-veg-traybake',
   ], 'the sourced oven records no longer open the manifest in their original order');
-  assert.deepEqual(order.slice(6, 14), EXPECTED_PRACTICAL_IDS,
+  assert.deepEqual(order.slice(6, 10), SECOND_OVEN_BATCH_IDS,
+    'the second oven batch does not follow the first six oven records');
+  assert.deepEqual(order.slice(10, 13), LAMB_OVEN_BATCH_IDS,
+    'the lamb oven batch does not follow the second oven batch');
+  assert.deepEqual(order.slice(13, 21), EXPECTED_PRACTICAL_IDS,
     'the Quick Air-Fryer records are not in manifest order between the oven set and the fixtures');
-  assert.deepEqual(order.slice(14), EXPECTED_FIXTURE_IDS,
+  assert.deepEqual(order.slice(21), EXPECTED_FIXTURE_IDS,
     'the fixtures no longer close the manifest');
 
   for (const id of EXPECTED_SOURCED_IDS) {
@@ -282,7 +310,7 @@ test('the fish note states no temperature of its own and does not sell time as a
 test('every sourced record carries its provenance and claims no review it has not had', () => {
   const { items } = loadContent();
   const sourced = items.filter((i) => i.record_class === 'sourced');
-  assert.equal(sourced.length, 6);
+  assert.equal(sourced.length, 13);
 
   for (const item of sourced) {
     const where = item.item_id;
@@ -291,7 +319,7 @@ test('every sourced record carries its provenance and claims no review it has no
     for (const source of item.sources) {
       assert.match(source.url, /^https:\/\//, `${where}: source URL is not https`);
       assert.ok(source.title.trim(), `${where}: a source has no title`);
-      assert.equal(source.accessed_at, '2026-09-14', `${where}: source access date is not the recorded one`);
+      assert.equal(source.accessed_at, sourceAccessDate(where), `${where}: source access date is not the recorded one`);
       // Author or publisher attribution travels with the pointer.
       assert.match(source.note ?? '', /Author:|published by|Health Canada|Publisher:/,
         `${where}: source "${source.title}" records no author or publisher`);
@@ -950,7 +978,7 @@ test('the published data file is presentation-free content and nothing else', ()
   assert.equal(data.items.length, TOTAL_RECORDS);
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
-  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 6);
+  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 13);
   assert.equal(data.items.filter((i) => i.record_class === 'practical-note').length, 8);
   assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
   for (const item of data.items) assert.equal(item.publication_ready, false);

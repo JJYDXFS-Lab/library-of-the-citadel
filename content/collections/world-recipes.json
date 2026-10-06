@@ -3,13 +3,13 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection of three kinds. Six records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "Mixed collection of three kinds. Thirteen records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains seventeen records of three kinds. Six are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
+  "scope_note": "Contains twenty-four records of three kinds. Thirteen are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
@@ -17,6 +17,13 @@
     "wr-oven-salmon-traybake",
     "wr-oven-halloumi-chickpea-traybake",
     "wr-oven-root-veg-traybake",
+    "wr-oven-portuguese-chicken-potato-bake",
+    "wr-oven-puttanesca-fish-traybake",
+    "wr-oven-roasted-veg-gnocchi-bake",
+    "wr-oven-baked-ziti",
+    "wr-oven-cumin-lamb-rack-roast",
+    "wr-oven-rosemary-garlic-lamb-mini-roast",
+    "wr-oven-slow-roast-lamb-shoulder",
     "wr-airfryer-crispy-tofu",
     "wr-airfryer-chicken-thigh-bites",
     "wr-airfryer-salmon-fillet",
@@ -46,9 +53,21 @@
       ]
     }
   ],
-  "reviewed_at": "2026-09-23",
-  "record_version": "1.5.0",
+  "reviewed_at": "2026-10-06",
+  "record_version": "1.7.0",
   "change_history": [
+    {
+      "version": "1.7.0",
+      "date": "2026-10-06",
+      "change": "Added three further sourced oven recipes, all lamb and all built on Australian supermarket cuts — a cumin and paprika lamb rack roast for one or two, a rosemary-garlic lamb leg mini roast, and a slow-roast lamb shoulder — placed after the second oven batch and before the Quick Air-Fryer notes. Each cites its recipe page, plus the guides behind every temperature it states: Health Canada and Food Standards Australia New Zealand for safety and leftovers, and Australian Lamb's doneness guide, labelled as an eating-quality guide, for the two cuts that may be served pink. All were accessed 2026-10-06. The two earlier lamb records, every other record, the section, and the fixtures are unchanged.",
+      "supersedes": "1.6.0"
+    },
+    {
+      "version": "1.6.0",
+      "date": "2026-10-06",
+      "change": "Added four further sourced beginner oven recipes — a Portuguese-style chicken and potato bake, a puttanesca fish traybake, a roasted vegetable gnocchi bake, and a baked ziti — placed after the six earlier oven records and before the Quick Air-Fryer notes. Each cites its recipe page, plus Health Canada for every temperature threshold it states; all four were accessed 2026-10-06. Every existing record, the section, and the fixtures are unchanged.",
+      "supersedes": "1.5.0"
+    },
     {
       "version": "1.5.0",
       "date": "2026-09-23",

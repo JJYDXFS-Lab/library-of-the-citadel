@@ -1,0 +1,107 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-puttanesca-fish-traybake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Puttanesca Fish Traybake",
+    "alt": ["Puttanesca fish tray bake", "普塔内斯卡酱烤鱼烤盘"]
+  },
+
+  "region": {
+    "label": "Mediterranean",
+    "cuisine_label": "White fish baked in a tomato, olive and caper sauce",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Baby potatoes roast first, then a raw puttanesca-style sauce of tinned and fresh tomatoes, olives, capers, anchovy and fennel goes in around them, and thick white fish fillets finish on top. The fish cooks on the sauce rather than on bare metal, which keeps it moist and makes overcooking less likely.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Baby potatoes", "quantity": "600 g", "note": "Halve the small ones and quarter the large ones." },
+    { "item": "Extra virgin olive oil, for the potatoes", "quantity": "1½ tablespoons" },
+    { "item": "Cooking salt, for the potatoes", "quantity": "½ teaspoon" },
+    { "item": "Black pepper, for the potatoes", "quantity": "¼ teaspoon" },
+    { "item": "Fennel bulb, cut into 0.5 cm half-moons", "quantity": "1 medium", "note": "Keep the fronds for serving. The source says fennel can be left out." },
+    { "item": "Cherry or grape tomatoes", "quantity": "200 g" },
+    { "item": "Pitted kalamata olives", "quantity": "½ cup" },
+    { "item": "Garlic cloves, finely minced", "quantity": "3" },
+    { "item": "Baby capers", "quantity": "3 tablespoons" },
+    { "item": "Anchovy fillets, finely minced", "quantity": "3", "note": "The source allows as few as 1, or 1 teaspoon of fish sauce, or ¼ teaspoon of extra salt instead. Anchovy and fish sauce are both fish." },
+    { "item": "Crushed or diced tomatoes, tinned", "quantity": "400 g" },
+    { "item": "Chilli flakes", "quantity": "½ teaspoon", "note": "Optional in the source." },
+    { "item": "Dried oregano", "quantity": "1 teaspoon" },
+    { "item": "Cooking salt, for the sauce", "quantity": "¼ teaspoon" },
+    { "item": "Black pepper, for the sauce", "quantity": "¼ teaspoon" },
+    { "item": "Barramundi fillets, or another firm white fish about 2.5 to 3 cm thick", "quantity": "4, each 160 to 180 g", "note": "Fish allergen. The source suggests snapper, ling, gummy shark, hake, cod, ocean trout or salmon among others, and advises against tuna, swordfish, kingfish, mahi mahi, mackerel and sardines." },
+    { "item": "Cooking salt, for the fish", "quantity": "½ teaspoon" },
+    { "item": "Black pepper, for the fish", "quantity": "¼ teaspoon" },
+    { "item": "Extra virgin olive oil, for the fish", "quantity": "1½ tablespoons" },
+    { "item": "Basil leaves, roughly chopped", "quantity": "1 loosely packed cup", "note": "Optional in the source; parsley or chives also work." },
+    { "item": "Crusty bread", "quantity": "To serve; the source gives no amount." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 220°C conventional, or 200°C fan-forced. Both figures are stated by the source; neither is a conversion made here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "Toss the potatoes with their oil, salt and pepper and spread them on a baking tray with a rim at least 2 cm high, or in a 23 × 33 cm pan. Bake for 20 minutes." },
+    { "step": 3, "instruction": "Stir all the sauce ingredients together, from the fennel through to the pepper, add them to the tray around the potatoes, and bake for 10 minutes more." },
+    { "step": 4, "instruction": "Meanwhile, pat the fish dry with paper towel and season both sides with its salt and pepper. Thaw frozen fish fully in the fridge first, then dry it the same way." },
+    { "step": 5, "instruction": "Lay the fillets on top of the sauce, drizzle them with their oil and bake for 15 minutes." },
+    { "step": 6, "instruction": "The source's test is that the fish is just cooked through and flakes easily. For a measured check, Health Canada gives 70°C internal for fish, read at the thickest part. Serve with a little more oil, the basil and fennel fronds, and bread for the sauce." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source. Source times: 15 minutes preparation and 45 minutes cooking (20 minutes for the potatoes, 10 with the sauce, then 15 with the fish). The source gives no resting time, and none is invented here. Leftovers: the source says 3 days in the fridge and advises against freezing.",
+
+  "sources": [
+    {
+      "url": "https://www.recipetineats.com/puttanesca-fish-tray-bake/",
+      "title": "Puttanesca fish tray bake",
+      "accessed_at": "2026-10-06",
+      "note": "Author: Nagi Maehashi. Publisher: RecipeTin Eats. Quantities, fillet weight and thickness, tray size, oven temperatures, step timings, fish suggestions, substitutions and storage are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 70°C fish threshold and the 74°C leftovers threshold used in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source's own endpoint is a visual and texture one — just cooked through and flaking easily — and it states no internal temperature, so Health Canada's 70°C is given beside it and attributed rather than presented as the source's. The source also suggests that thinner fillets such as dory or bream get the tray 5 extra minutes before the fish goes in and a first check at 10 minutes; that is reported here, not tested. The source gives Fahrenheit alongside Celsius; only Celsius is carried here. Cup and spoon measures are left as the source writes them, with the gram figure the source gives for the cherry tomatoes; no millilitre value is asserted.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited source as part of the second sourced oven batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Fillet thickness, not the clock, decides when fish is done. The 15 minutes assumes fillets 2.5 to 3 cm thick; Health Canada gives 70°C internal for fish, and the source's flake test is the visual check that goes with it.",
+      "Fish and anchovy are allergens, and the anchovy substitutes the source offers include fish sauce, which is also fish. Olives and capers are salty; taste before adding more salt.",
+      "Frozen fillets should be thawed in the fridge rather than on the bench, then patted dry as the source directs.",
+      "Leftovers: chill promptly, keep no longer than the source's 3 days, do not freeze (the source advises against it), and reheat until the centre reaches 74°C (Health Canada's figure for leftovers).",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["fish", "barramundi", "white-fish", "potato", "traybake", "oven", "one-tray", "beginner", "sourced"]
+}

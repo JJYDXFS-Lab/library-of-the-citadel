@@ -1,0 +1,105 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-baked-ziti",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Baked Ziti with Beef or Pork Mince",
+    "alt": ["Baked Ziti", "焗烤肉酱通心粉"]
+  },
+
+  "region": {
+    "label": "Americas",
+    "cuisine_label": "Baked pasta in an Italian-American style",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Short tube pasta, part-cooked and tossed with a spiced mince and passata sauce, layered with dollops of ricotta and covered with mozzarella and parmesan, then baked under foil and uncovered to brown. The pasta and sauce are made on the stove; the oven only finishes and browns it, so the timing is forgiving.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Ziti or penne", "quantity": "300 g", "note": "Wheat allergen." },
+    { "item": "Olive oil", "quantity": "1 tablespoon" },
+    { "item": "Garlic cloves, minced", "quantity": "3" },
+    { "item": "Small brown or white onion, finely chopped", "quantity": "1" },
+    { "item": "Beef or pork mince, or half of each", "quantity": "500 g" },
+    { "item": "Fennel seeds", "quantity": "2 teaspoons", "note": "Optional in the source." },
+    { "item": "Paprika, plain or sweet", "quantity": "1 tablespoon" },
+    { "item": "Cayenne pepper, or chilli flakes", "quantity": "¼ teaspoon cayenne, or ¾ teaspoon chilli flakes" },
+    { "item": "Onion powder", "quantity": "2 teaspoons" },
+    { "item": "Salt", "quantity": "1 teaspoon" },
+    { "item": "Black pepper", "quantity": "1 teaspoon" },
+    { "item": "Tomato passata", "quantity": "700 g" },
+    { "item": "Water", "quantity": "½ cup" },
+    { "item": "Dried basil, dried oregano and sugar", "quantity": "1 teaspoon of each" },
+    { "item": "Ricotta", "quantity": "1 cup", "note": "Optional in the source. Milk allergen." },
+    { "item": "Mozzarella, grated", "quantity": "1 cup", "note": "Or another melting cheese. Milk allergen." },
+    { "item": "Parmesan, freshly grated", "quantity": "1 cup", "note": "Optional in the source. Milk allergen." },
+    { "item": "Parsley or basil, finely chopped", "quantity": "To garnish; optional in the source." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Cook the pasta for 2 minutes less than the packet says, drain it and return it to its pot. It finishes softening in the oven." },
+    { "step": 2, "instruction": "Heat the oven to 180°C. The source gives this single Celsius figure without saying whether it means a fan or a conventional setting, and no second figure is invented here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 3, "instruction": "Heat the oil in a large frying pan over high heat and cook the onion and garlic for 2 minutes, until the onion turns translucent." },
+    { "step": 4, "instruction": "Add the mince and cook it, breaking it up as you go, until no pink or red remains; Health Canada's threshold for ground meat is 71°C internal. Then stir in the fennel seeds, paprika, cayenne or chilli, onion powder, salt and pepper and cook for 2 minutes more." },
+    { "step": 5, "instruction": "Add the passata, water, basil, oregano and sugar and simmer gently for 10 minutes. Taste and adjust the seasoning." },
+    { "step": 6, "instruction": "Pour 2 cups of the sauce into the pasta pot and toss, then spread the pasta in a 23 × 33 cm baking dish. Dot the ricotta over it, pour over the rest of the sauce, and top with the mozzarella and parmesan." },
+    { "step": 7, "instruction": "Cover loosely with foil and bake for 20 minutes, then remove the foil and bake for 10 to 15 minutes more, until the cheese is melted and golden. Garnish with the herbs if using." }
+  ],
+
+  "yield_note": "Serves 6, as stated by the source. Source times: 10 minutes preparation and 1 hour cooking. The source gives no resting time and no fridge-storage time for the baked dish, and none is invented here. Make-ahead, per the source: cool the drained pasta (tossed in a little oil) and the sauce separately and covered, assemble up to the cheese, then refrigerate or freeze; thaw a frozen dish in the fridge for 24 hours and bake for 30 to 35 minutes, 25 covered and 10 uncovered.",
+
+  "sources": [
+    {
+      "url": "https://www.recipetineats.com/baked-ziti/",
+      "title": "Baked Ziti",
+      "accessed_at": "2026-10-06",
+      "note": "Author: Nagi Maehashi. Publisher: RecipeTin Eats. Quantities, dish size, oven temperature, stove and oven timings, substitutions and make-ahead instructions are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 71°C ground-meat threshold and the 74°C leftovers threshold used in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source's cue for the mince is that it is 'just cooked'; this record reads that as no pink or red remaining and attributes the 71°C ground-meat figure to Health Canada, not to the source. The source states 180°C with no fan or conventional label, and that ambiguity is left as it is rather than resolved by a conversion. Cups and spoons are carried as the source writes them; the source gives no millilitre value for them, so none is asserted here, and cup sizes differ by country.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited source as part of the second sourced oven batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Mince can carry bacteria all the way through, because mincing mixes the meat's surface into the middle. Cook it until no pink remains; Health Canada's threshold for ground meat is 71°C internal.",
+      "Allergens: wheat in the pasta, and milk in the ricotta, mozzarella and parmesan.",
+      "When making ahead, cool the pasta and sauce before assembling, keep the assembled dish in the fridge or freezer, and thaw a frozen one in the fridge as the source says, never on the bench. A dish baked from cold may need longer than the source's times; it is ready when it is hot right through, not when the clock runs out.",
+      "Leftovers: chill promptly and reheat until the centre reaches 74°C (Health Canada's figure for leftovers). The source states no fridge life for the baked dish.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["pasta", "beef", "pork", "minced", "baked-pasta", "oven", "beginner", "sourced"]
+}

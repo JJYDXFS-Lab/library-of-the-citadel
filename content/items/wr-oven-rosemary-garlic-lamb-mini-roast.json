@@ -1,0 +1,112 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-rosemary-garlic-lamb-mini-roast",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06, with doneness and safety figures from the guides it also cites. No source text or photograph is reproduced. This record has been checked against its sources by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to a measured temperature rather than to the clock alone.",
+
+  "name": {
+    "primary": "Rosemary-Garlic Lamb Leg Mini Roast",
+    "alt": ["Lamb mini roast", "迷迭香蒜香迷你羊腿烤肉"]
+  },
+
+  "region": {
+    "label": "Australia",
+    "cuisine_label": "Small Sunday-style lamb roasts",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "A lamb leg mini roast — the small boneless piece of leg Australian supermarkets sell for two — rubbed with rosemary, garlic, honey and dijon mustard, roasted on a rack over its own vegetables, then sliced. A carved roast for a weeknight, in under an hour: smaller than a whole leg, and roasted hot rather than slowly.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Lamb leg mini roast", "quantity": "1", "note": "The source gives no weight. Read it off the label; the timing in the yield note goes by weight. Check whether it is tied or netted — see the safety notes." },
+    { "item": "Fresh rosemary leaves", "quantity": "2 tablespoons, plus extra sprigs" },
+    { "item": "Olive oil", "quantity": "1 tablespoon" },
+    { "item": "Honey", "quantity": "1 tablespoon" },
+    { "item": "Dijon mustard", "quantity": "2 teaspoons", "note": "Mustard allergen." },
+    { "item": "Garlic cloves, sliced", "quantity": "2" },
+    { "item": "Potatoes, peeled, quartered and par-boiled", "quantity": "2" },
+    { "item": "Pumpkin, seeded, skin on, chopped", "quantity": "100 g" },
+    { "item": "Red onion, cut into wedges", "quantity": "1" },
+    { "item": "Zucchini, thickly sliced", "quantity": "1" },
+    { "item": "Cherry tomatoes", "quantity": "6" },
+    { "item": "Mint sauce", "quantity": "To serve; optional in the source." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Set a rack in a baking dish and put the lamb on it. The source gives no dish size; one that holds the rack with room for the vegetables underneath and around it will do." },
+    { "step": 2, "instruction": "Mix the rosemary, oil, honey, mustard and garlic and rub it all over the lamb. The source makes a 20-minute rest in the fridge to marinate optional." },
+    { "step": 3, "instruction": "Heat the oven to 200°C. The source calls this a hot oven and gives no fan or conventional label, and no second figure is invented here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 4, "instruction": "Roast the lamb for 10 minutes. Then put the potatoes, pumpkin and onion into the same dish and roast for 20 minutes more." },
+    { "step": 5, "instruction": "Add the zucchini and tomatoes and roast for a further 10 to 15 minutes, until the lamb is done the way you like it. A heavier roast will need longer; see the yield note." },
+    { "step": 6, "instruction": "Measure in the thickest part of the roast, through to the middle. If the roast is an untied, unrolled piece of leg, Health Canada's lowest figure for a whole lamb cut is 63°C internal (medium-rare), and Australian Lamb's doneness guide — about eating quality, not safety — gives 65 to 70°C for medium, pink throughout. If it has been rolled and tied or netted, FSANZ recommends at least 75°C in the centre for rolled roasts. Australian Lamb suggests taking lamb out about 3 to 6°C before your goal, as it keeps cooking while it rests." },
+    { "step": 7, "instruction": "Cover the lamb with foil and rest it for 5 minutes, then slice it across the grain and serve with the vegetables, and mint sauce if you like." }
+  ],
+
+  "yield_note": "Serves 2, as stated by the source. Source times: 10 minutes preparation and 45 minutes cooking; the steps add up to 40 to 45 minutes in the oven and 5 minutes' rest. The source also gives a rule of 50 to 60 minutes per kg for the lamb. By this project's arithmetic from that rule, not by a source statement, that is about 40 to 48 minutes for an 800 g roast and 50 to 60 minutes for a 1 kg roast; the vegetables can go in at the same points, counted back from the end. A larger roast is one way to have cold lamb left for the next day. Times are a guide only: the thermometer decides.",
+
+  "sources": [
+    {
+      "url": "https://www.womensweeklyfood.com.au/recipe/dinner/lamb-mini-roast-18718/",
+      "title": "Lamb mini roast",
+      "accessed_at": "2026-10-06",
+      "note": "No named author; published by Women's Weekly Food. Quantities, the rack-in-dish set-up, the oven temperature, step timings, the 50 to 60 minutes per kg rule, the resting time and the serving count are taken from this page."
+    },
+    {
+      "url": "https://www.australianlamb.com.au/cooking/essential-techniques/how-to-tell-when-your-lamb-is-done/",
+      "title": "How to tell when your lamb is done",
+      "accessed_at": "2026-10-06",
+      "note": "Publisher: Australian Lamb (Meat & Livestock Australia Limited). Source of the medium doneness range, the pink-throughout description and the advice to take lamb out 3 to 6°C early. These are eating-quality targets, not safety thresholds."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 63°C medium-rare figure for whole lamb cuts and the 74°C figure for reheating leftovers."
+    },
+    {
+      "url": "https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics",
+      "title": "Food safety basics",
+      "accessed_at": "2026-10-06",
+      "note": "Publisher: Food Standards Australia New Zealand (FSANZ). Source of the 75°C figure for rolled roasts, the general 70°C centre figure and the leftovers guidance in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from the Women's Weekly Food page, accessed 2026-10-06. The source's doneness cue is 'cooked to taste'; the temperatures in this record are not the source's, and each is credited to the guide it comes from. The source does not say whether its mini roast is tied or netted. Because FSANZ treats rolled roasts like mince and gives them a higher figure, the record states both cases rather than guessing which one the reader has bought. The source gives no roast weight and no fan figure; the per-weight times in the yield note are this project's arithmetic from the source's own per-kg rule.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited sources as part of the third sourced oven batch, three lamb oven dishes.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited pages remain with their publishers.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Shopping names: a lamb leg mini roast (迷你羊腿烤肉) is a small boneless piece of leg; it may also be labelled a boneless leg portion. A half leg roast (半只羊腿) is bigger and often bone-in; it is not what this source was written for. The source's per-kg rule is the only timing it gives, and the thermometer decides.",
+      "Rolled or not decides the figure. FSANZ recommends at least 75°C in the centre for rolled roasts, along with mince and sausages. This project's reading of why: rolling folds the outside of the meat into the middle. A single unrolled piece is a whole cut: Health Canada's lowest figure for that is 63°C internal (medium-rare), and FSANZ gives 70°C in the centre as a general figure that will help ensure food is safe.",
+      "Australian Lamb's doneness temperatures describe eating quality. Its rare figure, 60°C, is below both safety figures above.",
+      "Leftovers: slice cold lamb off the roast, get it into the fridge within 2 hours — FSANZ says cooked food out for less than 2 hours can go back in the fridge — keep it at 5°C or colder and use it within a few days. Eat it cold, or reheat it until the centre reaches 74°C (Health Canada's figure for leftovers).",
+      "Allergens: mustard in the rub.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["lamb", "lamb-leg", "mini-roast", "rosemary", "garlic", "roast", "oven", "small-batch", "sourced"]
+}

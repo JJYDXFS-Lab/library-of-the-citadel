@@ -1,0 +1,103 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-slow-roast-lamb-shoulder",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06, with safety and leftovers figures from the food-safety guides it also cites. No source text or photograph is reproduced. This record has been checked against its sources by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+
+  "name": {
+    "primary": "Slow-Roast Rosemary-Garlic Lamb Shoulder",
+    "alt": ["Slow cooked lamb shoulder", "慢烤迷迭香蒜香羊肩"]
+  },
+
+  "region": {
+    "label": "Australia",
+    "cuisine_label": "Slow-roast lamb for pulling",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "A bone-in lamb shoulder studded with garlic and rosemary, roasted covered over onion, garlic and water for 3 hours, then uncovered in a hotter oven to brown. Not carved: the meat is pulled off the bone with tongs. The opposite method to the quick rack and the mini roast in this collection — long, covered and moist, aiming for tender rather than pink — and a dish that gives leftovers.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Lamb shoulder, bone in", "quantity": "1.8 kg", "note": "See the yield note for smaller, boneless and rolled shoulders." },
+    { "item": "Olive oil", "quantity": "2 tablespoons" },
+    { "item": "Salt", "quantity": "2 teaspoons" },
+    { "item": "Black pepper", "quantity": "1 teaspoon" },
+    { "item": "Onion, quartered", "quantity": "1" },
+    { "item": "Garlic, whole head, halved horizontally", "quantity": "1" },
+    { "item": "Garlic cloves, cut into slivers", "quantity": "3" },
+    { "item": "Rosemary", "quantity": "8 sprigs" },
+    { "item": "Water", "quantity": "1 cup, plus ¾ cup more if the pan runs dry" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 240°C conventional, or 220°C fan-forced. Both figures are the source's. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "Rub the lamb with the oil, salt and pepper. With a thin, sharp knife make 12 deep cuts in it, without going through to the underside, and push rosemary and garlic slivers into each one." },
+    { "step": 3, "instruction": "Put the onion, the halved garlic head and the remaining rosemary in the bottom of a roasting pan, sit the lamb on top and pour the water around it. The source gives no pan size; one the shoulder fits in with a little room is enough." },
+    { "step": 4, "instruction": "Cover with a lid or tightly with a double layer of foil. Put it in the oven and turn the oven down straight away to 180°C conventional, or 160°C fan-forced. Roast, covered, for 3 hours." },
+    { "step": 5, "instruction": "Take off the foil and check there is still liquid in the pan; if not, add ¾ cup water. Turn the oven up to 220°C and roast for 20 to 30 minutes more, until the outside is brown and crisp. The source gives no fan figure for this last stage, and none is converted here." },
+    { "step": 6, "instruction": "The source's test is tenderness: the meat should part easily with two forks. It is not a temperature, so check one with a thermometer in the thickest part, clear of the bone. Health Canada's figure for a whole lamb cut cooked well done is 77°C internal, and FSANZ recommends at least 75°C in the centre for a rolled roast; this project expects meat that pulls apart this easily to be past both, but that is an expectation, not a source figure, so measure rather than assume." },
+    { "step": 7, "instruction": "Lift the lamb onto a plate, cover it loosely with foil and then a couple of tea towels, and rest it for at least 20 minutes and up to a couple of hours. Pull the meat off the bone with tongs to serve." }
+  ],
+
+  "yield_note": "The source's recipe card gives 4 servings, and its notes say a 1.5 kg shoulder gives about 700 g of cooked meat, which feeds about 4. Source times: 15 minutes preparation and 3 hours 30 minutes cooking, plus resting. The source's adjustments: for a smaller shoulder of around 1 kg, or a boneless one, cut the covered time by 20 minutes; a 1.8 kg bone-in shoulder weighs about 1.3 kg boned; a rolled boneless shoulder of about 1.1 to 1.3 kg takes the recipe's time as written; two shoulders of about 1.5 kg each fit in one pan with 30 minutes added to the covered time. The source also gives a pan gravy, which is left out of this record.",
+
+  "sources": [
+    {
+      "url": "https://www.recipetineats.com/slow-roasted-rosemary-garlic-lamb-shoulder/",
+      "title": "Slow Cooked Lamb Shoulder",
+      "accessed_at": "2026-10-06",
+      "note": "Author: Nagi Maehashi. Publisher: RecipeTin Eats. Quantities, oven temperatures with their fan figures, the covered and uncovered timings, the resting time, the fork-tender test, the size and boneless adjustments and the yield are taken from this page."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 77°C well-done figure for whole lamb cuts and the 74°C figure for reheating leftovers."
+    },
+    {
+      "url": "https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics",
+      "title": "Food safety basics",
+      "accessed_at": "2026-10-06",
+      "note": "Publisher: Food Standards Australia New Zealand (FSANZ). Source of the 75°C figure for rolled roasts and the cooling, storage and leftovers guidance in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety and leftovers figures are Health Canada's and FSANZ's, from the same date. The source's doneness test is fork-tenderness, not a temperature, and the record keeps it that way while asking for one thermometer check. Its first and second oven settings come with fan figures; its final 220°C browning stage does not, and that is recorded as written. The source gives no storage, cooling or reheating advice; all of that in this record comes from the food-safety guides and is credited to them.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited sources as part of the third sourced oven batch, three lamb oven dishes.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited pages remain with their author and publishers.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Shopping names: lamb shoulder (羊肩肉), bone in, is the cut this source is written for. Boneless and rolled boneless shoulders are also sold; the source's time adjustments for them are in the yield note. A rolled roast falls under FSANZ's at-least-75°C recommendation.",
+      "Cooling: a big piece of hot meat cools slowly. FSANZ advises cooling cooked food quickly, for example in shallow containers in the fridge. Pulling the meat off the bone and spreading it out in shallow containers before chilling is one way to do that. Pour the pan juices into a separate container; the fat sets on top in the fridge and lifts off.",
+      "Storage: FSANZ says cooked food out for less than 2 hours can go back in the fridge, between 2 and 4 hours should be eaten straight away, and after 4 hours thrown away. Keep it at 5°C or colder and use it within a few days.",
+      "Reheating: FSANZ says to reheat cold food quickly to piping hot; Health Canada's figure for leftovers is 74°C in the centre. A splash of the reserved juices stops pulled meat drying out.",
+      "Hot fat and steam: the pan holds hot liquid and fat after 3 hours. Lift the foil away from you and move the pan with both hands.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["lamb", "lamb-shoulder", "slow-roast", "rosemary", "garlic", "roast", "oven", "leftovers", "sourced"]
+}

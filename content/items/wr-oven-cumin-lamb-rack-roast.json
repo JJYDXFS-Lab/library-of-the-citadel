@@ -1,0 +1,112 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-oven-cumin-lamb-rack-roast",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-06, with doneness and safety figures from the guides it also cites. No source text or photograph is reproduced. This record has been checked against its sources by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to a measured temperature rather than to the clock alone.",
+
+  "name": {
+    "primary": "Cumin and Paprika Lamb Rack Roast",
+    "alt": ["Spiced lamb rack roast", "孜然烤羊排"]
+  },
+
+  "region": {
+    "label": "Australia",
+    "cuisine_label": "Spice-rubbed lamb roasts",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "A small lamb rack — the cutlet rack sold in Australian supermarkets as a 'lamb rack roast' — rubbed with cumin, smoked paprika, chilli and garlic and roasted on a bed of potatoes in one pan, with capsicum and tomatoes added at the end. The lamb is in the oven for about 40 minutes, which makes it the quick, weeknight lamb in this collection; one 500 g rack is a natural one-to-two-person amount.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Lamb rack roast (cutlet rack)", "quantity": "2 × 500 g", "note": "Sold in Australia as a lamb rack or lamb rack roast: a row of rib cutlets still joined together. For 1 to 2 people, use one 500 g rack; see the yield note." },
+    { "item": "Kipfler potatoes, scrubbed, halved lengthways, quartered if large", "quantity": "600 g" },
+    { "item": "Garlic cloves, crushed", "quantity": "2", "note": "Half goes with the potatoes, half into the spice rub." },
+    { "item": "Olive oil", "quantity": "2 tablespoons", "note": "Half with the potatoes, half in the rub; plus a light spray of olive oil for the vegetables." },
+    { "item": "Smoked paprika", "quantity": "3 teaspoons" },
+    { "item": "Ground cumin", "quantity": "3 teaspoons" },
+    { "item": "Dried chilli flakes", "quantity": "1 teaspoon" },
+    { "item": "Red onion, cut into wedges", "quantity": "1" },
+    { "item": "Yellow capsicum, coarsely chopped", "quantity": "1" },
+    { "item": "Cherry truss tomatoes", "quantity": "250 g punnet" },
+    { "item": "Pitted kalamata olives", "quantity": "¼ cup, given by the source as 40 g" },
+    { "item": "Baby kale", "quantity": "80 g" },
+    { "item": "Lemon wedges and mint leaves", "quantity": "To serve" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Heat the oven to 200°C. The source gives this single figure with no fan or conventional label, and no second figure is invented here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "In a large roasting pan, toss the potatoes with half the garlic and half the oil, and roast them for 10 minutes on their own." },
+    { "step": 3, "instruction": "Meanwhile, mix the paprika, cumin, chilli flakes and the rest of the garlic and oil, and rub it evenly all over the lamb." },
+    { "step": 4, "instruction": "Sit the lamb on top of the potatoes, scatter the onion around, and roast for 25 minutes." },
+    { "step": 5, "instruction": "Add the capsicum and tomatoes around the lamb, give the vegetables a light spray of oil, and roast for 10 to 15 minutes more, until the vegetables are tender and the lamb is done the way you like it. Stir the olives through." },
+    { "step": 6, "instruction": "Measure the lamb in the middle of the meat, between two bones and not touching either. Health Canada's lowest figure for a whole lamb cut is 63°C internal, for medium-rare. Australian Lamb's doneness guide, which is about how the meat eats rather than about safety, gives 60°C for rare, 60 to 65°C for medium rare and 65 to 70°C for medium, and suggests taking lamb out about 3 to 6°C before your goal because it keeps cooking as it rests." },
+    { "step": 7, "instruction": "Move the lamb to a plate, cover it with foil and rest it for 10 minutes. Cut the rack into cutlets between the bones and serve on the vegetables with the kale, lemon wedges and mint." }
+  ],
+
+  "yield_note": "Serves 4, as stated by the source, from two 500 g racks. Source times: 15 minutes preparation, 50 minutes cooking and 10 minutes resting. For 1 to 2 people, this project's own scaling — not the source's — is one 500 g rack with every other quantity halved. The oven times stay the source's, because a rack's cooking time depends on the size of that rack, not on how many are in the pan; check with a thermometer all the same. The source gives no rack thickness and no tray dimensions beyond 'large roasting pan'; for a half batch, any pan that holds the potatoes in one layer will do.",
+
+  "sources": [
+    {
+      "url": "https://www.coles.com.au/recipes-inspiration/recipes/spiced-lamb-rack-roast",
+      "title": "Spiced Lamb Rack Roast",
+      "accessed_at": "2026-10-06",
+      "note": "No named author; published by Coles. Quantities, the 500 g rack size, the oven temperature, step timings, resting time and the serving count are taken from this page."
+    },
+    {
+      "url": "https://www.australianlamb.com.au/cooking/essential-techniques/how-to-tell-when-your-lamb-is-done/",
+      "title": "How to tell when your lamb is done",
+      "accessed_at": "2026-10-06",
+      "note": "Publisher: Australian Lamb (Meat & Livestock Australia Limited). Source of the rare-to-medium doneness temperatures and the advice to take lamb out 3 to 6°C early. These are eating-quality targets, not safety thresholds."
+    },
+    {
+      "url": "https://www.canada.ca/en/health-canada/services/general-food-safety-tips/safe-internal-cooking-temperatures.html",
+      "title": "Safe cooking temperatures",
+      "accessed_at": "2026-10-06",
+      "note": "Health Canada. Source of the 63°C medium-rare figure for whole lamb cuts and the 74°C figure for reheating leftovers, and of the advice to measure away from bone."
+    },
+    {
+      "url": "https://www.foodstandards.gov.au/consumer/prevention-of-foodborne-illness/food-safety-basics",
+      "title": "Food safety basics",
+      "accessed_at": "2026-10-06",
+      "note": "Publisher: Food Standards Australia New Zealand (FSANZ). Source of the general 70°C centre figure and the leftovers guidance in this record."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from the Coles recipe page, accessed 2026-10-06. Its only doneness cue is 'cooked to your liking'; the temperatures in this record are therefore not the source's, and each is credited to the guide it comes from. The guides do not agree, and the record keeps them apart. Australian Lamb's rare figure of 60°C is an eating-quality target and sits below Health Canada's 63°C lowest safety figure for whole lamb cuts; FSANZ gives 70°C in the centre as a general figure that will help ensure food is safe. The source states 200°C with no fan or conventional label, and that is left as it is. The half-batch quantities for 1 to 2 people are this project's arithmetic, not the source's. Chinese cut names are this project's shopping glosses, not terms from the source.",
+
+  "reviewed_at": "2026-10-06",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-06",
+      "change": "Record created from the cited sources as part of the third sourced oven batch, three lamb oven dishes.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited pages remain with their publishers.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Shopping names: a lamb rack (羊肋排, also called a cutlet rack or, with the bone ends scraped clean, a frenched rack) is a row of joined lamb cutlets (羊小排). Single cutlets and lamb loin chops (羊里脊排) are neighbouring cuts, but they are thinner and the source gives no time for them, so none is invented here; cook them to the thermometer.",
+      "A rack is a whole cut, not mince or a rolled roast, which is why it can be served pink. Health Canada's lowest figure for a whole lamb cut is 63°C internal (medium-rare); FSANZ gives 70°C in the centre as a general figure that will help ensure food is safe. Australian Lamb's 60°C rare figure is for eating quality and sits below both.",
+      "Measure in the middle of the meat, away from bone; bone conducts heat and reads high. If you are cooking to a safety figure, check that the rested meat has reached it.",
+      "Leftovers: get them into the fridge within 2 hours — FSANZ says cooked food out for less than 2 hours can go back in the fridge — keep them at 5°C or colder and use them within a few days. Reheat until the centre reaches 74°C (Health Canada's figure for leftovers). Reheating takes pink lamb past medium; cold sliced lamb is also an option.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["lamb", "lamb-rack", "cutlets", "cumin", "potato", "oven", "one-pan", "quick", "small-batch", "sourced"]
+}
