@@ -50,6 +50,12 @@ const INGREDIENT_OPTIONS = [
   ['fish', 'gallery.ingredient_fish'],
   ['potato', 'gallery.ingredient_potato'],
 ];
+// The primary dish-type categories, in chip order. The values are exactly the
+// `dish_type` enum in the item schema (a test holds the two together); every
+// record carries one, so the categories partition the catalogue. A category no
+// record holds is never offered, so no chip leads to an empty view.
+const CATEGORY_PARAM = 'category';
+export const CATEGORY_ORDER = ['dessert', 'main', 'side', 'snack', 'staple', 'soup'];
 
 export const plural = (L, stem, count) => L.t(`${stem}.${count === 1 ? 'one' : 'other'}`, { count });
 
@@ -342,15 +348,19 @@ function card(L, entry, sectionIds = []) {
     ...(item.tags ?? []), ...item.variants.map((v) => v.label), ...en.variants.map((v) => v.label),
     ...ingredientTerms(item), ...ingredientTerms(en), ...methodTerms(item), ...methodTerms(en),
     item.yield_note, en.yield_note, item.record_class,
+    // The dish type and its label in this locale, so a category word is
+    // searchable in either language; app.js aliases its other spellings.
+    item.dish_type, L.t(`dish.${item.dish_type}`),
   ];
   // Section membership rides on the card as a machine facet, keyed by
   // section_id. That is what a lens filters on, so the lens mechanism is data
   // driven and works for any section the manifest declares.
   const sections = sectionIds.length ? ` data-sections="${esc(sectionIds.join(' '))}"` : '';
-  return `<li class="card" data-item-id="${esc(item.item_id)}" data-region="${esc(entry.canonicalRegion)}" data-method="${esc(method)}" data-class="${esc(item.record_class)}" data-ingredients="${esc(ingredients.join(' '))}" data-tags="${esc([...(item.tags ?? [])].join(' '))}"${sections} data-haystack="${esc([...new Set(terms.filter(Boolean))].join(' ').toLowerCase())}">
+  return `<li class="card" data-item-id="${esc(item.item_id)}" data-category="${esc(item.dish_type)}" data-region="${esc(entry.canonicalRegion)}" data-method="${esc(method)}" data-class="${esc(item.record_class)}" data-ingredients="${esc(ingredients.join(' '))}" data-tags="${esc([...(item.tags ?? [])].join(' '))}"${sections} data-haystack="${esc([...new Set(terms.filter(Boolean))].join(' ').toLowerCase())}">
   <a class="card__link" href="${L.path(itemPath(item))}">
     <span class="card__marks">
       <span class="card__region">${esc(item.region.label)}</span>
+      <span class="card__category">${esc(L.t(`dish.${item.dish_type}`))}</span>
       <span class="card__class">${esc(L.t(classMark(item.record_class)))}</span>
       ${entry.state === 'none' ? `<span class="card__untranslated">${esc(L.t('card.untranslated'))}</span>` : ''}
     </span>
@@ -409,6 +419,34 @@ function collectionLenses(L, view) {
   }).join('\n');
 }
 
+/**
+ * The primary dish-type categories: "All" and one chip per category the
+ * catalogue actually holds, each with its count. Like a lens, every chip is a
+ * real link carrying `?category=` and the catalogue's fragment, so it works
+ * from the keyboard and can be shared; the script turns it into an in-page
+ * filter and moves `aria-current`. Without the script the page shows every
+ * card, so "All" is the chip honestly marked current in the static HTML.
+ */
+function categoryNav(L, view) {
+  const counts = new Map();
+  for (const entry of view.entries) {
+    counts.set(entry.record.dish_type, (counts.get(entry.record.dish_type) ?? 0) + 1);
+  }
+  const base = L.path('recipes/');
+  const chips = [
+    ['', L.t('category.all'), view.entries.length, `${base}#${CATALOGUE_ID}`],
+    ...CATEGORY_ORDER.filter((value) => counts.has(value)).map((value) => [
+      value, L.t(`category.${value}`), counts.get(value),
+      `${base}?${CATEGORY_PARAM}=${encodeURIComponent(value)}#${CATALOGUE_ID}`,
+    ]),
+  ];
+  return `  <nav class="categories" aria-label="${esc(L.t('category.label'))}" data-categories>
+    <ul class="categories__list">
+${chips.map(([value, label, count, href]) => `      <li><a class="category" href="${esc(href)}" data-category-filter="${esc(value)}" data-category-label="${esc(label)}"${value === '' ? ' aria-current="true"' : ''}><span class="category__name">${esc(label)}</span> <span class="category__count">${esc(count)}</span></a></li>`).join('\n')}
+    </ul>
+  </nav>`;
+}
+
 export function galleryPage(cfg, L, view, { regions }) {
   const collection = view.collection.record;
   const total = view.entries.length;
@@ -427,6 +465,8 @@ ${chrome(cfg, L, { nav: 'recipes/', route: 'recipes/' })}
 
   ${noticeBanner(L, collection.record_notice)}
   ${translationNotice(L, view.collection.state)}
+
+${categoryNav(L, view)}
 
 ${collectionLenses(L, view)}
 

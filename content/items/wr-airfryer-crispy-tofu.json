@@ -72,5 +72,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["tofu", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
 }

@@ -77,5 +77,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "dessert",
   "tags": ["dessert", "no-cook", "yoghurt", "berries", "vegetarian", "small-batch", "beginner", "sourced"]
 }

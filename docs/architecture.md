@@ -157,6 +157,24 @@ it is a source constant, not a configuration key.
   keystroke. The search, the region and the curated lens are three filters over
   one catalogue; `?section=` names a lens, an unknown value is dropped the same
   way an unknown region is, and the single reset clears all three.
+- **Dish-type categories are the gallery's first browse.** Above the lenses and
+  the filter form, a row of chips — All, then one per `dish_type` the catalogue
+  holds, in `CATEGORY_ORDER`, each with its count — narrows the same single
+  catalogue. Each chip is a real link to `recipes/?category=<dish_type>#catalogue`
+  in its own locale and base path, so it is keyboard-operable and shareable; the
+  script filters in place, moves `aria-current="true"` to the active chip, and
+  writes `?category=` with the same `replaceState` as every other filter. The
+  category intersects the search, the region, the lens, and the method, source
+  type and ingredient facets; it is not a food facet, so a category made only of
+  fixtures still shows them under their fixture mark. An unknown `?category=` is
+  dropped, the reset and the empty-state reset clear it, and the language switch
+  carries it with the rest of the query and the fragment. Without the script the
+  chips are inert links that reload the full catalogue, the static HTML marks
+  "All" as current because every card is shown, and the `<noscript>` note says
+  categories need JavaScript. The chips wrap, are at least 44 px tall, and use
+  the shared focus ring. Every card also shows its category mark, and its dish
+  type and localized label are in the search haystack; `app.js` aliases
+  dessert, desserts, 甜品 and 甜点 to one another.
 - **The hall is a plan of rooms, and a room mark is a coordinate.** The hall
   stands exactly the public rooms it holds — currently two — as its shelf list;
   what it does not hold yet is a note under the plan rather than a card standing
@@ -209,7 +227,8 @@ integrity and the twenty-four-record, three-class census (thirteen sourced, eigh
 original practical notes, three fixtures), the honesty rules for each class
 under tampering — including the practical-note gate and the section rules — one
 canonical card per record in the catalogue, the curated-lens rendering of a
-collection section and its affordance at both base paths,
+collection section and its affordance at both base paths, the dish type of
+every record and the schema's refusal of a missing or unknown one,
 base-path normalization, the output-directory guard, both the root and subpath
 builds, generated link/base-path correctness, detail prev/next navigation, the
 hall standing exactly its two marked public rooms, the location trail on every
@@ -221,7 +240,9 @@ receipts, secrets, and local paths from the output.
 parity and its fail-closed behavior, overlay fallback and the `none`/`partial`/
 `complete` states, the per-locale page sets and data files, the switch targets
 on every route, the translated lens heading, context and affordance label
-against untranslated section membership, the browser-side lens filter, EN/ZH numeric parity for the sourced records and the
+against untranslated section membership, the browser-side lens filter, the
+category chips and bilingual dessert aliases run against the real generated
+catalogue in both locales and at two base paths, EN/ZH numeric parity for the sourced records and the
 practical notes alike, the Celsius-only and 75°C poultry wording in both
 languages, and — by running `src/assets/app.js` in a `node:vm` context
 against a hand-built DOM — the browser-side switch under refused, unreadable,

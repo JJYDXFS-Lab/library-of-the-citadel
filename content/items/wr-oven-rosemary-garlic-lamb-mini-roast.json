@@ -108,5 +108,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["lamb", "lamb-leg", "mini-roast", "rosemary", "garlic", "roast", "oven", "small-batch", "sourced"]
 }

@@ -80,5 +80,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["salmon", "fish", "air-fryer", "quick", "potluck", "sharing", "practical-note"]
 }

@@ -16,7 +16,7 @@ import { repoRoot, normalizeBasePath, makeWithBase, resolveOutDir, loadConfig } 
 import { loadContent, regionsOf } from '../src/content.mjs';
 import { checkItem, checkCollection } from '../src/rules.mjs';
 import { validate } from '../src/schema-validate.mjs';
-import { esc } from '../src/templates/pages.mjs';
+import { esc, CATEGORY_ORDER } from '../src/templates/pages.mjs';
 import { build } from '../src/build.mjs';
 
 // The collection is mixed, and the three kinds are held to different rules: a
@@ -529,6 +529,104 @@ test('the schema validator reports type, required and unexpected-property proble
 
 test('the schema validator refuses a keyword it does not actually enforce', () => {
   assert.throws(() => validate(1, { type: 'integer', maximum: 3 }), /Unsupported JSON Schema keyword "maximum"/);
+});
+
+// ------------------------------------------------------ dish-type categories
+
+// Every record's one primary dish type, written out in full so a changed or
+// missing classification fails here by name rather than as a shifted count.
+const EXPECTED_DISH_TYPE = {
+  'wr-oven-lamb-kofta-traybake': 'main',
+  'wr-oven-lamb-potato-bake': 'main',
+  'wr-oven-chicken-thigh-traybake': 'main',
+  'wr-oven-salmon-traybake': 'main',
+  'wr-oven-halloumi-chickpea-traybake': 'main',
+  'wr-oven-root-veg-traybake': 'main',
+  'wr-oven-portuguese-chicken-potato-bake': 'main',
+  'wr-oven-puttanesca-fish-traybake': 'main',
+  'wr-oven-roasted-veg-gnocchi-bake': 'main',
+  'wr-oven-baked-ziti': 'main',
+  'wr-oven-cumin-lamb-rack-roast': 'main',
+  'wr-oven-rosemary-garlic-lamb-mini-roast': 'main',
+  'wr-oven-slow-roast-lamb-shoulder': 'main',
+  'wr-dessert-yogurt-berry-granola-cups': 'dessert',
+  'wr-dessert-chocolate-mug-cake': 'dessert',
+  'wr-dessert-small-apple-crumble': 'dessert',
+  'wr-dessert-lemon-posset': 'dessert',
+  'wr-airfryer-crispy-tofu': 'main',
+  'wr-airfryer-chicken-thigh-bites': 'main',
+  'wr-airfryer-salmon-fillet': 'main',
+  'wr-airfryer-broccoli-mixed-veg': 'side',
+  'wr-airfryer-sweet-potato-wedges': 'side',
+  'wr-airfryer-bean-cheese-quesadilla': 'snack',
+  'wr-airfryer-frozen-veg-dumplings': 'snack',
+  'wr-airfryer-garlic-lemon-salmon': 'main',
+  'wr-fixture-griddle-flatbread': 'staple',
+  'wr-fixture-rice-porridge': 'staple',
+  'wr-fixture-simmered-bean-soup': 'soup',
+};
+const itemSchema = () => JSON.parse(readFileSync(path.join(repoRoot, 'content', 'schema', 'library-item.schema.json'), 'utf8'));
+
+test('every one of the twenty-eight records carries exactly its one primary dish type', () => {
+  const { items } = loadContent();
+  assert.deepEqual(Object.keys(EXPECTED_DISH_TYPE).sort(), EXPECTED_ITEM_IDS);
+  for (const item of items) {
+    assert.equal(item.dish_type, EXPECTED_DISH_TYPE[item.item_id], `${item.item_id}: wrong dish_type`);
+  }
+  const count = (type) => items.filter((i) => i.dish_type === type).length;
+  assert.deepEqual(CATEGORY_ORDER.map((type) => [type, count(type)]), [
+    ['dessert', 4], ['main', 17], ['side', 2], ['snack', 2], ['staple', 2], ['soup', 1],
+  ]);
+  // Desserts are exactly today's four, whatever else a dessert record is
+  // tagged with; the yoghurt cups stay a dessert.
+  assert.deepEqual(items.filter((i) => i.dish_type === 'dessert').map((i) => i.item_id).sort(),
+    [...DESSERT_BATCH_IDS].sort());
+});
+
+test('the gallery category order is exactly the schema dish_type vocabulary, none empty', () => {
+  const schema = itemSchema();
+  assert.ok(schema.required.includes('dish_type'), 'dish_type must be required, so no record can go unclassified');
+  assert.deepEqual([...CATEGORY_ORDER].sort(), [...schema.properties.dish_type.enum].sort());
+  const used = new Set(loadContent().items.map((i) => i.dish_type));
+  for (const type of CATEGORY_ORDER) assert.ok(used.has(type), `category "${type}" holds no record`);
+});
+
+test('the schema refuses a record whose dish type is missing, unknown, or not a single value', () => {
+  const schema = itemSchema();
+  const good = loadContent().items.find((i) => i.item_id === 'wr-dessert-lemon-posset');
+  assert.deepEqual(validate(good, schema), []);
+
+  const { dish_type: _drop, ...missing } = good;
+  assert.ok(validate(missing, schema).some((e) => e.includes('missing required property "dish_type"')));
+  assert.ok(validate({ ...good, dish_type: 'pudding' }, schema).some((e) => e.includes('"pudding" is not one of')));
+  assert.ok(validate({ ...good, dish_type: ['dessert', 'snack'] }, schema).some((e) => /dish_type: expected type string/.test(e)));
+  assert.ok(validate({ ...good, dish_type: 'Dessert' }, schema).length > 0, 'the vocabulary is case-exact');
+});
+
+test('each gallery card carries its dish type as a facet, a visible mark, and a search term', () => {
+  const r = rootBuild();
+  const html = read(r, 'recipes/index.html');
+  const blocks = new Map(cardBlocks(html).map((block) => [/data-item-id="([^"]+)"/.exec(block)[1], block]));
+  for (const [id, type] of Object.entries(EXPECTED_DISH_TYPE)) {
+    const block = blocks.get(id);
+    assert.ok(block.includes(`data-category="${type}"`), `${id}: no category facet`);
+    assert.match(block, /<span class="card__category">[^<]+<\/span>/, `${id}: no visible category mark`);
+    assert.ok(/data-haystack="([^"]*)"/.exec(block)[1].split(' ').includes(type), `${id}: dish type not searchable`);
+  }
+  const data = JSON.parse(read(r, 'data/world-recipes.json'));
+  for (const item of data.items) assert.equal(item.dish_type, EXPECTED_DISH_TYPE[item.item_id]);
+
+  // The chips are real links under whatever base path the build was given,
+  // and the gallery keeps the shared credited footer.
+  const preview = read(previewBuild(), 'recipes/index.html');
+  const hrefs = [...preview.matchAll(/<a class="category" href="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(hrefs, [
+    '/library-preview/recipes/#catalogue',
+    ...CATEGORY_ORDER.map((type) => `/library-preview/recipes/?category=${type}#catalogue`),
+  ]);
+  for (const page of [html, preview]) {
+    assert.ok(page.includes('<p class="colophon__development">Developed by Atom (原子) &amp; Claude.</p>'));
+  }
 });
 
 // ---------------------------------------------------------- base path

@@ -502,7 +502,8 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 }
 .card:hover, .card:focus-within { transform: translateY(-2px); box-shadow: var(--shadow-lift); border-left-color: var(--brass); }
 .card__link { display: block; padding: 1.25rem; text-decoration: none; color: inherit; height: 100%; }
-.card__marks { display: flex; gap: .5rem; align-items: center; }
+.card__marks { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
+.card__category { font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--oxblood); }
 .card__region { font-family: var(--sans); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); }
 .card__class { font-family: var(--sans); font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--brass-soft); color: var(--ink-soft); padding: .05rem .35rem; border-radius: 2px; }
 .card__title { margin: .5rem 0 .4rem; font-size: 1.35rem; }
@@ -650,6 +651,15 @@ code { font-family: var(--mono); font-size: .85em; background: var(--wash); padd
 .lens__action { display: inline-block; padding: .45rem .85rem; font-family: var(--sans); font-size: .78rem; letter-spacing: .06em; text-decoration: none; color: inherit; border: 1px solid var(--rule); border-radius: 2px; }
 .lens__action:hover, .lens__action:focus-visible { border-color: var(--brass); color: var(--oxblood); }
 .lens__action[aria-current='true'] { border-color: var(--brass); background: rgba(201, 164, 95, .12); color: var(--oxblood); }
+
+/* ------- dish-type categories: the catalogue's primary browse, drawn as lens chips */
+
+.categories { margin: 2rem 0 0; }
+.categories__list { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.category { display: inline-flex; align-items: center; gap: .45rem; min-height: 2.75rem; padding: .45rem .95rem; font-family: var(--sans); font-size: .85rem; letter-spacing: .04em; text-decoration: none; color: inherit; background: var(--card); border: 1px solid var(--rule); border-radius: 2px; }
+.category__count { font-size: .72rem; letter-spacing: .08em; color: var(--brass); }
+.category:hover, .category:focus-visible { border-color: var(--brass); color: var(--oxblood); }
+.category[aria-current='true'] { border-color: var(--brass); background: rgba(201, 164, 95, .12); color: var(--oxblood); box-shadow: inset 0 -2px 0 var(--brass); }
 
 /* ---- stories: a quiet shelf, and a page built for reading and nothing else ---- */
 

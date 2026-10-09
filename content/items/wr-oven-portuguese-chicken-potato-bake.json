@@ -102,5 +102,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["chicken", "poultry", "potato", "traybake", "oven", "one-pan", "beginner", "sourced"]
 }

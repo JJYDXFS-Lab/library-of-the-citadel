@@ -101,5 +101,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["pasta", "beef", "pork", "minced", "baked-pasta", "oven", "beginner", "sourced"]
 }

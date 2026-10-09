@@ -87,5 +87,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["lamb", "chops", "potato", "oven", "one-dish", "beginner", "sourced"]
 }

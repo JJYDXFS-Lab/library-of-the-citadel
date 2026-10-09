@@ -72,5 +72,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "side",
   "tags": ["broccoli", "vegetables", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
 }

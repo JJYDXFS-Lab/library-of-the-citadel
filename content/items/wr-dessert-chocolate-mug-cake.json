@@ -82,5 +82,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "dessert",
   "tags": ["dessert", "microwave", "chocolate", "egg-free", "vegetarian", "small-batch", "beginner", "sourced"]
 }

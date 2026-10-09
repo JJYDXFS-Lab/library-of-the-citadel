@@ -118,6 +118,21 @@
     });
   }
 
+  // Dish-type categories. The same pattern as a lens: each chip is a real link
+  // naming the dish_type it narrows to, and each card carries its own. The
+  // "All" chip names the empty category, so exactly one chip is always current.
+  var categoryNav = document.querySelector('[data-categories]');
+  var categoryLinks = Array.prototype.slice.call(document.querySelectorAll('[data-category-filter]'));
+  var categoryIds = categoryLinks.map(function (link) { return link.getAttribute('data-category-filter'); });
+  var category = '';
+
+  function markCategories() {
+    categoryLinks.forEach(function (link) {
+      if (link.getAttribute('data-category-filter') === category) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
   // Status templates come from the page, so their language matches the page's.
   var STATUS_ALL = form.getAttribute('data-status-all');
   var STATUS_SOME = form.getAttribute('data-status-some');
@@ -150,6 +165,12 @@
     '三文鱼': ['salmon', '三文鱼'],
     'potato': ['potato', '土豆'],
     '土豆': ['potato', '土豆'],
+    // Every dessert card carries its dish_type and its localized category
+    // label in the haystack, so each spelling here reaches all of them.
+    'dessert': ['dessert', '甜品', '甜点'],
+    'desserts': ['dessert', '甜品', '甜点'],
+    '甜品': ['dessert', '甜品', '甜点'],
+    '甜点': ['dessert', '甜品', '甜点'],
   };
 
   function queryTokens(value) {
@@ -190,6 +211,11 @@
 
   function activeFilterLabels(tokens) {
     var labels = [];
+    if (category) {
+      var chip = categoryLinks.filter(function (link) { return link.getAttribute('data-category-filter') === category; })[0];
+      var navLabel = categoryNav ? categoryNav.getAttribute('aria-label') : '';
+      labels.push((navLabel ? navLabel + ': ' : '') + (chip ? chip.getAttribute('data-category-label') : category));
+    }
     if (tokens.length) labels.push(labelText('q') + ': ' + search.value.trim());
     if (region.value) labels.push(labelText('region') + ': ' + selectedText(region));
     if (method.value) labels.push(labelText('method') + ': ' + selectedText(method));
@@ -215,10 +241,14 @@
     // is not an option is, rather than silently hiding every card.
     section = params.get('section') || '';
     if (lensIds.indexOf(section) === -1) section = '';
+    // Likewise an unknown category, or one this page offers no chip for.
+    category = params.get('category') || '';
+    if (categoryIds.indexOf(category) === -1) category = '';
   }
 
   function writeUrl() {
     var params = new URLSearchParams();
+    if (category) params.set('category', category);
     if (search.value.trim()) params.set('q', search.value.trim());
     if (region.value) params.set('region', region.value);
     if (section) params.set('section', section);
@@ -248,6 +278,10 @@
       var queryMatch = matchesQuery(card, tokens);
       var matchesRegion = !r || card.getAttribute('data-region') === r;
       var matchesSection = !section || memberOf(card, section);
+      // A category is what the dish is, not a food facet over its contents, so
+      // it does not trigger the fixture gate below: a category made of
+      // fixtures shows them, still labelled as fixtures.
+      var matchesCategory = !category || card.getAttribute('data-category') === category;
       var matchesMethod = !m || card.getAttribute('data-method') === m;
       var matchesClass = !c || card.getAttribute('data-class') === c;
       var matchesIngredient = memberOfList(card, 'data-ingredients', i);
@@ -256,14 +290,15 @@
       // itself explicitly requested; the class/method/ingredient tests still
       // intersect normally after that policy gate.
       var fixtureAllowed = card.getAttribute('data-class') !== 'fixture' || !foodFacet || c === 'fixture';
-      var visible = queryMatch && matchesRegion && matchesSection && matchesMethod
+      var visible = queryMatch && matchesCategory && matchesRegion && matchesSection && matchesMethod
         && matchesClass && matchesIngredient && fixtureAllowed;
       card.hidden = !visible;
       if (visible) shown += 1;
     });
 
     markLenses();
-    var filtering = Boolean(tokens.length || r || section || m || c || i);
+    markCategories();
+    var filtering = Boolean(category || tokens.length || r || section || m || c || i);
     var fixtureNote = foodFacet && !c && FIXTURE_COUNT
       ? ' ' + fill(STATUS_FIXTURES_HIDDEN, { count: FIXTURE_COUNT }) : '';
     var labels = activeFilterLabels(tokens);
@@ -293,6 +328,7 @@
     sourceType.value = '';
     ingredient.value = '';
     section = '';
+    category = '';
     apply();
     search.focus();
   }
@@ -316,6 +352,17 @@
       section = link.getAttribute('data-lens-filter');
       apply();
       if (typeof form.scrollIntoView === 'function') form.scrollIntoView();
+    });
+  });
+
+  // A category chip is handled in place the same way, and composes with the
+  // search, the facets, and a lens. The chips sit above the catalogue, so the
+  // page is not scrolled: the reader stays on the chip they just chose.
+  categoryLinks.forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      category = link.getAttribute('data-category-filter');
+      apply();
     });
   });
 

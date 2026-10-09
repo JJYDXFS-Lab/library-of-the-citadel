@@ -83,5 +83,6 @@
     "review_state": "fixture-not-reviewed"
   },
 
+  "dish_type": "staple",
   "tags": ["rice", "porridge", "simmered", "vegetarian", "fixture"]
 }

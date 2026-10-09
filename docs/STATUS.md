@@ -188,3 +188,19 @@ notes, 3 fixtures), manifest version 1.8.0; no section, UI or CSS changed.
 28 records. Local headless Chrome checked all eight dessert routes at 1440px
 and 390px, with no horizontal overflow, complete linked credits and gallery
 links. Deployment confirmation is recorded in the release receipt.
+
+
+## 2026-10-10 — Recipe categories and dessert discovery
+
+World Recipes now offers a counted primary dish-type row: desserts (4), mains
+(17), sides (2), snacks (2), staples (2), and soup (1), alongside All (28).
+Categories have shareable URLs, compose with the existing filters, and survive
+language switching. Dessert/desserts/甜品/甜点 find the four desserts in both
+languages. Existing recipe bodies and routes are unchanged. The canonical
+record schema requires one dish type; the contribution contract documents it.
+
+Validation: 135/135 checks passed, including root and subpath coverage; the
+production-subpath build passed. Headless Chrome exercised hall-to-gallery
+navigation, keyboard category selection, search, empty/reset, language switch,
+back/reload, direct links, and all four dessert pages at desktop and mobile
+widths in both languages, with no horizontal overflow or browser errors.

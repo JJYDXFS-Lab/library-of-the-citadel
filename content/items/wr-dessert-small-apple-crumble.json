@@ -82,5 +82,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "dessert",
   "tags": ["dessert", "oven", "apple", "baked-pudding", "vegetarian", "small-batch", "beginner", "sourced"]
 }

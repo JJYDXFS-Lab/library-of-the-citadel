@@ -71,5 +71,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "side",
   "tags": ["sweet-potato", "potato", "wedges", "air-fryer", "vegetarian", "quick", "student", "practical-note"]
 }

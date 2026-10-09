@@ -15,6 +15,7 @@
     "name",
     "region",
     "summary",
+    "dish_type",
     "variants",
     "ingredients",
     "method",
@@ -82,6 +83,12 @@
     },
 
     "summary": { "type": "string", "minLength": 1 },
+
+    "dish_type": {
+      "type": "string",
+      "description": "The record's single primary dish type: the browsing category the gallery offers as ?category=. It is a machine facet over what the dish is served as, separate from its ingredients, its equipment and its tags, and it is never translated — a locale overlay inherits it unchanged. Exactly one value per record; a record that is also eaten at breakfast or as a snack still takes the one role it is primarily written for.",
+      "enum": ["main", "side", "snack", "staple", "soup", "dessert"]
+    },
 
     "variants": {
       "type": "array",

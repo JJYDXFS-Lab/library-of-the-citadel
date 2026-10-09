@@ -28,6 +28,7 @@ A file under `content/items/` must be named for its `item_id`.
 | `publication_ready` | Must be `false` for a fixture and for a practical note. |
 | `record_notice` | Honesty banner rendered on every view of the record. |
 | `name`, `region`, `summary`, `tags` | Display and search facets. `region.label_basis` records how much weight the label carries — it is a filter facet, not an attribution claim. `source-attributed` means the cited page names the region itself; `editorial-facet` means this project assigned it for browsing and the source makes no such claim; `fixture-illustrative` is for demonstration records. |
+| `dish_type` | Required. The record's single primary dish type, one of `main`, `side`, `snack`, `staple`, `soup`, `dessert`. It is the gallery's category browse (`?category=<dish_type>`) and the card's category mark. It names what the dish is served as — not its ingredients, its equipment, or its tags — and a record takes exactly one value even when its tags say it also suits another occasion (the yoghurt cups are a `dessert` whatever they are eaten with). It is a machine facet: never translated, never written into an overlay. |
 | `variants` | Regional variants held side by side. The framework never nominates one as definitive. |
 | `ingredients`, `method`, `yield_note` | `method` steps are numbered `1..n` in order. |
 | `sources`, `source_state`, `provenance_note` | Empty `sources` is legal and expected for a fixture and for a practical note; it is the honest state, not a placeholder. The two sourceless states are not interchangeable: `none-fixture-authored` belongs to `fixture`, `none-authored-here` to `practical-note`, and `src/rules.mjs` ties each to its class. |
@@ -117,8 +118,11 @@ filename, `variant_id`, `method` step number, `change_history` version, and
 ingredient rows by their canonical English `item` text, since the schema gives
 those rows no id of their own. No id, field set, or part of the data contract
 moves: a localized record is a drop-in view of the canonical one, and the
-machine-readable facets (`tags`, `region.label_basis`, review states, `sources`)
-stay canonical rather than being translated.
+machine-readable facets (`tags`, `dish_type`, `region.label_basis`, review
+states, `sources`) stay canonical rather than being translated. An overlay never
+repeats them; the localized record inherits them from the canonical one, and
+the category's visible label comes from the interface dictionary
+(`category.*` for the chips, `dish.*` for the card mark).
 
 Overlays are not schema-validated and are not required. A missing file is the
 untranslated state; an unfilled field keeps its English original and the page
@@ -246,9 +250,19 @@ These are gates, not documentation: a violation fails `npm run check` and
 
 ## Adding a record
 
-1. Write `content/items/<item_id>.json`.
+1. Write `content/items/<item_id>.json`, including its one `dish_type`. The
+   schema refuses a record without one, or with a value outside the enum.
 2. Add `<item_id>` to the collection manifest's `item_ids`, in editorial order.
-3. Run `npm run check`.
+3. Add the record and its dish type to the classification table in
+   `tests/check.mjs` (`EXPECTED_DISH_TYPE`), and update the category counts the
+   tests expect.
+4. Run `npm run check`.
+
+A new dish type is a deliberate vocabulary change, not a per-record choice: add
+it to the schema enum, to `CATEGORY_ORDER` in `src/templates/pages.mjs`, and to
+both interface dictionaries as `category.<value>` and `dish.<value>`. The gallery
+only offers a chip for a dish type some record actually holds, so no category
+leads to an empty view.
 
 A translation is optional and is added the same way: write
 `content/locales/items/<code>/<item_id>.json`. Until it exists, the record

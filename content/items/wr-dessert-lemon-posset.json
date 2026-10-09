@@ -79,5 +79,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "dessert",
   "tags": ["dessert", "no-bake", "lemon", "cream", "vegetarian", "small-batch", "beginner", "sourced"]
 }

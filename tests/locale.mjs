@@ -1029,10 +1029,13 @@ class Select extends El {
  * @param {string|null} opts.stored persisted language preference
  * @param {boolean}   opts.filters  render the gallery filter controls
  * @param {boolean}   opts.lens     render a curated lens over two of the cards
+ * @param {object|null} opts.gallery real cards and category chips parsed from a
+ *   generated gallery page (see realGallery); replaces the three stand-in cards
  */
 function runApp({
   locale = 'en', base = '/', route = 'recipes/', search = '', hash = '',
   storage = 'ok', stored = null, filters = true, switchBox = true, lens = true,
+  gallery = null,
 } = {}) {
   const key = LOCALE_STORAGE_KEY;
   const links = LOCALES.map((loc) => new El({
@@ -1064,7 +1067,7 @@ function runApp({
   }, [searchInput, region, method, sourceType, ingredient, status, reset]);
   // Two of the three cards belong to a section, so a lens can be distinguished
   // from "everything" and from a single record.
-  const cards = [
+  const cards = gallery ? gallery.cards.map((attrs) => new El(attrs)) : [
     new El({
       class: 'card', 'data-haystack': 'oven slow roast lamb shoulder potato cod fish flatbread west asia',
       'data-region': 'West Asia', 'data-method': 'oven', 'data-class': 'sourced',
@@ -1090,8 +1093,12 @@ function runApp({
     href: `${base}${locale === 'en' ? '' : 'zh/'}recipes/?section=quick-things#catalogue`,
   });
 
+  const chips = gallery ? gallery.chips.map((attrs) => new El(attrs)) : [];
+  const categoryNav = gallery ? new El(gallery.nav, chips) : null;
+
   const root = new El({}, [
     ...(switchBox ? [box] : []),
+    ...(categoryNav ? [categoryNav] : []),
     ...(lens ? [lensLink] : []),
     ...(filters ? [form, grid, empty, inlineReset] : []),
   ]);
@@ -1154,8 +1161,12 @@ function runApp({
   const linkFor = (code) => links.find((l) => l.getAttribute('data-locale-code') === code);
   return {
     links, linkFor, box, form, search: searchInput, region, method, sourceType, ingredient, status, reset, grid, empty, activeFilters,
-    inlineReset, cards, store, location, replaced, pushed, lensLink,
+    inlineReset, cards, store, location, replaced, pushed, lensLink, chips,
     shown: () => cards.filter((c) => !c.hidden).length,
+    shownIds: () => cards.filter((c) => !c.hidden).map((c) => c.getAttribute('data-item-id')).sort(),
+    chip: (value) => chips.find((c) => c.getAttribute('data-category-filter') === value),
+    current: () => chips.filter((c) => c.getAttribute('aria-current') === 'true')
+      .map((c) => c.getAttribute('data-category-filter')),
     href: (code) => linkFor(code).getAttribute('href'),
     type(value) { searchInput.value = value; searchInput.fire('input'); },
     pick(value) { region.value = value; region.fire('change'); },
@@ -1451,4 +1462,185 @@ test('a shared lens URL restores the view, and an unknown section is dropped', (
   const none = runApp({ locale: 'en', lens: false, search: '?section=quick-things&q=rice' });
   assert.equal(none.shown(), 1);
   assert.equal(none.location.search, '?q=rice');
+});
+
+// ============================ dish-type categories, against the real catalogue
+
+const UNESC = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" };
+const attrsOf = (tag) => Object.fromEntries([...tag.matchAll(/([\w-]+)="([^"]*)"/g)]
+  .map(([, name, value]) => [name, value.replace(/&(amp|lt|gt|quot|#39);/g, (m, n) => UNESC[n])]));
+
+/**
+ * The generated gallery of one locale, reduced to what app.js reads: every
+ * card's attributes and every category chip's. The client tests below run the
+ * real script over the real 28 cards rather than over stand-ins.
+ */
+function realGallery(code) {
+  const html = read(localeBuild(), `${localeByCode(code).prefix}recipes/index.html`);
+  const nav = /<nav class="categories"[^>]*>/.exec(html);
+  assert.ok(nav, `${code}: the gallery renders no category navigation`);
+  return {
+    html,
+    nav: { ...attrsOf(nav[0]), 'data-categories': '' },
+    chips: [...html.matchAll(/<a class="category"[^>]*>/g)].map((m) => attrsOf(m[0])),
+    cards: [...html.matchAll(/<li class="card"[^>]*>/g)].map((m) => attrsOf(m[0])),
+  };
+}
+
+const DESSERTS = [...DESSERT_BATCH_IDS].sort();
+
+test('the gallery leads with real category links: All, then every held dish type with its count', () => {
+  const expected = [['', 28], ['dessert', 4], ['main', 17], ['side', 2], ['snack', 2], ['staple', 2], ['soup', 1]];
+  const labels = {};
+  for (const loc of LOCALES) {
+    const { html, nav, chips, cards } = realGallery(loc.code);
+    assert.equal(cards.length, 28);
+    // Above the lens and the filter form, so it is the first browse a reader meets.
+    assert.ok(html.indexOf('class="categories"') < html.indexOf('class="lens"'), `${loc.code}: categories are not first`);
+    assert.ok(html.indexOf('class="categories"') < html.indexOf('data-filters'), `${loc.code}: categories follow the form`);
+    assert.ok(nav['aria-label'], `${loc.code}: the category navigation has no accessible name`);
+
+    assert.deepEqual(chips.map((c) => c['data-category-filter']), expected.map(([v]) => v));
+    const chipHtml = [...html.matchAll(/<a class="category"[\s\S]*?<\/a>/g)].map((m) => m[0]);
+    chipHtml.forEach((a, i) => {
+      assert.match(a, new RegExp(`<span class="category__count">${expected[i][1]}</span>`),
+        `${loc.code}: chip "${expected[i][0]}" shows the wrong count`);
+    });
+    // Real, shareable links in this locale's own page set, all to the one catalogue.
+    for (const chip of chips) {
+      const value = chip['data-category-filter'];
+      assert.equal(chip.href, value
+        ? `/${loc.prefix}recipes/?category=${value}#catalogue`
+        : `/${loc.prefix}recipes/#catalogue`);
+    }
+    // With no script the page shows every card, so only "All" is marked current.
+    assert.deepEqual(chips.filter((c) => c['aria-current'] === 'true').map((c) => c['data-category-filter']), ['']);
+    // The card facet is the record's own dish_type, in either locale.
+    for (const card of cards) {
+      assert.equal(card['data-category'], baseItem(card['data-item-id']).dish_type);
+    }
+    labels[loc.code] = chips.map((c) => c['data-category-label']);
+  }
+  assert.equal(labels.en[1], 'Desserts');
+  assert.equal(labels.zh[1], '甜品');
+  for (const label of labels.zh) assert.match(label, HAN, `zh chip "${label}" is not in Chinese`);
+});
+
+test('a locale overlay never carries or changes the canonical dish type', () => {
+  const hasKey = (value, key) => value !== null && typeof value === 'object'
+    && (Object.prototype.hasOwnProperty.call(value, key) || Object.values(value).some((v) => hasKey(v, key)));
+  for (const id of EXPECTED_ITEM_IDS) {
+    const overlay = loadOverlay('items', 'zh', id);
+    assert.ok(!hasKey(overlay, 'dish_type'), `${id}: the zh overlay duplicates the machine field dish_type`);
+    assert.equal(localizeItem(baseItem(id), overlay, 'zh').record.dish_type, baseItem(id).dish_type);
+  }
+});
+
+test('the dessert chip narrows the real catalogue to the four desserts, in both locales', () => {
+  for (const loc of LOCALES) {
+    const page = runApp({ locale: loc.code, gallery: realGallery(loc.code), lens: false });
+    assert.equal(page.shown(), 28);
+    assert.deepEqual(page.current(), ['']);
+
+    const click = page.chip('dessert').fire('click');
+    assert.equal(click.defaultPrevented, true, `${loc.code}: the chip should filter in place`);
+    assert.deepEqual(page.shownIds(), DESSERTS, `${loc.code}: the dessert chip shows the wrong records`);
+    assert.deepEqual(page.current(), ['dessert'], `${loc.code}: aria-current did not move to the chip`);
+    assert.equal(page.location.search, '?category=dessert');
+    assert.equal(page.status.textContent, 'Showing 4 of 28 records.');
+    assert.equal(page.reset.hidden, false, 'a category is a filter, so reset must be offered');
+    const other = loc.code === 'en' ? 'zh' : 'en';
+    assert.equal(page.href(other), `/${other === 'zh' ? 'zh/' : ''}recipes/?category=dessert`);
+
+    // A category made only of fixtures still shows them: it is not a food facet.
+    page.chip('staple').fire('click');
+    assert.deepEqual(page.shownIds(), ['wr-fixture-griddle-flatbread', 'wr-fixture-rice-porridge']);
+
+    page.chip('').fire('click');
+    assert.equal(page.shown(), 28);
+    assert.equal(page.location.search, '');
+    assert.deepEqual(page.current(), ['']);
+  }
+});
+
+test('dessert, desserts, 甜品 and 甜点 each find exactly the four desserts on both language pages', () => {
+  for (const loc of LOCALES) {
+    const gallery = realGallery(loc.code);
+    for (const query of ['dessert', 'desserts', 'Desserts', '甜品', '甜点']) {
+      const page = runApp({ locale: loc.code, gallery, lens: false });
+      page.type(query);
+      assert.deepEqual(page.shownIds(), DESSERTS, `${loc.code}: ${JSON.stringify(query)} does not find the four desserts`);
+      assert.equal(page.location.search, `?q=${encodeURIComponent(query)}`);
+    }
+    // The existing aliases still behave as before on the real catalogue.
+    const lamb = runApp({ locale: loc.code, gallery, lens: false });
+    lamb.type('羊肉');
+    const lambCards = lamb.cards.filter((c) => c.getAttribute('data-tags').split(' ').includes('lamb'));
+    assert.equal(lambCards.length, 5);
+    assert.ok(lambCards.every((c) => !c.hidden), `${loc.code}: the lamb alias no longer finds every lamb record`);
+    assert.ok(lamb.cards.filter((c) => !c.hidden).every((c) => c.getAttribute('data-category') !== 'dessert'),
+      `${loc.code}: the lamb alias now reaches a dessert`);
+  }
+});
+
+test('a category intersects search and every facet, and the empty state and reset clear it', () => {
+  const page = runApp({ locale: 'en', gallery: realGallery('en'), lens: false });
+  page.chip('dessert').fire('click');
+  page.pickMethod('oven');
+  assert.deepEqual(page.shownIds(), ['wr-dessert-small-apple-crumble'], 'category and method must intersect');
+  assert.equal(page.location.search, '?category=dessert&method=oven');
+
+  page.pickMethod('');
+  page.type('salmon');
+  assert.equal(page.shown(), 0, 'a category and a search must intersect, not union');
+  assert.equal(page.grid.hidden, true);
+  assert.equal(page.empty.hidden, false);
+  assert.equal(page.activeFilters.textContent, 'Current filters: Dish type: Desserts · q: salmon.');
+
+  page.inlineReset.fire('click');
+  assert.equal(page.shown(), 28, 'the empty-state reset must clear the category too');
+  assert.equal(page.location.search, '');
+  assert.deepEqual(page.current(), ['']);
+  assert.equal(page.search.focused, true);
+
+  page.chip('main').fire('click');
+  page.type('salmon');
+  assert.deepEqual(page.shownIds(), ['wr-airfryer-garlic-lemon-salmon', 'wr-airfryer-salmon-fillet', 'wr-oven-salmon-traybake']);
+  page.pickClass('practical-note');
+  assert.equal(page.shown(), 2);
+  assert.equal(page.location.search, '?category=main&q=salmon&class=practical-note');
+  page.reset.fire('click');
+  assert.equal(page.shown(), 28);
+  assert.equal(page.location.search, '');
+  assert.deepEqual(page.current(), ['']);
+});
+
+test('a shared category URL restores on any base path, survives the switch, and an unknown one is dropped', () => {
+  for (const base of ['/', '/library-of-the-citadel/']) {
+    const zh = runApp({ locale: 'zh', base, gallery: realGallery('zh'), lens: false,
+      search: '?category=dessert&q=%E7%94%9C%E5%93%81', hash: '#catalogue' });
+    assert.deepEqual(zh.shownIds(), DESSERTS);
+    assert.deepEqual(zh.current(), ['dessert']);
+    assert.equal(zh.href('en'), `${base}recipes/?category=dessert&q=%E7%94%9C%E5%93%81#catalogue`);
+    assert.equal(zh.href('zh'), `${base}zh/recipes/?category=dessert&q=%E7%94%9C%E5%93%81#catalogue`);
+
+    const en = runApp({ locale: 'en', base, gallery: realGallery('en'), lens: false, search: '?category=dessert', hash: '#catalogue' });
+    assert.deepEqual(en.shownIds(), DESSERTS);
+    assert.equal(en.href('zh'), `${base}zh/recipes/?category=dessert#catalogue`);
+    en.reset.fire('click');
+    assert.equal(en.pushed.at(-1), `${base}recipes/#catalogue`, 'reset must keep the base path and the fragment');
+    assert.equal(en.href('zh'), `${base}zh/recipes/#catalogue`);
+  }
+
+  for (const search of ['?category=pudding&q=rice', '?category=&q=rice', '?category=DESSERT&q=rice']) {
+    const page = runApp({ locale: 'en', gallery: realGallery('en'), lens: false, search });
+    assert.equal(page.location.search, '?q=rice', `${search}: an unknown category must be dropped from the URL`);
+    assert.deepEqual(page.current(), ['']);
+    assert.ok(page.shown() >= 1, `${search}: an unknown category hid every record`);
+  }
+
+  // A page with no category chips ignores the parameter rather than hiding everything.
+  const stand = runApp({ locale: 'en', search: '?category=dessert' });
+  assert.equal(stand.shown(), 3);
+  assert.equal(stand.location.search, '');
 });

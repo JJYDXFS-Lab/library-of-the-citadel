@@ -87,5 +87,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["vegetarian", "chickpeas", "halloumi", "traybake", "oven", "one-tray", "beginner", "sourced"]
 }

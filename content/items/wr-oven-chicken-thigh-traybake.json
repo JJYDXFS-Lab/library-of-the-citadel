@@ -91,5 +91,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["chicken", "poultry", "traybake", "oven", "one-tray", "beginner", "sourced"]
 }

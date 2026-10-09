@@ -108,5 +108,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["lamb", "lamb-rack", "cutlets", "cumin", "potato", "oven", "one-pan", "quick", "small-batch", "sourced"]
 }

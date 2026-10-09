@@ -88,5 +88,6 @@
     "review_state": "fixture-not-reviewed"
   },
 
+  "dish_type": "soup",
   "tags": ["legume", "soup", "simmered", "vegetarian", "fixture"]
 }

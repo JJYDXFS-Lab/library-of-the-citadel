@@ -84,5 +84,6 @@
     "review_state": "fixture-not-reviewed"
   },
 
+  "dish_type": "staple",
   "tags": ["bread", "griddle", "vegetarian", "fixture"]
 }

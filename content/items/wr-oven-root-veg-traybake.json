@@ -87,5 +87,6 @@
     "review_state": "not-reviewed"
   },
 
+  "dish_type": "main",
   "tags": ["vegetarian", "root-vegetables", "traybake", "oven", "one-tray", "beginner", "sourced"]
 }
