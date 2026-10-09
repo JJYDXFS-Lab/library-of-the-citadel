@@ -174,3 +174,17 @@ rights note. Local headless Chrome passed 40 checks, including seven representat
 English/Chinese routes, language switching, search and mobile overflow. This is
 local validation, not publication or logged-in desktop-profile evidence.
 The six sourced oven recipes remain unstarted; all three fixtures are unchanged.
+
+### 2026-10-10 — first beginner dessert batch (release candidate)
+
+World Recipes gained four sourced, small-batch beginner desserts with full
+Chinese overlays: yoghurt berry granola cups, an egg-free chocolate microwave
+mug cake, a half-size apple crumble and a lemon posset. Sources were accessed
+2026-10-10; scaling, metric conversions, equipment and storage advice are
+marked as editorial. None is kitchen-tested, food-safety reviewed or
+publication-ready. The collection is now 28 records (17 sourced, 8 practical
+notes, 3 fixtures), manifest version 1.8.0; no section, UI or CSS changed.
+`npm run check` passed 125/125 and the `/library-of-the-citadel/` build wrote
+28 records. Local headless Chrome checked all eight dessert routes at 1440px
+and 390px, with no horizontal overflow, complete linked credits and gallery
+links. Deployment confirmation is recorded in the release receipt.

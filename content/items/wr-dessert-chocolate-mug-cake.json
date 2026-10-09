@@ -1,0 +1,86 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-dessert-chocolate-mug-cake",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the ingredient ratios and microwave timing are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The millilitre and gram figures for spoon measures, the mug-size rule, the start-low timing and the doneness checks are this project's editorial adaptation. This record has not been kitchen-tested here and has had no professional food-safety review. Microwaves differ: cook to the doneness cue, not the clock.",
+
+  "name": {
+    "primary": "Egg-Free Chocolate Microwave Mug Cake",
+    "alt": ["Chocolate Mug Cake", "无蛋巧克力微波马克杯蛋糕"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "Microwave single-mug cake",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "A one-mug chocolate cake with no egg, stirred together in the mug or a small bowl and cooked in the microwave in about a minute. It is a soft, fully cooked sponge, not a molten or lava cake: the centre should be set right through. Active time about 5 minutes; cook time about 1 to 1½ minutes; rest 1 minute; total about 8 minutes. Serves 1, or 2 sharing.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Plain flour", "quantity": "31 g (¼ US cup in the source)", "note": "The source gives both the cup and the gram figure. Wheat (gluten) allergen." },
+    { "item": "Unsweetened cocoa powder", "quantity": "2 tablespoons (30 ml; about 12 g)", "note": "Tablespoons in this record are the 15 ml standard spoon, not the 20 ml Australian tablespoon. Gram weights for spoon measures are approximate editorial estimates." },
+    { "item": "Caster or white sugar", "quantity": "2 tablespoons (30 ml; about 25 g)", "note": "The source says granulated sugar and allows 1 more tablespoon for a sweeter cake." },
+    { "item": "Baking powder", "quantity": "¼ teaspoon (1.25 ml; about 1 g)", "note": "Check the use-by date; the source stresses this." },
+    { "item": "Salt", "quantity": "⅛ teaspoon (0.6 ml) kosher salt, or a small pinch of fine table salt", "note": "The source specifies kosher salt; fine salt is denser, so use a little less." },
+    { "item": "Milk", "quantity": "75 ml (¼ US cup plus 1 tablespoon in the source)", "note": "The source gives 59 ml plus 1 tablespoon; 59 + 15 = 74 ml, rounded here to 75 ml. Milk allergen." },
+    { "item": "Vegetable or canola oil", "quantity": "2 tablespoons (30 ml)" }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Tools: a microwave-safe mug that holds at least 350 ml (the source used a 14 US fl oz mug, about 410 ml), a fork or small whisk, a measuring spoon set and a paper towel. Find your microwave's wattage on the label inside the door or in the manual before you start." },
+    { "step": 2, "instruction": "In the mug, whisk the flour, cocoa, sugar, baking powder and salt together with a fork until even." },
+    { "step": 3, "instruction": "Whisk in the milk and oil until the batter is smooth with no dry pockets, scraping the bottom edge of the mug. The batter should fill the mug no more than halfway, because it rises while it cooks; if it is fuller, use a bigger mug." },
+    { "step": 4, "instruction": "Stand the mug on a paper towel in the microwave to catch any overflow. The source cooked on full power for 70 seconds in a 950-watt microwave, and notes that a different microwave took 90 seconds. Our editorial advice: on a higher-wattage oven start with 50 to 60 seconds; on a lower-wattage one start with 70 seconds. Then add 10 to 15 seconds at a time until done." },
+    { "step": 5, "instruction": "It is done when the top looks dry and set rather than glossy, it springs back when pressed lightly, and a skewer pushed into the centre comes out without wet batter (a few moist crumbs are fine). Overcooking makes it tough, which is why the extra time goes in short bursts." },
+    { "step": 6, "instruction": "Rest it in the microwave or on the bench for 1 minute; the mug and cake are very hot. Check the centre again with a skewer. If there is any wet batter after resting, cook another 10 seconds and check again. Do not serve it with an uncooked or runny middle." }
+  ],
+
+  "yield_note": "Serves 1, or 2 sharing, as the source describes. Source facts: quantities as listed, a 14-ounce mug, 70 seconds on full power at 950 watts (and 90 seconds in a second microwave the author later used), and the warning that every microwave and mug shape changes the time. The source gives no rest time. Times in this record: active about 5 minutes; cook about 1 to 1½ minutes; rest 1 minute (editorial); total about 8 minutes. The source's optional tablespoon of chocolate-hazelnut spread or chocolate chips dropped into the centre is deliberately left out here, so the middle can be checked properly and to avoid tree-nut allergens. Storage (editorial): eat it warm on the day. It is not designed to be kept; if any is left, cover it, refrigerate it and eat it the next day.",
+
+  "sources": [
+    {
+      "url": "https://www.tablefortwoblog.com/the-moistest-chocolate-mug-cake/",
+      "title": "The Best Chocolate Mug Cake",
+      "accessed_at": "2026-10-10",
+      "note": "Publisher: Table for Two (tablefortwoblog.com); the page names no author in the captured text. The ingredient amounts, egg-free design, mug size, 950-watt and 70-second timing, the 90-second note and the paper-towel tip are taken from this page. Spoon-to-millilitre figures, the start-low cooking pattern, the rest and the doneness checks are this project's."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from the Table for Two page, accessed 2026-10-10. The source gives grams only for the flour (31 g) and millilitres only for part of the milk (59 ml); every other spoon-to-metric figure here is an approximate editorial conversion using a 15 ml tablespoon and a 5 ml teaspoon. The source's optional hazelnut-spread centre is omitted on purpose. The minimum mug size, the half-full rule, the wattage-dependent starting time and the no-wet-batter check are editorial guidance, not the source's.",
+
+  "reviewed_at": "2026-10-10",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-10",
+      "change": "Record created from the cited source as part of the first beginner dessert batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Flour is a raw ingredient and is not safe to eat until it is cooked. Do not taste the batter, and cook the cake until no wet batter remains in the centre after its rest.",
+      "Use only a mug marked microwave-safe, with no metal trim. The mug gets very hot: lift it with an oven mitt and let it stand before eating.",
+      "Allergens: wheat (gluten) and milk. There is no egg in this recipe. A soy or oat drink may stand in for milk for a dairy-free version, but that has not been tried here and the cooking time may change.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["dessert", "microwave", "chocolate", "egg-free", "vegetarian", "small-batch", "beginner", "sourced"]
+}

@@ -44,11 +44,19 @@ const EXPECTED_SOURCED_IDS = [
   'wr-oven-cumin-lamb-rack-roast',
   'wr-oven-rosemary-garlic-lamb-mini-roast',
   'wr-oven-slow-roast-lamb-shoulder',
+  'wr-dessert-yogurt-berry-granola-cups',
+  'wr-dessert-chocolate-mug-cake',
+  'wr-dessert-small-apple-crumble',
+  'wr-dessert-lemon-posset',
 ];
 // The second oven batch and the lamb batch after it were read on a later date
-// than the first six.
-const SECOND_OVEN_BATCH_IDS = EXPECTED_SOURCED_IDS.slice(6);
-const sourceAccessDate = (id) => (SECOND_OVEN_BATCH_IDS.includes(id) ? '2026-10-06' : '2026-09-14');
+// than the first six; the dessert batch later still.
+const SECOND_OVEN_BATCH_IDS = EXPECTED_SOURCED_IDS.slice(6, 13);
+const DESSERT_BATCH_IDS = EXPECTED_SOURCED_IDS.slice(13);
+const sourceAccessDate = (id) => {
+  if (DESSERT_BATCH_IDS.includes(id)) return '2026-10-10';
+  return SECOND_OVEN_BATCH_IDS.includes(id) ? '2026-10-06' : '2026-09-14';
+};
 // The Quick Air-Fryer section: original practical notes, a third record class
 // that is neither sourced nor fixture. In manifest order.
 const EXPECTED_PRACTICAL_IDS = [
@@ -691,10 +699,10 @@ test('the per-locale data files are the same records with the same IDs', () => {
     }
   }
   const classes = zh.items.map((i) => i.record_class);
-  assert.equal(classes.filter((c) => c === 'sourced').length, 13);
+  assert.equal(classes.filter((c) => c === 'sourced').length, 17);
   assert.equal(classes.filter((c) => c === 'practical-note').length, 8);
   assert.equal(classes.filter((c) => c === 'fixture').length, 3);
-  assert.equal(zh.items.length, 24);
+  assert.equal(zh.items.length, 28);
   // The section travels into both data files, with untranslated membership.
   for (const data of [en, zh]) {
     assert.deepEqual(data.collection.sections.map((s) => s.section_id), [QUICK_AIR_FRYER]);

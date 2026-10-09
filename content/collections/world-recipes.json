@@ -3,13 +3,13 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection of three kinds. Thirteen records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "Mixed collection of three kinds. Seventeen records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
   "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains twenty-four records of three kinds. Thirteen are sourced beginner oven recipes, each citing the page its quantities, oven temperature and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
+  "scope_note": "Contains twenty-eight records of three kinds. Seventeen are sourced: thirteen beginner oven recipes and four small-batch beginner desserts, each citing the page its quantities, temperatures and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
@@ -24,6 +24,10 @@
     "wr-oven-cumin-lamb-rack-roast",
     "wr-oven-rosemary-garlic-lamb-mini-roast",
     "wr-oven-slow-roast-lamb-shoulder",
+    "wr-dessert-yogurt-berry-granola-cups",
+    "wr-dessert-chocolate-mug-cake",
+    "wr-dessert-small-apple-crumble",
+    "wr-dessert-lemon-posset",
     "wr-airfryer-crispy-tofu",
     "wr-airfryer-chicken-thigh-bites",
     "wr-airfryer-salmon-fillet",
@@ -53,9 +57,15 @@
       ]
     }
   ],
-  "reviewed_at": "2026-10-06",
-  "record_version": "1.7.0",
+  "reviewed_at": "2026-10-10",
+  "record_version": "1.8.0",
   "change_history": [
+    {
+      "version": "1.8.0",
+      "date": "2026-10-10",
+      "change": "Added the collection's first four desserts, all sourced, beginner-level and scaled down for two or three: no-cook yoghurt, berry and granola cups, an egg-free chocolate microwave mug cake, a half-size apple crumble, and a lemon posset without its shortbread. Each cites its recipe page, accessed 2026-10-10, and says plainly which amounts are the source's and which are this project's scaling, metric conversion, equipment and storage advice. None has been kitchen-tested here. They are placed after the lamb oven batch and before the Quick Air-Fryer notes; every existing record, the section, and the fixtures are unchanged.",
+      "supersedes": "1.7.0"
+    },
     {
       "version": "1.7.0",
       "date": "2026-10-06",

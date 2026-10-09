@@ -1,0 +1,81 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-dessert-yogurt-berry-granola-cups",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the layering idea and ingredient ratios are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The source measures in US cups for four glasses; the halved, two-cup version and every gram figure here are this project's editorial adaptation, not the source's numbers. This record has not been kitchen-tested here and has had no professional food-safety review.",
+
+  "name": {
+    "primary": "Yoghurt, Berry and Granola Cups for Two",
+    "alt": ["Yoghurt Parfait", "酸奶莓果燕麦脆杯"]
+  },
+
+  "region": {
+    "label": "Unattributed",
+    "cuisine_label": "No-cook layered yoghurt dessert",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Vanilla yoghurt layered in two glasses with fresh berries and crunchy granola. Nothing is cooked: the only skill is spooning in layers, and the only rule that matters is to assemble just before eating so the granola stays crisp. Active time about 10 minutes; cook time none; chill time none; total about 10 minutes. Serves 2.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Vanilla yoghurt, any fat level", "quantity": "350 g", "note": "The source uses vanilla nonfat yoghurt. Our gram figure is an editorial adaptation of its halved cup amount, not an exact conversion. Milk allergen." },
+    { "item": "Fresh strawberries, hulled and sliced", "quantity": "80 g (about 5 medium)", "note": "The source also allows defrosted frozen strawberries in juice; this record uses fresh fruit only, to keep the no-cook version simple." },
+    { "item": "Fresh blueberries, raspberries or blackberries", "quantity": "125 g (one standard supermarket punnet)", "note": "Our adaptation of the source's half pint." },
+    { "item": "Granola or toasted muesli", "quantity": "50 g", "note": "Check the label: many contain wheat or other gluten cereals, tree nuts, peanuts, sesame or soy." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Tools: two clear glasses or jars of about 300 ml each, a sieve or colander, a small knife and board, and a dessert spoon. Rinse the berries under cold running water, drain them well and pat dry with paper towel, then hull and slice the strawberries and mix them with the other berries." },
+    { "step": 2, "instruction": "Spoon roughly a third of the yoghurt (about 60 g per glass) into the bottom of each glass. The source starts each glass with a yoghurt layer in the same way." },
+    { "step": 3, "instruction": "Add a layer of berries, then a layer of granola, then more yoghurt, and repeat until the glasses are full and all the ingredients are used. Finish with a few berries and a sprinkle of granola on top." },
+    { "step": 4, "instruction": "Serve straight away. The source's point, kept here, is that the granola softens once it sits on wet yoghurt; the practical cue is that it should still crunch when you eat it." }
+  ],
+
+  "yield_note": "Serves 2 in this adaptation. Source facts: the source serves 4, rates it easy, and gives 5 minutes total with no cooking. Our adaptation: every source quantity was halved (1½ US cups yoghurt, ½ cup strawberries, ½ pint other berries, ½ cup granola), then rounded to amounts sold in Australian supermarkets — 350 g yoghurt, 80 g strawberries, a 125 g punnet of berries and 50 g granola. Those grams are an approximate editorial choice, not a conversion the source states. Times in this record: active about 10 minutes (our allowance for washing fruit); cook none; chill none; total about 10 minutes. Storage (our conservative advice, not the source's): eat once assembled. Keep unused yoghurt sealed in the fridge and use it by its date; keep spare washed berries covered in the fridge and eat them within a day or two; keep granola airtight in the pantry. If an assembled cup must wait, cover it and refrigerate, and eat it the same day, accepting soft granola.",
+
+  "sources": [
+    {
+      "url": "https://www.foodnetwork.com/recipes/rachael-ray/yogurt-and-fruit-parfaits-recipe-1940127",
+      "title": "Yogurt and Fruit Parfaits",
+      "accessed_at": "2026-10-10",
+      "note": "Author: Rachael Ray. Publisher: Food Network. The ingredient list in US cups and pints, the four-glass yield, the 5-minute time, the yoghurt-first layering and the advice to serve immediately are taken from this page. The halving, the gram amounts and the storage advice are this project's."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Rachael Ray's page at Food Network, accessed 2026-10-10. The source writes its amounts in US cups and a pint and gives no metric weights; the gram figures here are this project's rounded adaptation for a two-glass batch and should not be read as the source's measurements. The source allows defrosted frozen strawberries; this record deliberately uses fresh berries only. Washing, glass size, storage and allergen-label advice are editorial additions.",
+
+  "reviewed_at": "2026-10-10",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-10",
+      "change": "Record created from the cited source as part of the first beginner dessert batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Nothing in this dessert is cooked, so the berries are eaten raw. Rinse them under running water just before use and keep everything cold until you assemble it.",
+      "This record uses fresh berries only. It does not cover frozen berries, which some food-safety authorities advise heating before eating; follow your own authority's advice if you substitute them.",
+      "Allergens: milk in the yoghurt. Granola often contains gluten cereals and may contain tree nuts, peanuts, sesame or soy; read the label for anyone with an allergy. A lactose-free or plant-based yoghurt is a possible substitute but has not been tried here.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["dessert", "no-cook", "yoghurt", "berries", "vegetarian", "small-batch", "beginner", "sourced"]
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-dessert-small-apple-crumble",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the ratios, oven temperature and bake cues are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The half-size batch, the smaller dish, the Granny Smith apples and the storage advice are this project's editorial adaptation, not the source's. This record has not been kitchen-tested here and has had no professional food-safety review. Bake to the cue — golden top, very soft apple — not to the clock alone.",
+
+  "name": {
+    "primary": "Small-Batch Apple Crumble",
+    "alt": ["Apple Crumble for Two", "小份苹果酥粒烤"]
+  },
+
+  "region": {
+    "label": "Europe",
+    "cuisine_label": "British baked fruit pudding",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Sliced apples tossed with a little sugar under a rubbed-in topping of flour, sugar and cold butter, baked until the top is golden and the fruit is very soft. This is a half batch of a classic four-serving crumble, sized for two in a small, deep dish. Active time about 20 minutes; cook time 30 to 40 minutes; rest 10 minutes; total about 1 hour 15 minutes including preheating. Serves 2.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Granny Smith apples, peeled, cored and sliced 1 cm thick", "quantity": "290 g prepared weight (about 2 medium apples)", "note": "The source uses Bramley cooking apples, which are uncommon in Australia. Granny Smith is our readily available substitute; it is tart but may hold its shape and need a different time to go tender." },
+    { "item": "Caster sugar, for the apples", "quantity": "1 tablespoon (15 ml; about 13 g)", "note": "The source uses golden caster sugar. Tablespoons here are the 15 ml standard spoon, not the 20 ml Australian tablespoon." },
+    { "item": "Plain flour", "quantity": "88 g", "note": "Wheat (gluten) allergen." },
+    { "item": "Caster sugar, for the topping", "quantity": "55 g" },
+    { "item": "Fine salt", "quantity": "⅛ teaspoon (0.6 ml)", "note": "Our measured version of the source's good pinch." },
+    { "item": "Cold butter, cut into small cubes", "quantity": "55 g", "note": "Milk allergen." },
+    { "item": "Rolled oats and raw or demerara sugar, for sprinkling", "quantity": "½ tablespoon (7.5 ml) of each, about 4 g oats and 6 g sugar", "note": "Optional, as in the source. Oats may contain gluten." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Tools: an ovenproof dish about 15 to 16 cm across and at least 5 cm deep (about 900 to 1000 ml capacity), a mixing bowl, a vegetable peeler, a knife and board, a fork, a small sharp knife for testing, and a flat baking tray. Heat the oven to 190°C conventional or 170°C fan, as the source states." },
+    { "step": 2, "instruction": "Toss the apple slices with the tablespoon of sugar and spread them in the dish. Press them flat with your hand so the topping does not fall through gaps." },
+    { "step": 3, "instruction": "Mix the flour, topping sugar and salt in the bowl. Add the cold butter and rub it in with your fingertips until the mixture looks like damp breadcrumbs. Shake the bowl: any lumps of butter rise to the top, so rub those in too. A food processor pulsed briefly until sandy also works, per the source; do not over-process." },
+    { "step": 4, "instruction": "Tip the crumb mixture onto the middle of the apples and spread it to the edges with a fork. Press the surface lightly with the back of the fork so it holds together and crisps, then drag the fork lightly over the top. Scatter over the oats and sugar if using." },
+    { "step": 5, "instruction": "Set the dish on the baking tray to catch drips and bake. The source bakes its full-size dish for 35 to 40 minutes; in the smaller dish start checking at 30 minutes (our editorial suggestion). It is ready when the top is golden and a small sharp knife slides into the apple with almost no resistance. If the top browns before the apple is soft, cover it loosely with foil and keep baking." },
+    { "step": 6, "instruction": "Let it stand for 10 minutes before serving, as the source advises; the fruit underneath stays very hot." }
+  ],
+
+  "yield_note": "Serves 2 in this adaptation. Source facts: serves 4, easy, prep 15 minutes and cook 40 minutes; 575 g prepared Bramley apple with 2 tablespoons golden caster sugar; topping of 175 g plain flour, 110 g golden caster sugar, a good pinch of salt and 110 g cold butter; optional 1 tablespoon each of oats and demerara sugar; 190°C, 170°C fan or gas 5; a 23 cm round dish at least 5 cm deep or a 20 cm square dish; bake 35 to 40 minutes, then cool 10 minutes. Our arithmetic: every amount halved — 575 ÷ 2 = 287.5, rounded to 290 g apple; 175 ÷ 2 = 87.5, rounded to 88 g flour; 110 ÷ 2 = 55 g sugar and 55 g butter; 2 tablespoons ÷ 2 = 1 tablespoon. Half the area of a 23 cm round dish is about the area of a 16 cm round dish, so a 15 to 16 cm dish keeps the same depth of fruit and topping; that dish size and the earlier first check are editorial, not the source's. Times in this record: active about 20 minutes; preheat about 15 minutes; bake 30 to 40 minutes; rest 10 minutes; total about 1 hour 15 minutes. Storage (editorial, conservative): cool leftovers, cover and refrigerate within 2 hours of baking, and eat within 2 days, reheated until hot right through. The source also says the unbaked crumble can be frozen for up to 3 months once the filling is cool, then defrosted overnight and baked.",
+
+  "sources": [
+    {
+      "url": "https://www.bbcgoodfood.com/recipes/best-apple-crumble",
+      "title": "Easy apple crumble recipe",
+      "accessed_at": "2026-10-10",
+      "note": "Author: Orlando Murrin. Publisher: BBC Good Food. The full-size quantities, oven settings, dish size, rubbing-in method, bake time and doneness cue, cooling time, freezing advice and the note that eating apples hold their shape more than Bramleys are taken from this page. The halving, the smaller dish, the Granny Smith substitution and the fridge advice are this project's."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Orlando Murrin's page at BBC Good Food, accessed 2026-10-10. The source is metric for its main weights; the halved weights here are this project's arithmetic and rounding. The source's tablespoons are UK measures; this record uses the 15 ml standard spoon. The source suggests Bramley apples and notes that sweeter eating apples hold their shape and need less sugar; Granny Smith is this project's choice for an Australian shop and has not been tried in this recipe here. The smaller dish, the 30-minute first check and the storage advice are editorial guidance.",
+
+  "reviewed_at": "2026-10-10",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-10",
+      "change": "Record created from the cited source as part of the first beginner dessert batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "The fruit filling stays far hotter than the topping feels. Use oven mitts, let it stand for the full 10 minutes, and take care serving it to children.",
+      "Allergens: wheat (gluten) in the flour and milk in the butter; the optional oats may contain gluten. A plant-based baking block may replace the butter for a dairy-free version, but that has not been tried here.",
+      "Leftovers: refrigerate covered within 2 hours of baking, eat within 2 days, and reheat until hot right through. This is conservative editorial advice; the source gives no fridge life for the baked crumble.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["dessert", "oven", "apple", "baked-pudding", "vegetarian", "small-batch", "beginner", "sourced"]
+}

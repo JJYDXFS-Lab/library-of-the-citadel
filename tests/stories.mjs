@@ -863,13 +863,13 @@ test('the story shelf changed nothing about the World Recipes collection', () =>
   // routes, the record count, or the data export moved, that is a regression
   // regardless of how well the story shelf works.
   const r = rootBuild();
-  assert.equal(r.itemCount, 24);
+  assert.equal(r.itemCount, 28);
   const recipes = JSON.parse(read(r, 'data/world-recipes.json'));
-  assert.equal(recipes.items.length, 24);
+  assert.equal(recipes.items.length, 28);
   assert.equal(recipes.collection.collection_id, 'world-recipes');
   for (const loc of LOCALES) {
     const gallery = read(r, pageAt(loc, 'recipes/index.html'));
-    assert.equal([...gallery.matchAll(/<li class="card"/g)].length, 24, `${loc.code}: the recipe catalogue changed size`);
+    assert.equal([...gallery.matchAll(/<li class="card"/g)].length, 28, `${loc.code}: the recipe catalogue changed size`);
     assert.ok(!gallery.includes('story-card'), `${loc.code}: a story reached the recipe catalogue`);
   }
 });

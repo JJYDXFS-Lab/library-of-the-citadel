@@ -30,6 +30,10 @@ const EXPECTED_FIXTURE_IDS = [
   'wr-fixture-simmered-bean-soup',
 ];
 const EXPECTED_SOURCED_IDS = [
+  'wr-dessert-chocolate-mug-cake',
+  'wr-dessert-lemon-posset',
+  'wr-dessert-small-apple-crumble',
+  'wr-dessert-yogurt-berry-granola-cups',
   'wr-oven-baked-ziti',
   'wr-oven-chicken-thigh-traybake',
   'wr-oven-cumin-lamb-rack-roast',
@@ -59,8 +63,17 @@ const LAMB_OVEN_BATCH_IDS = [
   'wr-oven-rosemary-garlic-lamb-mini-roast',
   'wr-oven-slow-roast-lamb-shoulder',
 ];
-const sourceAccessDate = (id) => (
-  [...SECOND_OVEN_BATCH_IDS, ...LAMB_OVEN_BATCH_IDS].includes(id) ? '2026-10-06' : '2026-09-14');
+// The first dessert batch, in manifest order, read on a later date again.
+const DESSERT_BATCH_IDS = [
+  'wr-dessert-yogurt-berry-granola-cups',
+  'wr-dessert-chocolate-mug-cake',
+  'wr-dessert-small-apple-crumble',
+  'wr-dessert-lemon-posset',
+];
+const sourceAccessDate = (id) => {
+  if (DESSERT_BATCH_IDS.includes(id)) return '2026-10-10';
+  return [...SECOND_OVEN_BATCH_IDS, ...LAMB_OVEN_BATCH_IDS].includes(id) ? '2026-10-06' : '2026-09-14';
+};
 // The Quick Air-Fryer section, in the order the manifest's section lists it.
 // Membership is asserted against the manifest below rather than assumed.
 const EXPECTED_PRACTICAL_IDS = [
@@ -77,7 +90,7 @@ const QUICK_AIR_FRYER = 'quick-air-fryer';
 const EXPECTED_ITEM_IDS = [
   ...EXPECTED_FIXTURE_IDS, ...EXPECTED_SOURCED_IDS, ...EXPECTED_PRACTICAL_IDS,
 ].sort();
-const TOTAL_RECORDS = 24;
+const TOTAL_RECORDS = 28;
 
 // The story shelf is a second content type, not an eighteenth recipe. Its
 // census lives in tests/stories.mjs; this file only needs to know which routes
@@ -135,7 +148,7 @@ test('every content record validates against its schema and the cross-record rul
   assert.deepEqual(errors, [], `content validation reported problems:\n  - ${errors.join('\n  - ')}`);
 });
 
-test('the repository holds twenty-four records in one collection: thirteen sourced, eight practical notes, three fixtures', () => {
+test('the repository holds twenty-eight records in one collection: seventeen sourced, eight practical notes, three fixtures', () => {
   const { items, collections } = loadContent();
   assert.equal(items.length, TOTAL_RECORDS);
   assert.equal(collections.length, 1);
@@ -171,9 +184,11 @@ test('the existing sourced and fixture records are untouched by the air-fryer ad
     'the second oven batch does not follow the first six oven records');
   assert.deepEqual(order.slice(10, 13), LAMB_OVEN_BATCH_IDS,
     'the lamb oven batch does not follow the second oven batch');
-  assert.deepEqual(order.slice(13, 21), EXPECTED_PRACTICAL_IDS,
-    'the Quick Air-Fryer records are not in manifest order between the oven set and the fixtures');
-  assert.deepEqual(order.slice(21), EXPECTED_FIXTURE_IDS,
+  assert.deepEqual(order.slice(13, 17), DESSERT_BATCH_IDS,
+    'the dessert batch does not follow the lamb oven batch');
+  assert.deepEqual(order.slice(17, 25), EXPECTED_PRACTICAL_IDS,
+    'the Quick Air-Fryer records are not in manifest order between the sourced set and the fixtures');
+  assert.deepEqual(order.slice(25), EXPECTED_FIXTURE_IDS,
     'the fixtures no longer close the manifest');
 
   for (const id of EXPECTED_SOURCED_IDS) {
@@ -310,7 +325,7 @@ test('the fish note states no temperature of its own and does not sell time as a
 test('every sourced record carries its provenance and claims no review it has not had', () => {
   const { items } = loadContent();
   const sourced = items.filter((i) => i.record_class === 'sourced');
-  assert.equal(sourced.length, 13);
+  assert.equal(sourced.length, 17);
 
   for (const item of sourced) {
     const where = item.item_id;
@@ -991,7 +1006,7 @@ test('the published data file is presentation-free content and nothing else', ()
   assert.equal(data.items.length, TOTAL_RECORDS);
   assert.equal(data.collection.collection_id, 'world-recipes');
   assert.deepEqual(data.items.map((i) => i.item_id), data.collection.item_ids);
-  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 13);
+  assert.equal(data.items.filter((i) => i.record_class === 'sourced').length, 17);
   assert.equal(data.items.filter((i) => i.record_class === 'practical-note').length, 8);
   assert.equal(data.items.filter((i) => i.record_class === 'fixture').length, 3);
   for (const item of data.items) assert.equal(item.publication_ready, false);

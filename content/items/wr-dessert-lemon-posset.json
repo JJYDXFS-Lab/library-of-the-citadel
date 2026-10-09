@@ -1,0 +1,83 @@
+{
+  "schema_version": "library.item/1.0.0",
+  "item_id": "wr-dessert-lemon-posset",
+  "collection_id": "world-recipes",
+  "record_class": "sourced",
+  "publication_ready": false,
+  "record_notice": "SOURCED RECORD — the ratios, simmer time and chilling time are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. Only the posset is used; the source's shortbread is left out. The one-third batch and the Australian cream guidance are this project's editorial adaptation. This record has not been kitchen-tested here and has had no professional food-safety review.",
+
+  "name": {
+    "primary": "Lemon Posset for Two or Three",
+    "alt": ["Lemon Posset", "柠檬奶冻（Posset）"]
+  },
+
+  "region": {
+    "label": "Europe",
+    "cuisine_label": "British set cream dessert",
+    "label_basis": "editorial-facet"
+  },
+
+  "summary": "Rich cream heated with sugar, simmered briefly, then stirred with lemon juice and zest and chilled until it sets to a soft spoonable cream. The lemon's acid does the setting, so there is no gelatine, egg or oven. Active time about 10 minutes; cook time about 5 minutes; cooling about 30 to 45 minutes; chill at least 3 hours; total at least about 4 hours, mostly hands-off. Makes 2 to 3 small cups.",
+
+  "variants": [],
+
+  "ingredients": [
+    { "item": "Double cream, about 45 to 48% fat", "quantity": "200 ml", "note": "Buy the carton labelled double cream (often sold as rich or thick double cream) and check the fat on the label. Ordinary 35% thickened cream is not automatically equivalent and may set softer or not at all; never use light cream, low-fat cream or milk. Milk allergen." },
+    { "item": "Caster sugar", "quantity": "67 g", "note": "The source uses golden caster sugar." },
+    { "item": "Lemon juice, freshly squeezed", "quantity": "25 ml (about ½ to 1 lemon)" },
+    { "item": "Finely grated lemon zest", "quantity": "Zest of 1 lemon (about 1 teaspoon, 5 ml)", "note": "Wash and dry the lemon first; grate only the yellow skin." }
+  ],
+
+  "method": [
+    { "step": 1, "instruction": "Tools: a small heavy-based saucepan (about 1 litre), a fine grater, a citrus juicer, a measuring jug, a heatproof spoon or spatula, and 2 or 3 heatproof glasses or ramekins of at least 150 ml each. Zest the lemon, then juice it and measure out 25 ml." },
+    { "step": 2, "instruction": "Put the cream and sugar in the saucepan over low heat and stir until the sugar has completely dissolved and you can no longer feel grains on the spoon." },
+    { "step": 3, "instruction": "Turn the heat up a little and bring it to a gentle simmer, then let it bubble for 1 minute, stirring, as the source directs. Watch it closely: cream can rise and boil over quickly." },
+    { "step": 4, "instruction": "Take the pan off the heat and stir in the lemon zest and juice. The mixture thickens slightly straight away." },
+    { "step": 5, "instruction": "Pour it into the glasses. Let them cool to room temperature, about 30 to 45 minutes, but no longer than about an hour; then cover and refrigerate." },
+    { "step": 6, "instruction": "Chill for at least 3 hours, as the source says, until set: the surface should be firm enough that the posset barely moves when you tilt the glass. If it is still liquid after the full chill, give it more time in the fridge and check that the cream fat level, measured lemon juice and simmer matched the instructions; fat level is not the only possible cause." }
+  ],
+
+  "yield_note": "Makes 2 to 3 small cups in this adaptation. Source facts, for the posset only: serves 6; 600 ml double cream, 200 g golden caster sugar, zest of 3 lemons and 75 ml lemon juice; dissolve the sugar over gentle heat, simmer 1 minute, stir in zest and juice off the heat, divide between pots, cool to room temperature, cover and chill for at least 3 hours or up to 24 hours. The source's listed prep and cook times include its shortbread, so they are not repeated here. Our arithmetic: all amounts divided by 3 — 600 ÷ 3 = 200 ml cream; 200 ÷ 3 = 66.7, rounded to 67 g sugar; 75 ÷ 3 = 25 ml juice; 3 ÷ 3 = zest of 1 lemon. Times in this record (editorial): active about 10 minutes; cook about 5 minutes; cool 30 to 45 minutes; chill at least 3 hours (source); total at least about 4 hours. Chilling is waiting time, not prep time. Storage: keep covered in the fridge and eat within the source's 24-hour window.",
+
+  "sources": [
+    {
+      "url": "https://www.bbcgoodfood.com/recipes/lemon-posset-sugared-almond-shortbread",
+      "title": "Easy lemon posset",
+      "accessed_at": "2026-10-10",
+      "note": "Author: Sarah Cook. Publisher: BBC Good Food. The posset quantities, 1-minute simmer, cooling, the 3-hour minimum chill and the 24-hour upper limit are taken from this page. The page's shortbread is not used. The one-third scaling, cup size and Australian cream guidance are this project's."
+    }
+  ],
+  "source_state": "sources-recorded",
+  "provenance_note": "Recipe facts paraphrased from Sarah Cook's page at BBC Good Food, accessed 2026-10-10, using the posset portion only. The source specifies UK double cream; the guidance on Australian double cream at about 45 to 48% fat, and the warning that 35% thickened cream is not automatically equivalent, are this project's editorial notes, not source claims. The cooling window, cup size and set test are editorial guidance.",
+
+  "reviewed_at": "2026-10-10",
+
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-10",
+      "change": "Record created from the cited source as part of the first beginner dessert batch.",
+      "supersedes": null
+    }
+  ],
+
+  "rights": {
+    "content_license": "Original editorial paraphrase of cooking facts, written for this repository. No source text or image is reproduced; rights in the cited page remain with its author and publisher.",
+    "license_review_state": "not-reviewed",
+    "image_rights_review_state": "no-images-in-record",
+    "images": []
+  },
+
+  "safety": {
+    "caveats": [
+      "Hot sugared cream can cause serious burns and can boil over fast. Use a pan with plenty of headroom, stay with it, and keep children away from the stove.",
+      "This is a chilled dairy dessert. Do not leave it at room temperature for longer than needed to cool it, keep it covered in the fridge, and eat it within 24 hours.",
+      "Allergens: milk in the cream. There is no egg, gluten or gelatine in the posset itself.",
+      "This record has had no professional food-safety review and has not been kitchen-tested by this project."
+    ],
+    "review_state": "not-reviewed"
+  },
+
+  "tags": ["dessert", "no-bake", "lemon", "cream", "vegetarian", "small-batch", "beginner", "sourced"]
+}
