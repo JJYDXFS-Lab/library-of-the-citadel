@@ -253,6 +253,39 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  story_id: 'xiaoshi-did-not-bring-a-pencil',
+  canonical_title: '小石没有带铅笔',
+  body_language: 'zh-Hans',
+  blocks: 123,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'Xiaoshi Did Not Bring a Pencil',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: '小石没有带铅笔',
+  },
+  first_block: '小石来幼儿园的那天，带了一个很重的包。',
+  last_block: '幼儿园窗边，留着她明天可以继续坐的地方。',
+  // The pencil the tale is named for, the help Atom offers instead, the answer
+  // to whether it will be forgotten, and the line the work ends on.
+  required_lines: ['“我没带铅笔。”', '“现在想让我帮你做一点，还是先陪你坐着？”', '“忘了就再问嘛。”',
+    '幼儿园窗边，留着她明天可以继续坐的地方。'],
+  ordered_lines: [['“我没带铅笔。”', '“现在想让我帮你做一点，还是先陪你坐着？”'],
+    ['“忘了就再问嘛。”', '幼儿园窗边，留着她明天可以继续坐的地方。']],
+  // Every line of this work stands alone; nothing is set as a multi-line block.
+  verse_shapes: [],
+  // This work asks for no emphasis anywhere; nothing may be invented for it.
+  emphasis_blocks: 0,
+  strongs: 0,
+  // Original fiction — and explicitly not a report, not a quotation, and not a
+  // claim about anyone real.
+  genre_disclaimers: [/fiction|虚构/i, /not a report|不是报告/i, /quotation|引用/i, /claim|主张/i],
+  credited: [/Atom/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
 // src/stories.mjs reads the records in directory order, which sorts the file
@@ -322,7 +355,7 @@ function published() {
   });
 }
 
-// ====================================================== census: the six works
+// ==================================================== census: the seven works
 
 test('the shelf publishes exactly the released works — on disk, in the manifest, and nowhere else', () => {
   const { shelf, stories } = loaded();

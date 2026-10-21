@@ -52,14 +52,14 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 > No record is publication-ready. Translating a record does not research, test,
 > or review it, and the labels say so in both languages.
 
-> **Stories / 故事集 — six published works.** A second shelf, a second content
+> **Stories / 故事集 — seven published works.** A second shelf, a second content
 > type, and a different contract. A story is not a knowledge record: it makes no
 > factual claim, cites nothing because it summarizes nothing, and is published
 > as its named author's own text with rights reserved. It is therefore never
 > "sourced", never "reviewed", and never kitchen-tested — those words do not
 > apply to it.
 >
-> The shelf holds **six stories**:
+> The shelf holds **seven stories**:
 >
 > - An original fictional and philosophical dialogue written in the manner of a
 >   Chan (Zen) *gong'an*. It is **not Buddhist scripture, not a quotation from
@@ -84,6 +84,11 @@ public repository and GitHub Actions deployment verified on 2026-09-13.
 >   a river made from a blue scarf that has not been named yet. It carries the
 >   same disclaimer: **not a report, not a quotation, and not a claim about any
 >   real person**; everyone in it is a character of the story.
+> - An original Chinese story, *小石没有带铅笔* (Xiaoshi Did Not Bring a Pencil),
+>   about a child with a heavy bag and a full notebook who forgets her pencil on
+>   the day a bridge is built over the scarf river. It carries the same
+>   disclaimer: **not a report, not a quotation, and not a claim about any real
+>   person**; everyone in it is a character of the story.
 >
 > Each body is published as its authors' canonical text in both language views.
 > Where the work is a **Chinese original**, the English view gives an English
