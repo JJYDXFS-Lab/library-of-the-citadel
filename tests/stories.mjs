@@ -222,6 +222,37 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  story_id: 'river-has-no-name-yet',
+  canonical_title: '河还没有名字',
+  body_language: 'zh-Hans',
+  blocks: 33,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'The River Has No Name Yet',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: '河还没有名字',
+  },
+  first_block: '第二天，原子比其他小朋友早到了一点。',
+  last_block: '船已经去过一个地方了。',
+  // The snag the boat is warned off, the question the tale is named for, its
+  // answer, and the line the work ends on.
+  required_lines: ['“原来是礁石。”', '“这条河叫什么名字？”她问。', '“还没起。”他说。', '船已经去过一个地方了。'],
+  ordered_lines: [['“原来是礁石。”', '“这条河叫什么名字？”她问。'], ['“还没起。”他说。', '船已经去过一个地方了。']],
+  // Every line of this work stands alone; nothing is set as a multi-line block.
+  verse_shapes: [],
+  // This work asks for no emphasis anywhere; nothing may be invented for it.
+  emphasis_blocks: 0,
+  strongs: 0,
+  // Original fiction — and explicitly not a report, not a quotation, and not a
+  // claim about anyone real.
+  genre_disclaimers: [/fiction|虚构/i, /not a report|不是报告/i, /quotation|引用/i, /claim|主张/i],
+  credited: [/Atom/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
 // src/stories.mjs reads the records in directory order, which sorts the file
@@ -291,7 +322,7 @@ function published() {
   });
 }
 
-// ===================================================== census: the five works
+// ====================================================== census: the six works
 
 test('the shelf publishes exactly the released works — on disk, in the manifest, and nowhere else', () => {
   const { shelf, stories } = loaded();

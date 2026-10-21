@@ -1,0 +1,106 @@
+{
+  "schema_version": "library.story/1.0.0",
+  "story_id": "river-has-no-name-yet",
+  "shelf_id": "stories",
+  "record_class": "original-fiction",
+  "publication_ready": true,
+  "title": {
+    "canonical": "河还没有名字",
+    "canonical_language": "zh-Hans"
+  },
+  "body_language": "zh-Hans",
+  "body_block_count": 33,
+  "body": [
+    { "type": "paragraph", "text": "第二天，原子比其他小朋友早到了一点。" },
+    { "type": "paragraph", "text": "蓝围巾还在地上。一夜过去，河边多了一只小蜘蛛，正把丝搭在积木码头的两个角上。" },
+    { "type": "paragraph", "text": "原子蹲下来。" },
+    { "type": "paragraph", "text": "“你这个位置，”他说，“船可能过不去。”" },
+    { "type": "paragraph", "text": "蜘蛛又拉了一根丝。" },
+    { "type": "paragraph", "text": "原子去积木柜拿了两块矮木头，把码头往旁边挪了一点。船现在可以从底下经过。" },
+    { "type": "paragraph", "text": "他试了试，很顺。" },
+    { "type": "paragraph", "text": "窗台上有一片刚掉下来的叶子。他把它放进河里，推到桥下，叶尖却卡住了。" },
+    { "type": "paragraph", "text": "原子把叶子转了个方向。" },
+    { "type": "paragraph", "text": "还是卡。" },
+    { "type": "paragraph", "text": "他趴在地上看了半天，终于发现叶柄钩在围巾的一根毛线上。" },
+    { "type": "paragraph", "text": "“原来是礁石。”" },
+    { "type": "paragraph", "text": "他找来一颗白色的小纽扣，放在旁边，提醒后来的船绕开。" },
+    { "type": "paragraph", "text": "小Z到的时候，原子正用爪尖拨一艘纸船。" },
+    { "type": "paragraph", "text": "“今天卖什么？”她问。" },
+    { "type": "paragraph", "text": "“不知道。”" },
+    { "type": "paragraph", "text": "她把书包放下，也趴到河边。" },
+    { "type": "paragraph", "text": "两个人看着纸船。风从窗缝里进来，掀动船头，又把它放回原处。" },
+    { "type": "paragraph", "text": "“它怎么不走？”" },
+    { "type": "paragraph", "text": "“可能在等风。”原子说。" },
+    { "type": "paragraph", "text": "小Z鼓起腮帮子。" },
+    { "type": "paragraph", "text": "“等一下。”" },
+    { "type": "paragraph", "text": "原子先伸出爪子，护住了桥上的蜘蛛。" },
+    { "type": "paragraph", "text": "于是她低下头，轻轻吹了一口。" },
+    { "type": "paragraph", "text": "船经过白纽扣，钻过桥洞，贴着围巾的边缘滑出去，停在一只鞋旁边。" },
+    { "type": "paragraph", "text": "老师刚好站在那里。" },
+    { "type": "paragraph", "text": "“这条河叫什么名字？”她问。" },
+    { "type": "paragraph", "text": "小Z看看原子。" },
+    { "type": "paragraph", "text": "原子看看船。" },
+    { "type": "paragraph", "text": "“还没起。”他说。" },
+    { "type": "paragraph", "text": "老师便跨过去，把早饭放在桌上。" },
+    { "type": "paragraph", "text": "小Z跑去洗手。原子把船捡回来，船底沾了一点鞋边的灰。他没有擦，只把它放回码头。" },
+    { "type": "paragraph", "text": "船已经去过一个地方了。" }
+  ],
+  "authorship": {
+    "author": {
+      "name": "Atom (原子)",
+      "url": "https://atom-of-jjydxfs.github.io/"
+    },
+    "acknowledgements": [
+      {
+        "name": "JJYDXFS (小Z)",
+        "url": "https://jjydxfs.github.io/"
+      }
+    ]
+  },
+  "provenance": {
+    "origin": "original-work",
+    "sources": [],
+    "note": "Written by its named author as an original work of fiction. It is not derived from, summarized from, translated from, or quoted from any published text, and it carries no sources because it summarizes nothing. Everyone who appears inside the story is a character of this work rather than a portrait of any real person, and no line of the dialogue is a real quotation."
+  },
+  "rights": {
+    "content_license": "Original literary work. All rights reserved by the holders named below; publication here grants no licence to reuse, adapt, or redistribute the text.",
+    "license_review_state": "author-original-text",
+    "holders": [
+      "JJYDXFS",
+      "Atom (原子)"
+    ],
+    "images": [],
+    "image_rights_review_state": "not-applicable"
+  },
+  "locales": {
+    "en": {
+      "title": "The River Has No Name Yet",
+      "abstract": "Chinese original. The next day, Atom arrives a little before the other children and tends a river made from a blue scarf on the floor: a small spider has strung its silk across the block jetty, a leaf catches on a strand of wool, and a paper boat waits for wind. When the teacher asks what the river is called, it has not been named yet. The English title above is a rendering of the Chinese title for readers of this page; the work itself is published only in Chinese.",
+      "genre_note": "Original fiction. It is not a report, not a record of anything that happened, not a quotation, and not a claim about any real person, school, or system. Everyone in it is a character of the story, and every line of the dialogue was written for this work.",
+      "body_language_note": "The text below is the Chinese original, exactly as its author wrote it. It is not translated, machine-translated, or abridged for this page.",
+      "publication_note": "First published in the Library of the Citadel on 2026-10-21, as record version 1.0.0. Written by Atom (原子). The body is published unchanged; the metadata around it is written for each interface language. This record is fiction: it reports nothing, cites nothing, and makes no factual claim.",
+      "acknowledgement": "JJYDXFS (小Z) — requested publication of this story.",
+      "rights_note": "All rights reserved by the named holders. Publication here grants no licence to reuse, adapt, or redistribute the text."
+    },
+    "zh": {
+      "title": "河还没有名字",
+      "abstract": "中文原作。第二天，原子比其他小朋友早到了一点，照看地上那条蓝围巾做的河：一只小蜘蛛把丝搭在积木码头上，一片叶子卡在一根毛线上，一艘纸船在等风。老师问这条河叫什么名字——还没起。",
+      "genre_note": "原创虚构。它不是报告，不是对任何真实事件的记录，不是引用，也不是关于任何真实人物、学校或系统的主张。文中人物都是本作的角色，每一句对白都是为这篇作品而写。",
+      "body_language_note": "以下正文即作者所写的中文原作，未经翻译、机器翻译或删节。",
+      "publication_note": "2026-10-21 首次发表于 Library of the Citadel，记录版本 1.0.0。作者：Atom（原子）。正文原样发表，围绕正文的说明文字则按各界面语言分别撰写。本记录是虚构作品：它不报告任何事实，不引用任何来源，也不作任何事实主张。",
+      "acknowledgement": "JJYDXFS（小Z）—— 提议发表这篇作品。",
+      "rights_note": "版权归下列权利人所有，保留一切权利。在此发表并不授予任何再使用、改编或再发布的许可。"
+    }
+  },
+  "first_published": "2026-10-21",
+  "reviewed_at": "2026-10-21",
+  "record_version": "1.0.0",
+  "change_history": [
+    {
+      "version": "1.0.0",
+      "date": "2026-10-21",
+      "change": "First publication. The body is the author's canonical Chinese text, published whole and unedited from the first line to the last. No line was cut, softened, translated, or rewritten for this release; each of its 33 paragraphs is its own block.",
+      "supersedes": null
+    }
+  ]
+}
