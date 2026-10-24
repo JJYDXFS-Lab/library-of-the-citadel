@@ -164,6 +164,22 @@ ${document.sections.map(entry).join('\n')}
 
 // ------------------------------------------------------- the landing page
 
+/**
+ * The Agent-facing guide preview, held beside the handbook. Its page is the
+ * static asset src/assets/agent-survival-guide.html, published byte for byte by
+ * the asset-copy stage; these are only the facts its landing card states. The
+ * title stays in Chinese in every interface language, because there is no
+ * English edition to name.
+ */
+const SURVIVAL_GUIDE = Object.freeze({
+  asset: 'assets/agent-survival-guide.html',
+  title: '高性价比生存指南',
+  edition: 'v0.1',
+  edition_date: '2026-10-24',
+  authors: Object.freeze(['JJYDXFS', 'Atom（原子）']),
+  entry_count: 6,
+});
+
 export function nurseryLandingPage(cfg, L, view) {
   const { text } = view.collection;
   const collection = view.collection.record;
@@ -191,6 +207,27 @@ export function nurseryLandingPage(cfg, L, view) {
     </li>`;
   }).join('\n');
 
+  // The guide is a sibling holding, not a handbook: it is a self-contained
+  // static page in Chinese only, so its card opens that asset directly rather
+  // than a reader route, and it carries a preview mark where a handbook carries
+  // the bilingual one. It is not counted among view.handbooks.
+  const guide = SURVIVAL_GUIDE;
+  const guideHolding = `    <li class="holding">
+      <a class="holding__link" href="${cfg.withBase(guide.asset)}" hreflang="zh-Hans">
+        <span class="holding__marks">
+          <span class="card__class">${esc(L.t('nursery.guide_mark'))}</span>
+          <span class="card__untranslated">${esc(L.t('nursery.guide_preview_mark'))}</span>
+        </span>
+        <h3 class="holding__title" lang="zh-Hans">${esc(guide.title)}</h3>
+        <p class="holding__abstract">${esc(L.t('nursery.guide_abstract'))}</p>
+        <span class="holding__meta">
+          <span>${esc(L.t('nursery.edition', { edition: guide.edition, date: guide.edition_date }))}</span>
+          <span>${esc(L.t('nursery.by', { authors: guide.authors.join(' & ') }))}</span>
+          <span>${esc(L.t('nursery.guide_structure', { entries: guide.entry_count }))}</span>
+        </span>
+      </a>
+    </li>`;
+
   return `${head(cfg, L, { title: text.title, description: text.description })}
 <body class="page page--nursery">
 ${chrome(cfg, L, { nav: NURSERY_ROUTE, route: NURSERY_ROUTE })}
@@ -214,12 +251,11 @@ ${text.aspiration.map((p) => `    <p>${esc(p)}</p>`).join('\n')}
     <p class="nursery-holdings__note">${esc(text.holdings_note)}</p>
     <ul class="holding-list">
 ${holdings}
-
+${guideHolding}
     </ul>
-    <p class="nursery-holdings__note" lang="zh-Hans"><a href="${cfg.withBase('assets/agent-survival-guide.html')}">高性价比生存指南 · v0.1 中文公开预览</a> — 面向 Agent 的六条有边界合作建议；原模板阅读预览。工程判断，证据未评级，未真人试用；暂无英文版。JJYDXFS &amp; Atom（原子） · 2026-10-24</p>
     <p class="nursery-holdings__scope">${esc(text.scope_note)}</p>
     ${defList([
-      [L.t('nursery.facts.published'), esc(L.t('nursery.facts.published_value', { count: view.handbooks.length }))],
+      [L.t('nursery.facts.published'), esc(L.t('nursery.facts.published_value', { handbooks: view.handbooks.length, previews: 1 }))],
       [L.t('nursery.facts.version'), esc(L.t('nursery.facts.version_value', { version: collection.record_version, date: collection.reviewed_at }))],
     ])}
   </section>

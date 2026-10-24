@@ -102,10 +102,21 @@ that is only half recorded fails there too.
 
 ## Agent-facing guide preview — 2026-10-24
 
-The collection also links to `assets/agent-survival-guide.html`, a self-contained
+The collection also holds `assets/agent-survival-guide.html`, a self-contained
 Chinese-only v0.1 preview of 高性价比生存指南. Its six entries address Agents as
 “you”; they are engineering judgments, unrated and not participant-tested.
 It is a separate preview, not a second bilingual handbook or verified research.
+
+On the landing page it is the second `holding` card in the same `holding-list`
+as the handbook, built from the same marks / title / abstract / meta parts. The
+card opens the static asset directly (through `cfg.withBase`, so a base path is
+honoured) rather than a reader route, carries a "Chinese public preview · no
+English edition" mark where the handbook carries the bilingual one, and keeps
+its Chinese title in both interface languages. Its facts are the
+`SURVIVAL_GUIDE` constant in `src/templates/nursery.mjs` and the
+`nursery.guide_*` interface strings; it is not in `handbook_ids`, so the
+handbook count shown in the hall and the reader stays at the handbooks actually
+published. Collection record 0.1.1 records the change.
 
 This publication projection preserves the HowToLiveBetter template CSS and
 renderer from eternity4719 commit `e2605d3e2242bd6216c9255192b8a8957a08c55a`.

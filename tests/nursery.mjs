@@ -401,8 +401,22 @@ test('the collection is reachable from the hall and carries no operational path'
       const landing = read(r, pageAt(loc, `${NURSERY_ROUTE}index.html`));
       assert.ok(landing.includes(`class="holding__link" href="${base}${loc.prefix}${HANDBOOK_ROUTE}"`),
         `${label}/${loc.code}: the landing page does not open the published handbook`);
-      assert.equal([...landing.matchAll(/<li class="holding">/g)].length, 1,
+      // Two holdings: the one handbook, and the Chinese-only guide preview, whose
+      // card opens its static page directly instead of a reader route.
+      assert.equal([...landing.matchAll(/<li class="holding">/g)].length, 2,
         `${label}/${loc.code}: the landing page shows a different number of artifacts than it publishes`);
+      assert.equal([...landing.matchAll(/class="holding__link" href="[^"]*\/agent-nursery\/handbook\//g)].length, 1,
+        `${label}/${loc.code}: more than one holding opens a handbook reader`);
+      assert.ok(landing.includes(`class="holding__link" href="${base}assets/agent-survival-guide.html" hreflang="zh-Hans"`),
+        `${label}/${loc.code}: the guide preview is not a holding card opening its page`);
+      assert.ok(landing.includes('<h3 class="holding__title" lang="zh-Hans">高性价比生存指南</h3>'),
+        `${label}/${loc.code}: the guide card does not carry its Chinese title`);
+      assert.match(landing, /Chinese public preview · no English edition|中文公开预览 · 暂无英文版/,
+        `${label}/${loc.code}: the guide card does not say it is a Chinese-only preview`);
+      assert.match(landing, /evidence is not rated, and nothing has been tried with human participants|证据未评级，未经真人试用/,
+        `${label}/${loc.code}: the guide card drops its evidence caveat`);
+      assert.ok(!landing.includes('nursery-holdings__note" lang="zh-Hans"'),
+        `${label}/${loc.code}: the guide is still a plain paragraph link`);
       // The project states a goal; it may not state it as a going concern.
       assert.match(landing, /has not been established|尚未成立/,
         `${label}/${loc.code}: the landing page does not say where the institution currently stands`);

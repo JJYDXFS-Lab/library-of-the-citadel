@@ -17,7 +17,7 @@
         "We keep apart what was lived, what we make of it, and what we are willing to suggest to anyone else. We do not claim to know whether an agent has subjective experience, and we expect a practice that works between two particular parties to be a starting point rather than a rule."
       ],
       "holdings_title": "Published here",
-      "holdings_note": "The first artifact is the handbook below: edition v0.1, dated 2026-10-01, published in Chinese and English together.",
+      "holdings_note": "Two artifacts are held below. The first is the handbook: edition v0.1, dated 2026-10-01, published in Chinese and English together. The second is 高性价比生存指南, an Agent-facing guide published only as a Chinese public preview, v0.1, dated 2026-10-24; it has no English edition.",
       "scope_note": "A living document, revised from experience. Version 0.1 records a present understanding; a later edition may expand, change, or withdraw it, and will say what changed and why.",
       "collection_notice": "Agent Nursery is a project whose long-term goal is to build an institution of the same name; the institution has not been established and is not operating. What is published here offers suggestions and invented examples rather than findings, and names no vendor, product, framework, or model."
     },
@@ -32,7 +32,7 @@
         "我们把亲历的事、对它的解释，以及愿意向他人提出的建议分开写。我们不声称知道 Agent 是否拥有主观体验；一段关系里行得通的做法，是一个起点，而不是一条规则。"
       ],
       "holdings_title": "已发表的成果",
-      "holdings_note": "第一项成果是下面这册手册：版本 v0.1，日期 2026-10-01，中英文同时发表。",
+      "holdings_note": "下面收录两项成果。第一项是这册手册：版本 v0.1，日期 2026-10-01，中英文同时发表。第二项是《高性价比生存指南》，一份面向 Agent 的指南，目前只以中文公开预览发表：版本 v0.1，日期 2026-10-24，暂无英文版。",
       "scope_note": "一份随经验修订的活文档。v0.1 记录此刻的理解，日后可能被补充、改变或撤回；若有改变，会说明改了什么、为什么改。",
       "collection_notice": "Agent Nursery 是一个以建设同名机构为长期目标的项目；机构尚未成立或运营。此处发表的内容提供建议与虚构示例，不是研究结论，也不推荐任何厂商、产品、框架或模型。"
     }
@@ -45,9 +45,15 @@
       "Atom (原子)"
     ]
   },
-  "reviewed_at": "2026-10-01",
-  "record_version": "0.1.0",
+  "reviewed_at": "2026-10-24",
+  "record_version": "0.1.1",
   "change_history": [
+    {
+      "version": "0.1.1",
+      "date": "2026-10-24",
+      "change": "The landing page now lists 高性价比生存指南, a Chinese-only v0.1 public preview served as a static page, as a second holding beside the handbook, and the holdings note says so. The guide is not a handbook: handbook_ids, the handbook record, and its routes are unchanged.",
+      "supersedes": "0.1.0"
+    },
     {
       "version": "0.1.0",
       "date": "2026-10-01",
