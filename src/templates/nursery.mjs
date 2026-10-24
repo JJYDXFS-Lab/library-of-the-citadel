@@ -214,7 +214,9 @@ ${text.aspiration.map((p) => `    <p>${esc(p)}</p>`).join('\n')}
     <p class="nursery-holdings__note">${esc(text.holdings_note)}</p>
     <ul class="holding-list">
 ${holdings}
+
     </ul>
+    <p class="nursery-holdings__note" lang="zh-Hans"><a href="${cfg.withBase('assets/agent-survival-guide.html')}">高性价比生存指南 · v0.1 中文公开预览</a> — 面向 Agent 的六条有边界合作建议；原模板阅读预览。工程判断，证据未评级，未真人试用；暂无英文版。JJYDXFS &amp; Atom（原子） · 2026-10-24</p>
     <p class="nursery-holdings__scope">${esc(text.scope_note)}</p>
     ${defList([
       [L.t('nursery.facts.published'), esc(L.t('nursery.facts.published_value', { count: view.handbooks.length }))],

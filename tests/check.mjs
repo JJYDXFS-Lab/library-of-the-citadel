@@ -717,7 +717,7 @@ const PAGE_LANG = new Map([
   ...PAGES.map((rel) => [rel, 'en']),
   ...ZH_PAGES.map((rel) => [rel, 'zh-Hans']),
 ]);
-const ASSETS = ['assets/site.css', 'assets/app.js', '.nojekyll',
+const ASSETS = ['assets/site.css', 'assets/agent-survival-guide.html', 'assets/app.js', '.nojekyll',
   'data/world-recipes.json', 'data/world-recipes.zh.json', 'data/stories.json',
   'data/agent-nursery.json'];
 

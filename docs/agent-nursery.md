@@ -99,3 +99,20 @@ A handbook is a living document, and a revision is a recorded act:
 `tests/nursery.mjs` pins the published digests, the approved preface, the spine,
 the four routes, and the rendered text against the manuscripts, so a revision
 that is only half recorded fails there too.
+
+## Agent-facing guide preview — 2026-10-24
+
+The collection also links to `assets/agent-survival-guide.html`, a self-contained
+Chinese-only v0.1 preview of 高性价比生存指南. Its six entries address Agents as
+“you”; they are engineering judgments, unrated and not participant-tested.
+It is a separate preview, not a second bilingual handbook or verified research.
+
+This publication projection preserves the HowToLiveBetter template CSS and
+renderer from eternity4719 commit `e2605d3e2242bd6216c9255192b8a8957a08c55a`.
+The page records adaptation and source attribution, CC BY 4.0 template-text
+rights, the full MIT code notice, and the authors’ separate original-content
+rights. External Google Fonts links are omitted to preserve the Library’s
+no-third-party-resource policy; the original CSS system-font fallback applies.
+Publication labels replace the offline draft labels; local-only references are
+plain text. The existing asset-copy stage publishes this explicit static asset;
+no service, dependencies, or handbook schema changes are required.
