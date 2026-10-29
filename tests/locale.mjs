@@ -976,9 +976,16 @@ class El {
     this.listeners.get(type).push(fn);
   }
 
-  /** Fire a listener the way a browser would, with a minimal event object. */
-  fire(type) {
-    const event = { type, preventDefault() { this.defaultPrevented = true; }, defaultPrevented: false };
+  /**
+   * Fire a listener the way a browser would, with a minimal event object: an
+   * unmodified primary activation unless `init` says otherwise.
+   */
+  fire(type, init = {}) {
+    const event = {
+      type, button: 0, metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, defaultPrevented: false,
+      ...init,
+      preventDefault() { this.defaultPrevented = true; },
+    };
     for (const fn of this.listeners.get(type) ?? []) fn(event);
     return event;
   }
@@ -1129,21 +1136,37 @@ function runApp({
     hash,
     replace(url) { replaced.push(url); },
   };
+  const setUrl = (url) => {
+    let rest = String(url);
+    const h = rest.indexOf('#');
+    location.hash = h === -1 ? '' : rest.slice(h);
+    if (h !== -1) rest = rest.slice(0, h);
+    const q = rest.indexOf('?');
+    location.search = q === -1 ? '' : rest.slice(q);
+    if (q !== -1) rest = rest.slice(0, q);
+    if (rest) location.pathname = rest;
+  };
   const history = {
     replaceState(_state, _title, url) {
       pushed.push(url);
-      let rest = String(url);
-      const h = rest.indexOf('#');
-      location.hash = h === -1 ? '' : rest.slice(h);
-      if (h !== -1) rest = rest.slice(0, h);
-      const q = rest.indexOf('?');
-      location.search = q === -1 ? '' : rest.slice(q);
-      if (q !== -1) rest = rest.slice(0, q);
-      if (rest) location.pathname = rest;
+      setUrl(url);
     },
   };
 
-  const window = { location, history, URLSearchParams };
+  // Window-level listeners, so a test can traverse history the way back and
+  // forward do: the URL changes in place and popstate fires, with no reload.
+  const windowListeners = new Map();
+  const window = {
+    location, history, URLSearchParams,
+    addEventListener(type, fn) {
+      if (!windowListeners.has(type)) windowListeners.set(type, []);
+      windowListeners.get(type).push(fn);
+    },
+  };
+  const traverse = (url) => {
+    setUrl(url);
+    for (const fn of windowListeners.get('popstate') ?? []) fn({ type: 'popstate', state: null });
+  };
   if (storage === 'absent') {
     Object.defineProperty(window, 'localStorage', {
       get() { throw new Error('localStorage is not available in this document'); },
@@ -1162,7 +1185,7 @@ function runApp({
   const linkFor = (code) => links.find((l) => l.getAttribute('data-locale-code') === code);
   return {
     links, linkFor, box, form, search: searchInput, region, method, sourceType, ingredient, status, reset, grid, empty, activeFilters,
-    inlineReset, cards, store, location, replaced, pushed, lensLink, chips,
+    inlineReset, cards, store, location, replaced, pushed, lensLink, chips, traverse,
     shown: () => cards.filter((c) => !c.hidden).length,
     shownIds: () => cards.filter((c) => !c.hidden).map((c) => c.getAttribute('data-item-id')).sort(),
     chip: (value) => chips.find((c) => c.getAttribute('data-category-filter') === value),
@@ -1644,4 +1667,69 @@ test('a shared category URL restores on any base path, survives the switch, and 
   const stand = runApp({ locale: 'en', search: '?category=dessert' });
   assert.equal(stand.shown(), 3);
   assert.equal(stand.location.search, '');
+});
+
+// ================================ link activation and history traversal
+
+test('a modified, non-primary or already-claimed click on a chip or lens is left to the browser', () => {
+  const declined = [
+    ['Ctrl', { ctrlKey: true }], ['Cmd', { metaKey: true }], ['Shift', { shiftKey: true }],
+    ['Alt', { altKey: true }], ['middle button', { button: 1 }], ['already prevented', { defaultPrevented: true }],
+  ];
+  for (const [name, init] of declined) {
+    const page = runApp({ locale: 'en', gallery: realGallery('en') });
+    const before = page.pushed.length;
+
+    const chip = page.chip('dessert').fire('click', init);
+    if (!init.defaultPrevented) assert.equal(chip.defaultPrevented, false, `${name}: the chip click was hijacked`);
+    const lens = page.lensLink.fire('click', init);
+    if (!init.defaultPrevented) assert.equal(lens.defaultPrevented, false, `${name}: the lens click was hijacked`);
+
+    assert.equal(page.shown(), 28, `${name}: the catalogue was filtered in place`);
+    assert.deepEqual(page.current(), [''], `${name}: aria-current moved`);
+    assert.equal(page.lensLink.getAttribute('aria-current'), null, `${name}: the lens was marked`);
+    assert.equal(page.location.search, '', `${name}: the query was rewritten`);
+    assert.equal(page.pushed.length, before, `${name}: history was touched`);
+  }
+
+  // An ordinary activation — a left click, or Enter on the focused link, which
+  // the browser delivers as the same unmodified primary click — still filters.
+  const page = runApp({ locale: 'en', gallery: realGallery('en') });
+  assert.equal(page.chip('dessert').fire('click').defaultPrevented, true);
+  assert.deepEqual(page.shownIds(), DESSERTS);
+  assert.equal(page.lensLink.fire('click').defaultPrevented, true);
+  assert.equal(page.location.search, '?category=dessert&section=quick-things');
+});
+
+test('back and forward restore the filter view and the switch from the restored URL', () => {
+  for (const base of ['/', '/library-of-the-citadel/']) {
+    const page = runApp({ locale: 'zh', base, gallery: realGallery('zh'), lens: false, search: '?category=dessert', hash: '#catalogue' });
+    page.chip('main').fire('click');
+    page.type('salmon');
+    assert.equal(page.shown(), 3);
+
+    // Back to an entry whose URL still holds the earlier view.
+    page.traverse(`${base}zh/recipes/?category=dessert#catalogue`);
+    assert.deepEqual(page.shownIds(), DESSERTS, `${base}: the restored category was not applied`);
+    assert.deepEqual(page.current(), ['dessert']);
+    assert.equal(page.search.value, '', `${base}: the search from the newer entry survived`);
+    assert.equal(page.status.textContent, 'Showing 4 of 28 records.');
+    assert.equal(page.location.search, '?category=dessert');
+    assert.equal(page.location.hash, '#catalogue');
+    assert.equal(page.href('en'), `${base}recipes/?category=dessert#catalogue`);
+
+    // Forward to an unfiltered entry clears every filter, and an unknown
+    // category restored from history is dropped exactly as on load.
+    page.traverse(`${base}zh/recipes/?category=pudding#main`);
+    assert.equal(page.shown(), 28);
+    assert.deepEqual(page.current(), ['']);
+    assert.equal(page.reset.hidden, true);
+    assert.equal(page.location.search, '');
+    assert.equal(page.href('en'), `${base}recipes/#main`);
+  }
+
+  // A page with no filters still keeps its switch on the restored URL.
+  const plain = runApp({ locale: 'en', route: 'about/', filters: false, lens: false, hash: '#top' });
+  plain.traverse('/about/#notes');
+  assert.equal(plain.href('zh'), '/zh/about/#notes');
 });

@@ -83,6 +83,20 @@
     return refresh;
   })();
 
+  // Back/forward between entries of this same document (a fragment the reader
+  // followed, say) restores an older URL without reloading, so the switch has
+  // to follow the restored query and fragment rather than the last ones seen.
+  window.addEventListener('popstate', function () { refreshLocaleLinks(); });
+
+  // A link click is handled in place only when it is an ordinary primary
+  // activation — a left click or Enter on the link. A modified or non-primary
+  // click (new tab, new window, download) or one another handler already
+  // claimed is left to the browser, so the link behaves as the link it is.
+  function plainActivation(e) {
+    return !e.defaultPrevented && e.button === 0
+      && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+  }
+
   // ------------------------------------------------------- gallery filter
 
   var form = document.querySelector('[data-filters]');
@@ -348,6 +362,7 @@
   // with the other two filters.
   lensLinks.forEach(function (link) {
     link.addEventListener('click', function (e) {
+      if (!plainActivation(e)) return;
       e.preventDefault();
       section = link.getAttribute('data-lens-filter');
       apply();
@@ -360,6 +375,7 @@
   // page is not scrolled: the reader stays on the chip they just chose.
   categoryLinks.forEach(function (link) {
     link.addEventListener('click', function (e) {
+      if (!plainActivation(e)) return;
       e.preventDefault();
       category = link.getAttribute('data-category-filter');
       apply();
@@ -368,6 +384,14 @@
 
   var inlineReset = document.querySelector('[data-reset-inline]');
   if (inlineReset) inlineReset.addEventListener('click', clearAll);
+
+  // Filtering only ever replaces the current entry, but back/forward can still
+  // land on another entry of this document whose query is older. Re-read it so
+  // the cards, the chips, the lens and the switch match the restored URL.
+  window.addEventListener('popstate', function () {
+    readUrl();
+    apply();
+  });
 
   readUrl();
   apply();
