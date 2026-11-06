@@ -87,3 +87,8 @@ Run `npm run check` and `npm run build`; retain semantic translation, numeric
 parity, class, provenance and footer tests. Compare untouched files byte-for-byte
 with the input, then record actual test/build counts and unresolved work in
 `STATUS.md`. Do not overwrite prior milestones with the new result.
+
+Publication checkpoint: the 2026-11-07 recipe refresh is published; see
+[STATUS.md](STATUS.md) for the successful deployment and 56-page live HTML
+verification. Real Chrome desktop/mobile visual acceptance remains blocked;
+Coles source re-verification remains pending.

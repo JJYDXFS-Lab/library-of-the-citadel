@@ -243,3 +243,18 @@ deployment and HTTP acceptance are pending the release workflow. Real Chrome
 desktop/mobile acceptance is blocked by an ambiguous multiple-profile preflight;
 no existing browser instance was altered.
 Earlier release and navigation evidence above remains historical and unchanged.
+
+
+### Recipe refresh publication verified — 2026-11-07
+
+Recipe release `833f85b757a612dc48689c17c4c7e7a6dd4346fa` was published through
+the existing main-branch Pages workflow. [Run 42313208068](https://github.com/JJYDXFS-Lab/library-of-the-citadel/actions/runs/42313208068)
+completed successfully, including build and deploy. The isolated release tree
+passed 145/145 checks and the production-subpath build emitted 90 files. All
+56 EN/ZH recipe URLs and both recipe indexes returned HTTP 200 and matched
+release-build bytes exactly. This verifies served HTML, not browser rendering.
+
+Real Chrome desktop and 390px mobile visual acceptance remains blocked by the
+multiple-profile preflight. No browser instance was closed or substituted;
+language interaction, visual overflow and footer appearance were not freshly
+verified. Coles rack source re-verification remains explicitly pending.
