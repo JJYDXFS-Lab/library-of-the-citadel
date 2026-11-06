@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Short tube pasta, part-cooked and tossed with a spiced mince and passata sauce, layered with dollops of ricotta and covered with mozzarella and parmesan, then baked under foil and uncovered to brown. The pasta and sauce are made on the stove; the oven only finishes and browns it, so the timing is forgiving.",
+  "summary": "Short tube pasta, part-cooked and tossed with a spiced mince and passata sauce, layered with dollops of ricotta and covered with mozzarella and parmesan, then baked under foil and uncovered to brown. Prepare the pasta and sauce on the stove, then bake until the pasta finishes cooking and the cheese browns.",
 
   "variants": [],
 
@@ -44,15 +44,15 @@
 
   "method": [
     { "step": 1, "instruction": "Cook the pasta for 2 minutes less than the packet says, drain it and return it to its pot. It finishes softening in the oven." },
-    { "step": 2, "instruction": "Heat the oven to 180°C. The source gives this single Celsius figure without saying whether it means a fan or a conventional setting, and no second figure is invented here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 2, "instruction": "Heat the oven to 180°C. The source does not specify fan or conventional mode. Use the middle shelf as an editorial recommendation; the source gives no shelf position." },
     { "step": 3, "instruction": "Heat the oil in a large frying pan over high heat and cook the onion and garlic for 2 minutes, until the onion turns translucent." },
-    { "step": 4, "instruction": "Add the mince and cook it, breaking it up as you go, until no pink or red remains; Health Canada's threshold for ground meat is 71°C internal. Then stir in the fennel seeds, paprika, cayenne or chilli, onion powder, salt and pepper and cook for 2 minutes more." },
+    { "step": 4, "instruction": "Add the mince and cook, breaking it up. Use a probe thermometer to verify Health Canada's 71°C internal endpoint for ground meat; the absence of pink or red is not proof. Then stir in the fennel seeds, paprika, cayenne or chilli, onion powder, salt and pepper and cook for 2 minutes more." },
     { "step": 5, "instruction": "Add the passata, water, basil, oregano and sugar and simmer gently for 10 minutes. Taste and adjust the seasoning." },
     { "step": 6, "instruction": "Pour 2 cups of the sauce into the pasta pot and toss, then spread the pasta in a 23 × 33 cm baking dish. Dot the ricotta over it, pour over the rest of the sauce, and top with the mozzarella and parmesan." },
     { "step": 7, "instruction": "Cover loosely with foil and bake for 20 minutes, then remove the foil and bake for 10 to 15 minutes more, until the cheese is melted and golden. Garnish with the herbs if using." }
   ],
 
-  "yield_note": "Serves 6, as stated by the source. Source times: 10 minutes preparation and 1 hour cooking. The source gives no resting time and no fridge-storage time for the baked dish, and none is invented here. Make-ahead, per the source: cool the drained pasta (tossed in a little oil) and the sauce separately and covered, assemble up to the cheese, then refrigerate or freeze; thaw a frozen dish in the fridge for 24 hours and bake for 30 to 35 minutes, 25 covered and 10 uncovered.",
+  "yield_note": "Serves 6, as stated by the source. Source times: 10 minutes preparation and 1 hour cooking. The source gives no resting time or refrigerated storage duration for the baked dish. Make-ahead, per the source: cool the drained pasta (tossed in a little oil) and the sauce separately and covered, assemble up to the cheese, then refrigerate or freeze; thaw a frozen dish in the fridge for 24 hours and bake for 30 to 35 minutes, 25 covered and 10 uncovered. The make-ahead instruction is internally inconsistent: its stated 30 to 35 minutes includes stages of 25 covered + 10 uncovered, which sum to 35 minutes. Keep those stages as the planning guide and verify the measured endpoint; do not shorten them to force the lower total.",
 
   "sources": [
     {
@@ -69,12 +69,18 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source's cue for the mince is that it is 'just cooked'; this record reads that as no pink or red remaining and attributes the 71°C ground-meat figure to Health Canada, not to the source. The source states 180°C with no fan or conventional label, and that ambiguity is left as it is rather than resolved by a conversion. Cups and spoons are carried as the source writes them; the source gives no millilitre value for them, so none is asserted here, and cup sizes differ by country.",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The recipe source describes the mince as 'just cooked'. This version requires measurement to Health Canada's 71°C ground-meat endpoint; the absence of pink or red does not confirm it. The recipe source states 180°C without identifying fan or conventional mode. Its cup and spoon measures are retained, with millilitre volumes unspecified; cup sizes differ by country.",
 
-  "reviewed_at": "2026-10-06",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Required measured mince doneness and made the source’s make-ahead timing discrepancy explicit.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-10-06",
@@ -92,9 +98,9 @@
 
   "safety": {
     "caveats": [
-      "Mince can carry bacteria all the way through, because mincing mixes the meat's surface into the middle. Cook it until no pink remains; Health Canada's threshold for ground meat is 71°C internal.",
+      "Mincing can spread surface contamination through the meat. Measure Health Canada's 71°C internal endpoint for ground meat with a probe thermometer; colour, including no remaining pink, does not validate it.",
       "Allergens: wheat in the pasta, and milk in the ricotta, mozzarella and parmesan.",
-      "When making ahead, cool the pasta and sauce before assembling, keep the assembled dish in the fridge or freezer, and thaw a frozen one in the fridge as the source says, never on the bench. A dish baked from cold may need longer than the source's times; it is ready when it is hot right through, not when the clock runs out.",
+      "When making ahead, cool the pasta and sauce before assembling, keep the assembled dish in the fridge or freezer, and thaw a frozen one in the fridge as the source says, never on the bench. A dish baked from cold may need longer than the source’s times. Check that it is hot right through.",
       "Leftovers: chill promptly and reheat until the centre reaches 74°C (Health Canada's figure for leftovers). The source states no fridge life for the baked dish.",
       "This record has had no professional food-safety review and has not been kitchen-tested by this project."
     ],

@@ -305,7 +305,7 @@ test('the poultry note requires a measured 75°C and refuses time or colour as t
     'an unreviewed record must not promise safety');
 });
 
-test('the fish note states no temperature of its own and does not sell time as a test', () => {
+test('the fish note requires a local-authority measured endpoint, not time or appearance', () => {
   const salmon = loadContent().items.find((i) => i.item_id === 'wr-airfryer-salmon-fillet');
   const method = salmon.method.map((m) => m.instruction).join(' ');
   const both = `${method} ${salmon.safety.caveats.join(' ')}`;
@@ -317,10 +317,15 @@ test('the fish note states no temperature of its own and does not sell time as a
   assert.match(both, /[Tt]ime alone is not a doneness test|Elapsed time is not a safety control/,
     'the fish note does not say that time alone is not a test');
   assert.match(both, /food-safety authority/i,
-    'a reader who wants a number is not sent to their own food-safety authority');
+    'the required measured endpoint must come from the applicable food-safety authority');
   assert.doesNotMatch(both, /safe at|safe internal|guaranteed|always safe/i,
     'the fish note must make no universal safe-temperature claim');
-  assert.match(both, /opaque/i, 'the stated endpoint is not the visual and texture one the record claims to give');
+  assert.match(method, /probe thermometer is required/i,
+    'the thermometer must be required, not offered as an optional alternative');
+  assert.match(method, /colour, flaking and elapsed time cannot validate doneness/i,
+    'visual cues must not substitute for the measured endpoint');
+  assert.doesNotMatch(method, /if you would rather|look for fish that has turned/i,
+    'the old optional-thermometer or visual-only fallback must not return');
 });
 
 test('every sourced record carries its provenance and claims no review it has not had', () => {

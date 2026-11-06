@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Salmon fillets laid among sweet potato, peppers and onion for the last ten minutes of a vegetable roast. The fish goes in whole and untouched — no turning, no skinning, no pan work — which is what makes it a reasonable first fish dish.",
+  "summary": "Salmon fillets laid among sweet potato, peppers and onion for the last ten minutes of a vegetable roast. Leave the skin on and roast the fillets whole; no turning or pan-frying is needed.",
 
   "variants": [],
 
@@ -37,7 +37,7 @@
     { "step": 3, "instruction": "Drizzle over the 2 tablespoons of oil, scatter the thyme, season, and turn everything to coat before spreading it flat again." },
     { "step": 4, "instruction": "Roast the vegetables for 15 minutes." },
     { "step": 5, "instruction": "Take the pan out, stir the vegetables and spread them flat, then settle the four fillets among them with the skin against the pan. Drizzle with a little oil if you are using it, and season." },
-    { "step": 6, "instruction": "Roast for a further 10 minutes. The source's endpoint is whatever doneness you prefer, which is not a usable test on its own; for a cooked-through fillet Health Canada gives 70°C internal, measured at the thickest part. The source states no fillet thickness, only the 130 g weight, so go by the thermometer rather than by the clock." }
+    { "step": 6, "instruction": "Roast for a further 10 minutes, then measure the thickest part of each fillet. The recipe source leaves doneness to preference; Health Canada gives a 70°C internal endpoint for fish. The source specifies a 130 g fillet but no thickness, so the cooking time may vary. Continue cooking and recheck if needed." }
   ],
 
   "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 25 minutes cooking. The source gives no resting time, and none is invented here.",
@@ -57,7 +57,7 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. The source's only endpoint for the fish is cooking it to your liking, which is not a usable instruction for a beginner on its own, so Health Canada's 70°C is given beside it and attributed. No fillet thickness is stated by the source; only the 130 g weight is. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here.",
+  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. The recipe source leaves fish doneness to preference and gives no measured endpoint. The 70°C endpoint comes from Health Canada. No fillet thickness is stated by the source; only the 130 g weight is. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here.",
 
   "reviewed_at": "2026-09-14",
 
@@ -80,7 +80,7 @@
 
   "safety": {
     "caveats": [
-      "Fish has its own threshold, separate from the meat records in this collection: Health Canada gives 70°C internal for fish. Salmon is often served less cooked than that by choice; this record states the safe figure rather than a preference.",
+      "Health Canada gives a 70°C internal endpoint for fish. Some diners prefer less-cooked salmon; that preference does not establish that the fish has reached this safety endpoint.",
       "Raw fish and its packaging contaminate surfaces. Wash hands, board and knife after handling, and do not rest cooked fillets where the raw ones sat.",
       "Allergen: fish. The dish contains no gluten or dairy as written, but check any seasoning you add.",
       "This record has had no professional food-safety review and has not been kitchen-tested by this project."

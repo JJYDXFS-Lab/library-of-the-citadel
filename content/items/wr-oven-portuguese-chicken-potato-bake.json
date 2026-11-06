@@ -49,7 +49,7 @@
     { "step": 3, "instruction": "Bake the vegetables on their own for 25 minutes." },
     { "step": 4, "instruction": "Meanwhile, mix all the chicken seasoning ingredients in a bowl, add the thighs and turn them until coated all over. Wash your hands and anything the raw chicken touched before handling the hot pan." },
     { "step": 5, "instruction": "Take the pan out, set the thighs on top of the potatoes and tuck any loose skin underneath, then bake for 40 minutes, until the skin is golden." },
-    { "step": 6, "instruction": "Check the thickest thigh at the centre, clear of the bone. The source cooks to an internal 76°C; Health Canada's threshold for poultry pieces is 74°C internal (Safe cooking temperatures), so the source's figure already clears it. Use the thermometer, not the 40 minutes, as the test." },
+    { "step": 6, "instruction": "Check the thickest thigh at the centre, clear of the bone. The source cooks to an internal 76°C; Health Canada's threshold for poultry pieces is 74°C internal (Safe cooking temperatures), so the source's figure already clears it. After 40 minutes, measure the centre temperature and continue cooking if it is below the required endpoint." },
     { "step": 7, "instruction": "If the chicken is done but the potatoes are still firm, cover the chicken loosely with foil and return the potatoes to the oven until tender. Serve with the pan juices and bread." }
   ],
 
@@ -70,7 +70,7 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source states its own 76°C endpoint, which sits above Health Canada's 74°C for poultry pieces; both are shown and neither is altered. The source gives Fahrenheit alongside Celsius; only the Celsius figures are carried here. The source names no pan size and no shelf position: the middle shelf in step 1 is labelled as this project's default. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here; spoon volumes differ by country, so measure with a single spoon set.",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The recipe source specifies a 76°C endpoint, above Health Canada's 74°C threshold for poultry pieces. The source gives Fahrenheit alongside Celsius; only the Celsius figures are carried here. The source names no pan size and no shelf position: the middle shelf in step 1 is labelled as this project's default. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here; spoon volumes differ by country, so measure with a single spoon set.",
 
   "reviewed_at": "2026-10-06",
 
@@ -95,7 +95,7 @@
     "caveats": [
       "Poultry must be cooked all the way through. Health Canada gives 74°C internal for poultry pieces; the source aims for 76°C. Measure the thickest piece at its centre, not touching bone, and do not rely on juice colour.",
       "Raw chicken contaminates whatever it touches. Coat it in a bowl you then wash, and wash hands, board and knife before touching the vegetables or the serving dish.",
-      "Changing the cut changes the timing. The source says Marylands take longer and can go into the oven with the potatoes from the start; it also lists drumsticks as suitable. Whatever the cut, the thermometer decides, not the clock.",
+      "Changing the cut changes the timing. The source says Marylands take longer and can go into the oven with the potatoes from the start; it also lists drumsticks as suitable. For every cut, use a probe thermometer to confirm the centre has reached the required temperature.",
       "Leftovers: chill promptly once the steam has died down, keep no longer than the source's 3 days in the fridge, and reheat until the centre reaches 74°C (Health Canada's figure for leftovers).",
       "This record has had no professional food-safety review and has not been kitchen-tested by this project."
     ],

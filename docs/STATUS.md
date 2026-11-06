@@ -204,3 +204,42 @@ production-subpath build passed. Headless Chrome exercised hall-to-gallery
 navigation, keyboard category selection, search, empty/reset, language switch,
 back/reload, direct links, and all four dessert pages at desktop and mobile
 widths in both languages, with no horizontal overflow or browser errors.
+
+
+## 2026-11-07 — Bilingual recipe refresh, release approved
+
+
+Reviewed the 28-record inventory against the focused editorial checklist;
+corrected cooking guidance in **15 bilingual recipe pairs**, then refreshed
+contextual prose in **all 28 bilingual pairs**, with no records added, deleted
+or promoted. Corrections
+cover the lamb-potato oven-mode ambiguity and shoulder-chop terminology,
+whole-shoulder recovery/rest, fish potato thickness, staged bake totals, measured
+doneness, and practical-note ingredient, transport, allergen and appliance limits.
+Confirmed Australian Lamb carryover/doneness guidance and the mini roast's lamb
+leg identity remain. Original source access dates and historical change entries
+remain; changed records receive a new editorial history entry, not a kitchen-test
+or professional safety-review claim.
+
+Existing yield prose now appears in the recipe header before ingredients, with
+explicit equipment and planning times for lamb-potato bake and practical chicken.
+Numbered steps stay visible. No schema, framework, browser-script, stylesheet,
+configuration, footer or dependency change. The maintenance checklist is in
+[recipe-maintenance.md](recipe-maintenance.md).
+
+Local validation: `npm run check` **145 passed, 0 failed, 0 skipped**;
+`npm run build` emitted **90 files, 28 recipes, 7 stories and 1 handbook**, EN/ZH,
+for `/`. Eight added regression tests cover the focused corrections and header
+placement; the existing salmon endpoint test now requires measurement rather
+than the removed visual-only cue. Existing locale/date tests remain unchanged.
+Generated-HTML checks cover all 56 localized recipe pages, including visible
+method steps and header yield placement; they are not browser/mobile acceptance.
+
+Unresolved: Coles rack recipe live re-verification remains pending; no product
+page weight was substituted. Bounded primary-source checks informed this revision; a complete
+source-faithfulness verification, kitchen testing and professional safety review
+remain outside this milestone. Publication of this exact batch is authorized;
+deployment and HTTP acceptance are pending the release workflow. Real Chrome
+desktop/mobile acceptance is blocked by an ambiguous multiple-profile preflight;
+no existing browser instance was altered.
+Earlier release and navigation evidence above remains historical and unchanged.

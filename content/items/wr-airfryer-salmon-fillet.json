@@ -4,7 +4,7 @@
   "collection_id": "world-recipes",
   "record_class": "practical-note",
   "publication_ready": false,
-  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, and none of it has had a professional food-safety review. This record gives a visual and texture endpoint for the fish and deliberately states no temperature threshold of its own.",
+  "record_notice": "ORIGINAL PRACTICAL NOTE — written for this repository without outside sources. This is an original cooking note, not a demonstration record. It has not been cooked or tested by this project, has had no professional food-safety review and is not publication-ready. Use a probe thermometer and the applicable local authority’s fish endpoint. This note supplies no numerical safety threshold.",
 
   "name": {
     "primary": "Air-Fryer Salmon Fillet",
@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Two salmon fillets, skin down, cooked until they flake. Nothing to turn and nothing to watch, and the fish is out of the basket before the rice has finished. About ten minutes, give or take the thickness of the fillet.",
+  "summary": "Two skin-on salmon fillets cooked in a single layer. Start checking at about ten minutes, allowing for thickness. Use a probe thermometer to confirm that each fillet reaches the applicable local authority’s fish endpoint.",
 
   "variants": [],
 
@@ -29,23 +29,29 @@
   ],
 
   "method": [
-    { "step": 1, "instruction": "Pat the fillets dry, rub them with the oil and season them. Leave the skin on; it keeps the fish from welding itself to the basket." },
+    { "step": 1, "instruction": "Pat the fillets dry, rub with oil and season. Leave the skin on; it may help with lifting the fish, but does not guarantee that nothing sticks." },
     { "step": 2, "instruction": "Set the air fryer to 180°C, preheating only if your appliance manual says your model needs it." },
-    { "step": 3, "instruction": "Lay the fillets skin down in a single layer, not touching. Two fillets fit most baskets and four usually do not, and crowded fish steams rather than roasts." },
-    { "step": 4, "instruction": "Cook for 8 to 11 minutes, depending on thickness. Look for fish that has turned from glassy to opaque the whole way through and that separates into flakes under gentle pressure from a fork at the thickest part. Time alone is not a doneness test, and the outside tells you nothing about the middle. If you would rather cook fish to a temperature, use the figure your own food-safety authority publishes and measure with a probe held clear of the basket — this record cites no source and makes no universal claim of its own." },
-    { "step": 5, "instruction": "Squeeze the lemon over off the heat. The skin usually stays behind in the basket: lift it out while it is still warm and the basket needs nothing more than hot water." }
+    { "step": 3, "instruction": "Lay the fillets skin down in a single layer with gaps. If they do not fit without crowding, cook separate batches rather than assuming a standard basket capacity." },
+    { "step": 4, "instruction": "Cook for 8 to 11 minutes as a starting point, depending on thickness. A probe thermometer is required: measure the thickest part of each fillet, clear of metal, and reach the applicable local food-safety authority’s fish endpoint. Confirm that endpoint before starting. If it has not been reached, continue cooking and measure again; colour, flaking and elapsed time cannot validate doneness." },
+    { "step": 5, "instruction": "Squeeze over the lemon off the heat. After cooking, switch off, unplug and let the appliance cool before cleaning. Follow its manual for removable parts, soaking and cleaning products; never immerse the electrical unit or assume water alone is enough." }
   ],
 
-  "yield_note": "Two fillets, serving two. About 15 minutes from fridge to plate.",
+  "yield_note": "Two fillets, serving two. About 15 minutes from fridge to plate. Editorial measuring convention for these original notes: tablespoon 20 mL; teaspoon 5 mL. These are volume measures, not gram conversions.",
 
   "sources": [],
   "source_state": "none-authored-here",
-  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Guidance on fish differs between countries and this record names no authority, so it gives a cautious visual and texture endpoint and sends any reader who wants a number to the authority published where they live.",
+  "provenance_note": "Original practical notes written for this repository, with no outside source cited or kitchen testing. Use a thermometer to check the fish against the applicable local authority’s guidance. This note supplies no numerical safety threshold.",
 
-  "reviewed_at": "2026-09-16",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Required a thermometer and locally applicable fish endpoint; removed cleaning and non-stick guarantees and defined editorial spoon volumes.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-16",
@@ -63,10 +69,10 @@
 
   "safety": {
     "caveats": [
-      "This is the recipe here where the endpoint is a judgement. These notes give a visual and texture endpoint — opaque the whole way through, flaking under a fork at the thickest part — and no temperature claim of their own. Follow the fish guidance your own food-safety authority publishes, and your appliance manual for the machine.",
+      "Use a probe thermometer, not a visual-only endpoint. Follow the applicable local authority’s measured fish endpoint and the appliance manual; this uncited practical note supplies no numerical safety threshold of its own.",
       "Elapsed time is not a safety control. A thick centre-cut fillet and a thin tail piece will never be done at the same minute, so check the thickest part of each one.",
       "Raw fish and its packaging contaminate surfaces. Wash hands, board and knife, and do not put cooked fillets back on the plate that held them raw.",
-      "Allergen: fish. As written the recipe contains no gluten or dairy, but anything you add alongside is yours to check.",
+      "Fish is an allergen. Check all additions and packets for other allergens, including soy and usually wheat if using soy sauce; do not assume the finished meal is allergen-free.",
       "These are practical notes: this project has not cooked this recipe and it has had no professional food-safety review."
     ],
     "review_state": "not-reviewed"

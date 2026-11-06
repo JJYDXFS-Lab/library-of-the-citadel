@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Bone-in chicken thighs roasted on top of sweet potato, peppers and onion so the skin crisps while the vegetables take the fat. Skin-on, bone-in thighs are the forgiving cut here: they tolerate a few extra minutes without drying, and there is no jointing or carving.",
+  "summary": "Bone-in chicken thighs roasted on top of sweet potato, peppers and onion so the skin crisps while the vegetables take the fat. Skin-on, bone-in thighs tend to stay moist with a few extra minutes of cooking and need no jointing or carving.",
 
   "variants": [],
 
@@ -59,7 +59,7 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. One inconsistency in the source is left unresolved rather than silently corrected: its ingredient list gives 3 teaspoons of Cajun seasoning and its method puts 2 teaspoons on the vegetables, but the later step calls the remainder a tablespoon. This record says only 'the remaining seasoning'. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here. Spoon volumes differ by country: a tablespoon defined as 15 mL holds a quarter less than one defined as 20 mL, so measure with a single spoon set rather than mixing them.",
+  "provenance_note": "Recipe facts paraphrased from Eb Gargano's page at Easy Peasy Foodie, accessed 2026-09-14; the safety threshold is Health Canada's. The source has an unresolved seasoning discrepancy: its ingredient list gives 3 teaspoons of Cajun seasoning and its method puts 2 teaspoons on the vegetables, but the later step calls the remainder a tablespoon. This record says only 'the remaining seasoning'. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here. Spoon volumes differ by country: a tablespoon defined as 15 mL holds a quarter less than one defined as 20 mL, so measure with a single spoon set rather than mixing them.",
 
   "reviewed_at": "2026-09-14",
 
@@ -82,10 +82,10 @@
 
   "safety": {
     "caveats": [
-      "Poultry is the strictest case in this collection. The UK Food Standards Agency states that poultry can carry bacteria all the way through and must be cooked all the way through; Health Canada gives 74°C internal for poultry pieces. Pink juice near the bone is common in thighs and is not by itself a reliable test — measure.",
+      "The UK Food Standards Agency states that poultry can carry bacteria all the way through and must be cooked all the way through; Health Canada gives 74°C internal for poultry pieces. Pink juice near the bone is common in thighs and is not by itself a reliable test — measure.",
       "Raw chicken contaminates everything it touches. Wash hands, board and knife after handling, and never put the cooked thighs back on the plate that held them raw.",
       "The thighs are moved to a plate midway through step 6; use a clean plate, not the one the raw chicken came on.",
-      "Allergens depend on the Cajun blend you buy; the jar's label is the authority, not this record.",
+      "Check the Cajun seasoning’s ingredient and allergen labels; blends differ.",
       "This record has had no professional food-safety review and has not been kitchen-tested by this project."
     ],
     "review_state": "not-reviewed"

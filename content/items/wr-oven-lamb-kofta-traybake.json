@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Spiced lamb meatballs roasted in one tray on a bed of peppers and onions. A forgiving first oven dish: nothing is browned in a pan first, the meatballs are rolled by hand, and minced lamb is cooked right through rather than to a judged degree of doneness.",
+  "summary": "Spiced lamb meatballs roasted in one tray on a bed of peppers and onions. Roll the meatballs by hand and put them straight into the oven without pan-browning. Cook the minced lamb through and check the centre temperature.",
 
   "variants": [],
 
@@ -29,7 +29,7 @@
     { "item": "Fresh parsley, finely chopped", "quantity": "1 tablespoon" },
     { "item": "Fresh mint, finely chopped", "quantity": "1 tablespoon" },
     { "item": "Garlic cloves, grated or crushed", "quantity": "3" },
-    { "item": "Pistachio kernels, finely chopped", "quantity": "25 g", "note": "Tree nut. Omit only if you accept that the record then departs from its source." },
+    { "item": "Pistachio kernels, finely chopped", "quantity": "25 g", "note": "Tree-nut allergen. Omitting pistachios changes the source recipe." },
     { "item": "Lemon juice", "quantity": "Juice of half a lemon" },
     { "item": "Plain flour", "quantity": "2 tablespoons", "note": "Wheat. Binds the mixture with the egg." },
     { "item": "Egg, beaten", "quantity": "1 medium" },

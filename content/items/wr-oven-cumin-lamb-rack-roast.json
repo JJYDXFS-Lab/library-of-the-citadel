@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "A small lamb rack — the cutlet rack sold in Australian supermarkets as a 'lamb rack roast' — rubbed with cumin, smoked paprika, chilli and garlic and roasted on a bed of potatoes in one pan, with capsicum and tomatoes added at the end. The lamb is in the oven for about 40 minutes, which makes it the quick, weeknight lamb in this collection; one 500 g rack is a natural one-to-two-person amount.",
+  "summary": "A small lamb rack rubbed with cumin, smoked paprika, chilli and garlic and roasted on potatoes, with capsicum and tomatoes added at the end. The recorded recipe uses two 500 g racks; its lamb stages take about 35 to 40 minutes, apart from the potatoes’ head start and resting. Use the times for planning and measure the lamb’s centre temperature before serving.",
 
   "variants": [],
 
@@ -38,7 +38,7 @@
   ],
 
   "method": [
-    { "step": 1, "instruction": "Heat the oven to 200°C. The source gives this single figure with no fan or conventional label, and no second figure is invented here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
+    { "step": 1, "instruction": "Heat the oven to 200°C. The source specifies neither fan or conventional mode nor a shelf position. A middle shelf is this project’s editorial recommendation." },
     { "step": 2, "instruction": "In a large roasting pan, toss the potatoes with half the garlic and half the oil, and roast them for 10 minutes on their own." },
     { "step": 3, "instruction": "Meanwhile, mix the paprika, cumin, chilli flakes and the rest of the garlic and oil, and rub it evenly all over the lamb." },
     { "step": 4, "instruction": "Sit the lamb on top of the potatoes, scatter the onion around, and roast for 25 minutes." },
@@ -47,7 +47,7 @@
     { "step": 7, "instruction": "Move the lamb to a plate, cover it with foil and rest it for 10 minutes. Cut the rack into cutlets between the bones and serve on the vegetables with the kale, lemon wedges and mint." }
   ],
 
-  "yield_note": "Serves 4, as stated by the source, from two 500 g racks. Source times: 15 minutes preparation, 50 minutes cooking and 10 minutes resting. For 1 to 2 people, this project's own scaling — not the source's — is one 500 g rack with every other quantity halved. The oven times stay the source's, because a rack's cooking time depends on the size of that rack, not on how many are in the pan; check with a thermometer all the same. The source gives no rack thickness and no tray dimensions beyond 'large roasting pan'; for a half batch, any pan that holds the potatoes in one layer will do.",
+  "yield_note": "Serves 4, as stated by the source, from two 500 g racks. Source times: 15 minutes preparation, 50 minutes cooking and 10 minutes resting. Editorial scaling for 1 to 2 people: use one 500 g rack and halve every other quantity. Keep the source’s oven times as a starting point because the rack itself remains the same size; confirm doneness with a thermometer. The source gives no rack thickness and no tray dimensions beyond 'large roasting pan'; for a half batch, any pan that holds the potatoes in one layer will do.",
 
   "sources": [
     {
@@ -76,12 +76,18 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from the Coles recipe page, accessed 2026-10-06. Its only doneness cue is 'cooked to your liking'; the temperatures in this record are therefore not the source's, and each is credited to the guide it comes from. The guides do not agree, and the record keeps them apart. Australian Lamb's rare figure of 60°C is an eating-quality target and sits below Health Canada's 63°C lowest safety figure for whole lamb cuts; FSANZ gives 70°C in the centre as a general figure that will help ensure food is safe. The source states 200°C with no fan or conventional label, and that is left as it is. The half-batch quantities for 1 to 2 people are this project's arithmetic, not the source's. Chinese cut names are this project's shopping glosses, not terms from the source.",
+  "provenance_note": "Recipe facts paraphrased from the Coles recipe page, accessed 2026-10-06. Its only doneness cue is 'cooked to your liking'; the temperatures in this record are therefore not the source's, and each is credited to the guide it comes from. The guides give different temperatures for different purposes. Australian Lamb's rare figure of 60°C is an eating-quality target and sits below Health Canada's 63°C lowest safety figure for whole lamb cuts; FSANZ gives 70°C in the centre as a general figure that will help ensure food is safe. The source states 200°C with no fan or conventional label, and that is left as it is. The half-batch quantities for 1 to 2 people are this project's arithmetic, not the source's. Chinese cut names are this project's shopping glosses, not terms from the source. Live verification pending: the Coles recipe could not be re-fetched for this refresh. Its previously recorded quantities and timings, including the rack weight, are retained rather than replaced with weights from a shop product. The original access date is not a fresh verification date.",
 
-  "reviewed_at": "2026-10-06",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Removed comparative speed claims and flagged pending live verification of the Coles recipe; retained recorded weights and the Australian Lamb doneness and carryover guidance.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-10-06",

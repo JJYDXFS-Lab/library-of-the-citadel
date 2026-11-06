@@ -4,7 +4,7 @@
   "collection_id": "world-recipes",
   "record_class": "practical-note",
   "publication_ready": false,
-  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+  "record_notice": "ORIGINAL PRACTICAL NOTE — written for this repository without outside sources. This is an original cooking note, not a demonstration record. It has not been cooked or tested by this project, has had no professional food-safety review and is not publication-ready. Times and temperatures are starting points. Air fryers differ; check the food and follow your appliance manual and any product cooking instructions.",
 
   "name": {
     "primary": "Air-Fryer Bean and Cheese Quesadilla",
@@ -17,36 +17,42 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Vegetarian. A tortilla folded over tinned beans and grated cheese and crisped in six or seven minutes. It costs very little, uses nothing that goes off quickly, and it is the recipe to know for the week the shopping runs out.",
+  "summary": "Vegetarian. A tortilla folded over tinned beans and grated cheese and crisped in six or seven minutes. A low-cost lunch using cupboard staples and refrigerated cheese.",
 
   "variants": [],
 
   "ingredients": [
     { "item": "Large flour tortillas", "quantity": "2, about 20 cm across", "note": "Wheat tortillas contain gluten. Corn tortillas crisp beautifully but crack when folded cold, so warm them first." },
-    { "item": "Tinned red kidney or black beans, drained and rinsed", "quantity": "200 g drained, half a 400 g tin", "note": "Tinned beans are already cooked. Keep the rest of the tin in a covered container in the fridge and use it within a couple of days." },
+    { "item": "Tinned red kidney or black beans, drained and rinsed", "quantity": "200 g drained", "note": "Tinned beans are already cooked. Keep the rest of the tin in a covered container in the fridge and use it within a couple of days." },
     { "item": "Grated tasty or mozzarella cheese", "quantity": "80 g", "note": "For a vegetarian kitchen, check the packet says it is made without animal rennet." },
     { "item": "Ground cumin or smoked paprika, salt and pepper", "quantity": "half a teaspoon in total" },
-    { "item": "Neutral oil, for brushing", "quantity": "1 teaspoon", "note": "Brushed on the outside. It is what makes the tortilla crisp instead of merely dry." }
+    { "item": "Neutral oil, for brushing", "quantity": "1 teaspoon", "note": "Brush on the outside to help the tortilla crisp." }
   ],
 
   "method": [
     { "step": 1, "instruction": "Mash the beans roughly with the cumin, salt and pepper, spread them over half of each tortilla, scatter the cheese on top and fold the tortilla over into a half-moon." },
     { "step": 2, "instruction": "Brush the outside of each folded tortilla with a little oil, then push two or three cocktail sticks through the open edge to pin it shut. An unpinned tortilla is light enough for the fan to lift." },
     { "step": 3, "instruction": "Set the air fryer to 180°C, preheating only if your appliance manual calls for it, and lay the quesadillas flat in a single layer without overlapping them." },
-    { "step": 4, "instruction": "Cook for 6 to 8 minutes, turning once at about 4 minutes, until the outside is blistered and crisp and the cheese has melted. Tinned beans and cheese are both already safe to eat, so this is a browning judgement rather than a temperature one." },
-    { "step": 5, "instruction": "Take the cocktail sticks out before eating. Crumbs and escaped cheese fall through the basket, so pull the drawer out over the bin, tip it, and wipe it while it is still warm." }
+    { "step": 4, "instruction": "Cook for 6 to 8 minutes, turning once at about 4 minutes, until the outside is blistered and crisp and the cheese has melted. The tinned beans are already cooked and the cheese is ready to eat; heat the filling through while browning the tortilla." },
+    { "step": 5, "instruction": "Count and remove all cocktail sticks before eating. After cooking, switch off, unplug and let the appliance cool before cleaning. Follow its manual for removable parts, soaking and cleaning products; never immerse the electrical unit or assume water alone is enough." }
   ],
 
-  "yield_note": "Two quesadillas — lunch for two, or one large plate for one. About 12 minutes in total.",
+  "yield_note": "Two quesadillas — lunch for two, or one large plate for one. About 12 minutes in total. Editorial measuring convention for these original notes: tablespoon 20 mL; teaspoon 5 mL. These are volume measures, not gram conversions.",
 
   "sources": [],
   "source_state": "none-authored-here",
-  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+  "provenance_note": "Original practical notes written for this repository, with no outside source cited. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
 
-  "reviewed_at": "2026-09-16",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Corrected drained bean weight without a tin-fraction equivalence; clarified cleaning and editorial spoon volumes.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-16",

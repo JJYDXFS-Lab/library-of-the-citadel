@@ -17,7 +17,7 @@
     "label_basis": "fixture-illustrative"
   },
 
-  "summary": "Rice simmered in a large excess of water until the grains break down. Used here as a worked example of a record whose variants differ by ratio and finishing rather than by ingredient list.",
+  "summary": "Illustrative rice porridge with thin and thick variants. Both use rice and water, with different ratios and simmering times to produce broken-down or whole grains.",
 
   "variants": [
     {
@@ -30,7 +30,7 @@
       "variant_id": "thick-short-simmer",
       "label": "Thick, short simmer",
       "region_label": "Southeast Asia",
-      "difference_note": "Roughly one part rice to eight parts water and a shorter cook, leaving whole grains suspended in the liquid. Kept as its own variant, not treated as an undercooked version of the first."
+      "difference_note": "Roughly one part rice to eight parts water and a shorter cook, leaving whole grains suspended in the liquid. Whole grains are the intended texture for this variant; they should still be cooked through."
     }
   ],
 
@@ -54,7 +54,7 @@
 
   "sources": [],
   "source_state": "none-fixture-authored",
-  "provenance_note": "No source. This text was written directly for this repository as fixture content. The empty source list is the honest state; it is not awaiting substitution with a guessed URL.",
+  "provenance_note": "Original fixture text written for this repository, with no external sources. The rice-to-water ratios and regional labels are illustrative and have not been researched.",
 
   "reviewed_at": "2026-09-13",
 

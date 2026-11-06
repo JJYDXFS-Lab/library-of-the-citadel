@@ -574,6 +574,7 @@ ${chrome(cfg, L, { nav: 'recipes/', route: itemPath(item) })}
       <h1>${esc(item.name.primary)}</h1>
       ${(item.name.alt ?? []).length ? `<p class="record__alt">${esc(item.name.alt.join(' · '))}</p>` : ''}
       <p class="record__summary">${esc(item.summary)}</p>
+      ${item.yield_note ? `<p class="yield">${esc(L.t('detail.yield', { yield: item.yield_note }))}</p>` : ''}
     </header>
 
     ${item.variants.length === 0 ? '' : `<section class="record__block" aria-labelledby="h-variants">
@@ -590,7 +591,6 @@ ${item.variants.map((v) => `        <li class="variant"><p class="variant__label
         <ul class="ingredients">
 ${item.ingredients.map((g) => `          <li><span class="ingredients__qty">${esc(g.quantity ?? '')}</span> <span class="ingredients__item">${esc(g.item)}</span>${g.note ? `<span class="ingredients__note">${esc(g.note)}</span>` : ''}</li>`).join('\n')}
         </ul>
-        ${item.yield_note ? `<p class="yield">${esc(L.t('detail.yield', { yield: item.yield_note }))}</p>` : ''}
       </section>
 
       <section class="record__block" aria-labelledby="h-method">

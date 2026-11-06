@@ -4,7 +4,7 @@
   "collection_id": "world-recipes",
   "record_class": "sourced",
   "publication_ready": false,
-  "record_notice": "SOURCED RECORD — the ratios, oven temperature and bake cues are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The half-size batch, the smaller dish, the Granny Smith apples and the storage advice are this project's editorial adaptation, not the source's. This record has not been kitchen-tested here and has had no professional food-safety review. Bake to the cue — golden top, very soft apple — not to the clock alone.",
+  "record_notice": "SOURCED RECORD — the ratios, oven temperature and bake cues are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The half-size batch, the smaller dish, the Granny Smith apples and the storage advice are this project's editorial adaptation, not the source's. This record has not been kitchen-tested here and has had no professional food-safety review. Check for a golden top and very soft apple before taking it out; the baking time can vary.",
 
   "name": {
     "primary": "Small-Batch Apple Crumble",
@@ -26,7 +26,7 @@
     { "item": "Caster sugar, for the apples", "quantity": "1 tablespoon (15 ml; about 13 g)", "note": "The source uses golden caster sugar. Tablespoons here are the 15 ml standard spoon, not the 20 ml Australian tablespoon." },
     { "item": "Plain flour", "quantity": "88 g", "note": "Wheat (gluten) allergen." },
     { "item": "Caster sugar, for the topping", "quantity": "55 g" },
-    { "item": "Fine salt", "quantity": "⅛ teaspoon (0.6 ml)", "note": "Our measured version of the source's good pinch." },
+    { "item": "Fine salt", "quantity": "⅛ teaspoon (0.6 ml)", "note": "Editorial measured amount; the source specifies a good pinch." },
     { "item": "Cold butter, cut into small cubes", "quantity": "55 g", "note": "Milk allergen." },
     { "item": "Rolled oats and raw or demerara sugar, for sprinkling", "quantity": "½ tablespoon (7.5 ml) of each, about 4 g oats and 6 g sugar", "note": "Optional, as in the source. Oats may contain gluten." }
   ],

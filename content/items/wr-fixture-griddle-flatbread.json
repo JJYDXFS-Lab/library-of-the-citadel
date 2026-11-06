@@ -17,7 +17,7 @@
     "label_basis": "fixture-illustrative"
   },
 
-  "summary": "A plain flour-and-water dough rested briefly, rolled thin, and cooked dry on a hot griddle. Used here as the simplest possible worked example of a record with two regional variants.",
+  "summary": "Illustrative flatbread made from a plain flour-and-water dough, rested briefly and cooked on a hot griddle. The two variants use different thicknesses and surface treatments.",
 
   "variants": [
     {
@@ -30,7 +30,7 @@
       "variant_id": "thick-fat-brushed",
       "label": "Thicker, fat-brushed",
       "region_label": "South Asia",
-      "difference_note": "Rolled to roughly 5 mm and brushed with fat during cooking, giving a softer crumb and a browner surface. Recorded as a parallel variant rather than a correction of the first."
+      "difference_note": "Rolled to roughly 5 mm and brushed with fat during cooking, giving a softer crumb and a browner surface. This is an alternative to the thin, dry-griddled version."
     }
   ],
 
@@ -55,7 +55,7 @@
 
   "sources": [],
   "source_state": "none-fixture-authored",
-  "provenance_note": "No source. This text was written directly for this repository as fixture content. There is deliberately no invented URL here: a fabricated pointer would be worse than an empty list, because it would look like provenance that was never established.",
+  "provenance_note": "Original fixture text written for this repository, with no external sources. The regional labels and variants are illustrative and have not been researched.",
 
   "reviewed_at": "2026-09-13",
 

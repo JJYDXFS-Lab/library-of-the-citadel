@@ -4,11 +4,11 @@
   "collection_id": "world-recipes",
   "record_class": "sourced",
   "publication_ready": false,
-  "record_notice": "SOURCED RECORD — the cooking facts below are summarized in this project's own words from the single source cited in this record, accessed 2026-09-14. No source text or photograph is reproduced. This record has been checked against its source by this project, but it has not been kitchen-tested here and has had no professional food-safety review. Cook to the cited temperature threshold rather than to the clock alone.",
+  "record_notice": "SOURCED RECORD — cooking facts paraphrased from McCormick Australia and temperature guidance from Health Canada, both first accessed 2026-09-14. No source text or photograph is reproduced. The final oven mode is ambiguous in the recipe source; the conventional-only path below is an explicit editorial choice. This record has not been kitchen-tested here and has had no professional food-safety review. Measure temperature and check tenderness separately.",
 
   "name": {
     "primary": "Lamb Chop and Potato Bake",
-    "alt": ["Mediterranean lamb and potato tray bake", "羊排土豆烤盘菜"]
+    "alt": ["Mediterranean lamb and potato tray bake", "羊排土豆烤盘菜", "Lamb shoulder chops", "Forequarter chops", "羊肩排"]
   },
 
   "region": {
@@ -17,7 +17,7 @@
     "label_basis": "source-attributed"
   },
 
-  "summary": "Forequarter lamb chops and sliced potatoes baked together under a sealed cover, then finished uncovered until the potatoes colour. The second forgiving lamb approach in this collection: a whole cut rather than mince, laid flat in one dish, with no browning, no trimming and nothing to carve.",
+  "summary": "Forequarter lamb chops and thinly sliced Pontiac potatoes baked together under a sealed cover, then finished uncovered until the potatoes colour. The times apply to chops baked under potatoes with a sealed cover; use a separate recipe for uncovered, meat-only roasting.",
 
   "variants": [],
 
@@ -29,16 +29,16 @@
   ],
 
   "method": [
-    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan-forced. Both figures are stated by the source; neither is a conversion made here." },
+    { "step": 1, "instruction": "The source starts at 200°C conventional or 180°C fan-forced. Use 200°C conventional throughout, an editorial choice because the source’s final stage does not specify a mode. Preheat on that conventional setting." },
     { "step": 2, "instruction": "Grease a shallow baking dish large enough to hold the four chops flat in a single layer." },
     { "step": 3, "instruction": "Season both sides of the chops with about 1 1/2 tablespoons of the recipe base and lay them in the dish." },
     { "step": 4, "instruction": "Turn the potato slices through the olive oil with the rest of the recipe base, then arrange them over the chops." },
     { "step": 5, "instruction": "Cover with baking paper and then foil, pinching the edges tightly to seal, and bake for 45 minutes." },
-    { "step": 6, "instruction": "Take off the foil, set the oven to 200°C — which changes the setting only if you have been using the 180°C fan-forced figure — and bake uncovered for a further 15 minutes, until the potatoes are golden brown and the lamb is tender." },
-    { "step": 7, "instruction": "Check the lamb at the thickest part of a chop, clear of the bone. Health Canada gives 63°C internal for a medium-rare lamb cut and 71°C for medium. The source's own endpoint — potatoes golden, lamb tender — is a texture cue rather than a temperature, so measure instead of going by the clock." }
+    { "step": 6, "instruction": "Remove the cover and bake uncovered for a further 15 minutes, until the potatoes are golden brown and the lamb is tender. The source says 200°C here but gives NO oven mode; it does not establish 200°C fan-forced. Continue at 200°C conventional, as recommended in step 1. If you started on fan, switch to conventional; the source gives no final fan setting." },
+    { "step": 7, "instruction": "Measure the thickest part of each chop away from bone. Health Canada gives 63°C internal for medium-rare lamb cuts and 71°C for medium. Reaching 63°C does not establish tenderness: also check that the potatoes are cooked through and the lamb is tender. Time alone establishes neither endpoint." }
   ],
 
-  "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 1 hour in the oven. The source gives no resting time, and none is invented here.",
+  "yield_note": "Serves 4. Source prep: 5 minutes; cook: 60 minutes (45 covered + 15 uncovered); total: about 65 minutes by editorial addition, excluding preheating and any extra cooking needed. Equipment: conventional oven, shallow baking dish holding the chops in one layer, baking paper and foil suitable for that oven setting, knife, board and probe thermometer. No resting time is supplied by the source.",
 
   "sources": [
     {
@@ -55,12 +55,18 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from McCormick Australia's page, accessed 2026-09-14; the safety thresholds are Health Canada's. Two limits are worth stating plainly. The source is a seasoning manufacturer and the dish is built around one branded sachet, so it is not a generic-ingredient recipe; and its final step says to increase the temperature to 200°C without naming a corresponding fan figure, which is recorded above exactly as written rather than converted. The baking-paper-and-foil cover is the source's own instruction; no heat tolerance is claimed for either material here.",
+  "provenance_note": "Recipe facts paraphrased from McCormick Australia, first accessed 2026-09-14; temperature guidance is Health Canada's. The recipe uses a branded seasoning sachet and Pontiac potatoes. It gives no chop weight or thickness, no potato-slice thickness and no added liquid. Its final 200°C has no mode: the conventional-only path is an editorial resolution, not a newly verified source instruction or a fan conversion. The sealed baking-paper-and-foil cover and potatoes are part of this method; do not transfer its times to uncovered, meat-only cooking or derive a time from a 500 g pack. Thickness, cover, potato preparation and appliance behaviour matter. Check the material manufacturers' heat limits.",
 
-  "reviewed_at": "2026-09-14",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Clarified the ambiguous final oven mode with an explicit conventional-only editorial path; corrected cut terminology, method boundaries and header details. No kitchen test or new source access claimed.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-14",
@@ -78,7 +84,7 @@
 
   "safety": {
     "caveats": [
-      "A chop is a whole cut, not mince: the UK Food Standards Agency states that whole cuts other than poultry and pork carry bacteria on the outer surface only, and may be served pink in the middle. That is why the threshold here differs from the minced-lamb record in this collection.",
+      "Forequarter chops are shoulder chops, not a rack or a whole shoulder roast. Their thickness is unspecified; the sealed cover and potato layer are essential context for these timings. A pack weight is not a timing rule, and a measured safety endpoint is not proof of tenderness.",
       "Health Canada gives 63°C internal for a medium-rare lamb cut and 71°C for medium. Measure at the thickest point away from the bone; bone conducts heat and reads high.",
       "Raw lamb juices run in the dish. Wash hands, board and knife after handling, and keep the raw packaging away from the sliced potatoes.",
       "The branded seasoning sachet has not been checked for allergens by this project; read its packet.",

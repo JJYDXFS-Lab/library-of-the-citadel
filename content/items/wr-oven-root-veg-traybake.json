@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "A kilo of carrots, parsnips and swede roasted in one tin with new potatoes and whole garlic cloves, then dressed with the softened garlic, lemon and parsley and finished with feta and nuts. The simplest record in this set: one tin, one 50-minute roast, and a dressing stirred together at the end.",
+  "summary": "A kilo of carrots, parsnips and swede roasted in one tin with new potatoes and whole garlic cloves, then dressed with the softened garlic, lemon and parsley and finished with feta and nuts. Use one tin for the 50-minute roast and mix the dressing at the end.",
 
   "variants": [],
 
@@ -37,7 +37,7 @@
   ],
 
   "method": [
-    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan. The source prints gas mark 5 alongside those figures; all three are recorded as written and none is a conversion made here." },
+    { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan. The source also lists gas mark 5. These are its stated settings; see the provenance note for the gas-mark discrepancy." },
     { "step": 2, "instruction": "Put the prepared roots, new potatoes and whole garlic cloves into a large roasting tin and tuck the rosemary and thyme sprigs among them." },
     { "step": 3, "instruction": "Drizzle over 2 tablespoons of the olive oil, toss until everything is evenly coated, and season." },
     { "step": 4, "instruction": "Roast for 50 minutes, until the vegetables are tender." },
@@ -56,7 +56,7 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Love2Feed's page, accessed 2026-09-14. The source prints '200C/180C fan/gas 5'; that gas figure sits a mark below the pairing most British recipes print for 200°C, and it is reproduced here as written rather than corrected, because correcting it would be this project asserting a temperature the source does not. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here. The source lists no separate preparation time; only the 50-minute roast and a 65-minute total are stated.",
+  "provenance_note": "Recipe facts paraphrased from Love2Feed's page, accessed 2026-09-14. The source prints '200C/180C fan/gas 5'; that gas figure sits a mark below the pairing most British recipes print for 200°C, so the gas setting remains uncertain. The values here are the source’s stated settings. The source writes tablespoons without stating a millilitre value, so no spoon size is asserted here. The source lists no separate preparation time; only the 50-minute roast and a 65-minute total are stated.",
 
   "reviewed_at": "2026-09-14",
 

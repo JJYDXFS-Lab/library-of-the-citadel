@@ -4,7 +4,7 @@
   "collection_id": "world-recipes",
   "record_class": "practical-note",
   "publication_ready": false,
-  "record_notice": "ORIGINAL PRACTICAL NOTE — everyday cooking notes written for this repository. They are not summarized from an outside page and they are not a demonstration record, so they cite nothing and claim nothing that would need a citation. Nothing here has been cooked or tested by this project, none of it has had a professional food-safety review, and it is not publication-ready. Times and temperatures are starting points: air fryers differ, so judge by the food and follow your own appliance manual.",
+  "record_notice": "ORIGINAL PRACTICAL NOTE — written for this repository without outside sources. This is an original cooking note, not a demonstration record. It has not been cooked or tested by this project, has had no professional food-safety review and is not publication-ready. Times and temperatures are starting points. Air fryers differ; check the food and follow your appliance manual and any product cooking instructions.",
 
   "name": {
     "primary": "Air-Fryer Broccoli and Mixed Vegetables",
@@ -17,12 +17,12 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Vegetarian. Broccoli florets and whatever else is left in the crisper drawer, cooked hot enough to brown at the edges instead of going soft and grey. Under 15 minutes, and one bowl to wash.",
+  "summary": "Vegetarian. Broccoli florets and other firm vegetables cooked at high heat until the edges brown. Under 15 minutes, using one mixing bowl.",
 
   "variants": [],
 
   "ingredients": [
-    { "item": "Broccoli, cut into small florets", "quantity": "300 g, about one head", "note": "Frozen florets work: add 3 minutes and do not thaw them first." },
+    { "item": "Broccoli, cut into small florets", "quantity": "300 g, about one head", "note": "For frozen florets, follow the packet’s cooking instructions; adding 3 minutes is only a starting estimate and does not establish thorough cooking." },
     { "item": "Capsicum, red onion or zucchini, cut into 2 cm pieces", "quantity": "200 g in total", "note": "Any firm vegetable of a similar size. Keep the pieces as big as the florets so everything finishes together." },
     { "item": "Olive oil", "quantity": "1 tablespoon" },
     { "item": "Salt, pepper and garlic powder", "quantity": "1 teaspoon in total" },
@@ -30,23 +30,29 @@
   ],
 
   "method": [
-    { "step": 1, "instruction": "Toss the broccoli and the other vegetables with the oil and the seasoning in a bowl until every piece is lightly coated. Dry patches are what scorch." },
+    { "step": 1, "instruction": "Toss the broccoli and the other vegetables with the oil and the seasoning in a bowl until every piece is lightly coated. Coat dry patches to reduce scorching." },
     { "step": 2, "instruction": "Set the air fryer to 190°C, preheating only if your appliance manual requires it." },
-    { "step": 3, "instruction": "Tip the vegetables into the basket in as close to a single layer as you can manage. A crowded basket steams broccoli instead of browning it, and two quick batches beat one slow one." },
-    { "step": 4, "instruction": "Cook for 8 to 10 minutes, shaking the basket at about 5 minutes. They are ready when the thickest stems give under a fork and the floret tips have browned. Vegetables have no temperature to reach, so this is a texture judgement — a few dark tips are flavour, an evenly black floret is not." },
-    { "step": 5, "instruction": "Finish with the cheese or the lemon off the heat. The bowl is the only extra washing-up, and the basket wipes clean while it is still warm." }
+    { "step": 3, "instruction": "Tip the vegetables into the basket in as close to a single layer as you can manage. Crowding traps steam and limits browning; use two batches if needed." },
+    { "step": 4, "instruction": "Cook for 8 to 10 minutes, shaking at about 5 minutes. Tender thick stems and browned tips are texture cues, not a blanket safety test. Frozen vegetable packets may require thorough cooking: follow those instructions even if the outside has browned." },
+    { "step": 5, "instruction": "Finish with the cheese or lemon off the heat. After cooking, switch off, unplug and let the appliance cool before cleaning. Follow its manual for removable parts, soaking and cleaning products; never immerse the electrical unit or assume water alone is enough." }
   ],
 
-  "yield_note": "A side for two, or a lunch bowl for one with rice or noodles. About 15 minutes in total.",
+  "yield_note": "A side for two, or a lunch bowl for one with rice or noodles. About 15 minutes in total. Editorial measuring convention for these original notes: tablespoon 20 mL; teaspoon 5 mL. These are volume measures, not gram conversions.",
 
   "sources": [],
   "source_state": "none-authored-here",
-  "provenance_note": "No outside source, and none is missing. This text was written directly for this repository as original practical notes, so the empty source list is the honest state rather than an unfinished citation slot. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
+  "provenance_note": "Original practical notes written for this repository, with no outside source cited. Quantities suit a small household batch in a domestic air fryer and have not been checked in a test kitchen.",
 
-  "reviewed_at": "2026-09-16",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Removed blanket vegetable-safety and oil-prevents-lift claims; deferred frozen products to packet instructions and clarified cleaning and editorial spoon volumes.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-16",
@@ -64,8 +70,8 @@
 
   "safety": {
     "caveats": [
-      "Vegetables have no safety threshold to hit. This is a texture and browning judgement, not a food-safety one.",
-      "Light, dry pieces can be picked up by the fan on some models and blown against the element. Coating everything in oil and keeping the basket no more than loosely full is what prevents it.",
+      "Vegetables are not automatically safe regardless of handling or cooking. Follow product storage and preparation instructions; frozen products may require thorough cooking, and browning alone does not establish that.",
+      "Light pieces may lift into the element in some models. Oil coating does not guarantee against fan lift. Follow the manual’s loading restrictions and do not use ingredients or loose liners that the appliance cannot safely retain.",
       "The basket and drawer stay hot well after the machine stops. Set them down on a heatproof surface, not on a bench or a chopping board.",
       "These are practical notes. Nothing here has been kitchen-tested by this project or given a professional food-safety review."
     ],

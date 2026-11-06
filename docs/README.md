@@ -7,6 +7,8 @@ they mean this project's framework layer, never Atom-KB's.
 - [architecture.md](architecture.md) — modules, build pipeline, output shape.
 - [content-schema.md](content-schema.md) — record fields, the validated JSON
   Schema subset, and the cross-record rules.
+- [recipe-maintenance.md](recipe-maintenance.md) — bilingual recipe revisions,
+  cooking-method boundaries, measurements, evidence and review checkpoints.
 - [configuration.md](configuration.md) — configuration keys, environment
   overrides, base paths, and deployment notes.
 - [agent-nursery.md](agent-nursery.md) — the Agent Nursery collection: where its

@@ -17,12 +17,12 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Baby potatoes roast first, then a raw puttanesca-style sauce of tinned and fresh tomatoes, olives, capers, anchovy and fennel goes in around them, and thick white fish fillets finish on top. The fish cooks on the sauce rather than on bare metal, which keeps it moist and makes overcooking less likely.",
+  "summary": "Baby potatoes roast first, then a raw puttanesca-style sauce of tinned and fresh tomatoes, olives, capers, anchovy and fennel goes in around them, and thick white fish fillets finish on top. The sauce separates the fish from the hot tray and helps it stay moist.",
 
   "variants": [],
 
   "ingredients": [
-    { "item": "Baby potatoes", "quantity": "600 g", "note": "Halve the small ones and quarter the large ones." },
+    { "item": "Baby potatoes", "quantity": "600 g", "note": "Halve the small ones and quarter the large ones; the source limits potato pieces to no more than 1.75 cm thick." },
     { "item": "Extra virgin olive oil, for the potatoes", "quantity": "1½ tablespoons" },
     { "item": "Cooking salt, for the potatoes", "quantity": "½ teaspoon" },
     { "item": "Black pepper, for the potatoes", "quantity": "¼ teaspoon" },
@@ -47,7 +47,7 @@
 
   "method": [
     { "step": 1, "instruction": "Heat the oven to 220°C conventional, or 200°C fan-forced. Both figures are stated by the source; neither is a conversion made here. The source names no shelf; a middle shelf is this project's ordinary default, not a source instruction." },
-    { "step": 2, "instruction": "Toss the potatoes with their oil, salt and pepper and spread them on a baking tray with a rim at least 2 cm high, or in a 23 × 33 cm pan. Bake for 20 minutes." },
+    { "step": 2, "instruction": "Cut the potatoes into pieces no more than 1.75 cm thick, as the source specifies. Toss with their oil, salt and pepper and spread on a baking tray with a rim at least 2 cm high, or in a 23 × 33 cm pan. Bake for 20 minutes." },
     { "step": 3, "instruction": "Stir all the sauce ingredients together, from the fennel through to the pepper, add them to the tray around the potatoes, and bake for 10 minutes more." },
     { "step": 4, "instruction": "Meanwhile, pat the fish dry with paper towel and season both sides with its salt and pepper. Thaw frozen fish fully in the fridge first, then dry it the same way." },
     { "step": 5, "instruction": "Lay the fillets on top of the sauce, drizzle them with their oil and bake for 15 minutes." },
@@ -71,12 +71,18 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The source's own endpoint is a visual and texture one — just cooked through and flaking easily — and it states no internal temperature, so Health Canada's 70°C is given beside it and attributed rather than presented as the source's. The source also suggests that thinner fillets such as dory or bream get the tray 5 extra minutes before the fish goes in and a first check at 10 minutes; that is reported here, not tested. The source gives Fahrenheit alongside Celsius; only Celsius is carried here. Cup and spoon measures are left as the source writes them, with the gram figure the source gives for the cherry tomatoes; no millilitre value is asserted.",
+  "provenance_note": "Recipe facts paraphrased from Nagi Maehashi's page at RecipeTin Eats, accessed 2026-10-06; the safety thresholds are Health Canada's, from the same date. The recipe source describes fish that is just cooked through and flakes easily, without giving an internal temperature. The 70°C measured endpoint comes from Health Canada. The source also suggests that thinner fillets such as dory or bream get the tray 5 extra minutes before the fish goes in and a first check at 10 minutes; that is reported here, not tested. The source gives Fahrenheit alongside Celsius; only Celsius is carried here. Cup and spoon measures are left as the source writes them, with the gram figure the source gives for the cherry tomatoes; no millilitre value is asserted.",
 
-  "reviewed_at": "2026-10-06",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Restored the source’s maximum potato-piece thickness in both the ingredient note and method.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-10-06",
@@ -94,7 +100,7 @@
 
   "safety": {
     "caveats": [
-      "Fillet thickness, not the clock, decides when fish is done. The 15 minutes assumes fillets 2.5 to 3 cm thick; Health Canada gives 70°C internal for fish, and the source's flake test is the visual check that goes with it.",
+      "Cooking time varies with fillet thickness. The 15 minutes assumes fillets 2.5 to 3 cm thick; measure Health Canada's 70°C internal endpoint for fish. The source also describes an easy-flaking texture.",
       "Fish and anchovy are allergens, and the anchovy substitutes the source offers include fish sauce, which is also fish. Olives and capers are salty; taste before adding more salt.",
       "Frozen fillets should be thawed in the fridge rather than on the bench, then patted dry as the source directs.",
       "Leftovers: chill promptly, keep no longer than the source's 3 days, do not freeze (the source advises against it), and reheat until the centre reaches 74°C (Health Canada's figure for leftovers).",

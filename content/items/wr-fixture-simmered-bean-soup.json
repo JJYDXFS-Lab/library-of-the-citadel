@@ -17,7 +17,7 @@
     "label_basis": "fixture-illustrative"
   },
 
-  "summary": "Dried beans soaked and then simmered with aromatics until soft. Used here as a worked example of a record that carries a real, scoped safety caveat rather than a generic one.",
+  "summary": "Illustrative soup of soaked dried beans simmered with aromatics until soft, served whole or partly crushed. Read the dried-bean warnings; this fixture has had no food-safety review.",
 
   "variants": [
     {
@@ -30,7 +30,7 @@
       "variant_id": "partly-crushed",
       "label": "Partly crushed",
       "region_label": "North Africa",
-      "difference_note": "A portion of the beans is crushed against the side of the pot near the end, which thickens the liquid without any added starch. Recorded alongside the first variant rather than replacing it."
+      "difference_note": "A portion of the beans is crushed against the side of the pot near the end, which thickens the liquid without any added starch. This gives a thicker alternative to the whole-bean broth."
     }
   ],
 
@@ -58,7 +58,7 @@
 
   "sources": [],
   "source_state": "none-fixture-authored",
-  "provenance_note": "No source. This text was written directly for this repository as fixture content. The safety caveats below are included to show that the field carries scoped, record-specific warnings; they are not offered as reviewed food-safety guidance.",
+  "provenance_note": "Original fixture text written for this repository, with no external sources. The dried-bean warnings have not been professionally reviewed; consult authoritative food-safety guidance before cooking dried beans.",
 
   "reviewed_at": "2026-09-13",
 

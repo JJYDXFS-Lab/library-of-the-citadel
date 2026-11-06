@@ -3,13 +3,13 @@
   "collection_id": "world-recipes",
   "record_class": "fixture",
   "publication_ready": false,
-  "record_notice": "Mixed collection of three kinds. Seventeen records are sourced: their cooking facts are summarized in this project's own words from the pages each record cites. Eight are original practical notes written here for a small air fryer, citing nothing because they claim nothing that needs a citation. Three are fixtures, authored to exercise the content contract, and are not knowledge records at all. Nothing in the collection has been kitchen-tested here or given a professional food-safety review, and every record says which kind it is. The record_class on this manifest describes the manifest text itself, which is still original writing.",
+  "record_notice": "This collection contains seventeen sourced recipes, eight original practical notes for a small air fryer, and three fixtures. The sourced recipes summarize cooking facts from the pages they cite. The practical notes were written for this project without outside sources; their cooking guidance has not been independently verified. The fixtures are demonstration records for testing the site, not researched recipes. Each record identifies its type. Nothing in the collection has been kitchen-tested here or given a professional food-safety review.",
   "title": {
     "primary": "World Recipes",
     "alt": ["世界食谱"]
   },
-  "description": "The Library's first themed collection. It holds recipe knowledge items with their regional variants, provenance, version history, and rights review kept as first-class record fields rather than presentation state.",
-  "scope_note": "Contains twenty-eight records of three kinds. Seventeen are sourced: thirteen beginner oven recipes and four small-batch beginner desserts, each citing the page its quantities, temperatures and timings come from, plus the food-safety authority behind any temperature threshold it states; they are editorially checked against those sources but untested in any kitchen here and not publication-ready. Eight are original practical notes in the Quick Air-Fryer section, written here rather than retrieved: they carry no sources because they make no claim about any published recipe, and where one gives a cook-to temperature it hands the reader back to their own food-safety authority. Three are illustrative fixture records, seeded so the hall, gallery, search, region filter and detail views can be built and checked end to end. No record carries an image, an authenticity claim, or a cooking-test result. A sourced record requires record_class 'sourced', at least one identified source URL, and a rights review; a practical note requires record_class 'practical-note' and no sources at all. The content rules in src/rules.mjs enforce both gates.",
+  "description": "The Library's first themed collection brings together recipes with notes on regional variations, sources, revisions and rights.",
+  "scope_note": "Contains twenty-eight records: seventeen sourced recipes, eight original practical notes and three fixtures. The sourced recipes include thirteen beginner oven recipes and four small-batch beginner desserts. They cite recipe pages for quantities, temperatures and timings, and identify food-safety authorities for safety thresholds. Source limitations and pending checks are noted in the individual records. These recipes have not been kitchen-tested here and are not publication-ready. The Quick Air-Fryer practical notes were written for this project without outside sources and have not been independently verified. Follow the appliance manual and product instructions; where a note refers to local food-safety guidance, confirm the applicable requirements before cooking, transport or holding. The fixtures are demonstration records used to test the site's pages, search and region filter. No record includes an image, an authenticity claim or a cooking-test result.",
   "item_ids": [
     "wr-oven-lamb-kofta-traybake",
     "wr-oven-lamb-potato-bake",
@@ -44,7 +44,7 @@
     {
       "section_id": "quick-air-fryer",
       "title": "Quick Air-Fryer",
-      "intro": "Eight original practical notes for one small air fryer and an ordinary supermarket shop, five of them vegetarian. Each gives a temperature in Celsius, a time, and the single check that actually decides when the food is done; the one written for a shared table also says how long the dish may stand. None has been cooked in a test kitchen or reviewed by a food-safety professional, and none cites a source, because none is claiming one.",
+      "intro": "Eight original practical notes for a small air fryer using ordinary supermarket ingredients, five of them vegetarian. Each gives a starting temperature in Celsius, a cooking time and checks to make as you cook. The garlic and lemon salmon note also covers transport and holding for a shared table, with requirements to confirm under local food-safety guidance rather than a fixed time on the table. These notes have no outside sources, have not been kitchen-tested here and have had no professional food-safety review.",
       "item_ids": [
         "wr-airfryer-crispy-tofu",
         "wr-airfryer-chicken-thigh-bites",
@@ -81,7 +81,7 @@
     {
       "version": "1.5.0",
       "date": "2026-09-23",
-      "change": "Added an eighth original practical note to the Quick Air-Fryer section: a garlic and lemon salmon written for a shared table, carrying a measured cook-to temperature, a transport rule and a cumulative holding clock. It is a new record placed at the end of the section and of the air-fryer run in the manifest; the existing salmon note, which deliberately states no temperature of its own, is unchanged, as is every other record.",
+      "change": "Added an eighth original practical note to the Quick Air-Fryer section: garlic and lemon salmon for a shared table, placed at the end of the section and the air-fryer list. It originally included a cook-to temperature, a transport rule and a cumulative holding clock. Those fixed thresholds were removed in a later revision; the current note asks readers to confirm cooking, transport and holding requirements with their local food-safety authority. The existing salmon note and all other records were unchanged in this release.",
       "supersedes": "1.4.0"
     },
     {

@@ -13,7 +13,7 @@
     "cuisine_label": "加香料的羊肉末丸子"
   },
 
-  "summary": "加了香料的羊肉丸，连同甜椒与洋葱一起放在同一个烤盘里烤熟。对新手很宽容的第一道烤箱菜：不需要先下锅煎，丸子用手搓，羊肉末只要彻底烤透即可，不必判断几分熟。",
+  "summary": "加了香料的羊肉丸，连同甜椒与洋葱一起放在同一个烤盘里烤熟。用手搓好丸子后直接入烤箱，无需先下锅煎。羊肉末要彻底烤透，并检查中心温度。",
 
   "ingredients": {
     "Lamb mince": { "item": "羊肉末", "quantity": "500 克" },
@@ -23,7 +23,7 @@
     "Fresh parsley, finely chopped": { "item": "新鲜欧芹，切碎", "quantity": "1 汤匙" },
     "Fresh mint, finely chopped": { "item": "新鲜薄荷，切碎", "quantity": "1 汤匙" },
     "Garlic cloves, grated or crushed": { "item": "蒜瓣，擦蓉或压碎", "quantity": "3 瓣" },
-    "Pistachio kernels, finely chopped": { "item": "开心果仁，切碎", "quantity": "25 克", "note": "坚果类过敏原。若省略，请知悉本记录即与其来源不再一致。" },
+    "Pistachio kernels, finely chopped": { "item": "开心果仁，切碎", "quantity": "25 克", "note": "坚果类过敏原。省略开心果会改变来源配方。" },
     "Lemon juice": { "item": "柠檬汁", "quantity": "半个柠檬的汁" },
     "Plain flour": { "item": "普通面粉", "quantity": "2 汤匙", "note": "小麦。与鸡蛋一起把混合物黏合起来。" },
     "Egg, beaten": { "item": "鸡蛋，打散", "quantity": "1 个中等大小" },

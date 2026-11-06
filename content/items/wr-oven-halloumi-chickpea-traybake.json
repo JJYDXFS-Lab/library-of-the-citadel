@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "Aubergine, sweet potato, pepper and chickpeas roasted under harissa, with slices of halloumi laid on for the last stretch and a garlic yoghurt stirred together while it bakes. The hearty vegetarian main of this set: the tin of chickpeas carries it, and nothing needs timing to the minute.",
+  "summary": "Aubergine, sweet potato, pepper and chickpeas roasted under harissa, with slices of halloumi laid on for the last stretch and a garlic yoghurt stirred together while it bakes. The chickpeas and cheese make a substantial vegetarian main; check that the sweet potato is tender before serving.",
 
   "variants": [],
 
@@ -38,14 +38,14 @@
 
   "method": [
     { "step": 1, "instruction": "Heat the oven to 200°C conventional, or 180°C fan (gas mark 6). Both figures are stated by the source; neither is a conversion made here. Line a baking tray with baking paper unless it is non-stick." },
-    { "step": 2, "instruction": "Cut the aubergine and sweet potato into rounds half an inch thick — about 1.3 cm, converted here by arithmetic rather than stated by the source — then quarter the rounds. Cut the pepper into large chunks." },
+    { "step": 2, "instruction": "Cut the aubergine and sweet potato into rounds half an inch thick (about 1.3 cm, an editorial conversion), then quarter the rounds. Cut the pepper into large chunks." },
     { "step": 3, "instruction": "Put the vegetables and the drained chickpeas in a bowl, add the tablespoon of oil and the harissa, and mix until everything is coated." },
     { "step": 4, "instruction": "Tip onto the tray in a single layer and bake for 30 minutes." },
     { "step": 5, "instruction": "Cut the halloumi into 8 slices, lay them over the vegetables and return the tray for a further 10 to 15 minutes, until the vegetables are cooked through — a knife should meet no resistance in the sweet potato." },
     { "step": 6, "instruction": "Stir the yoghurt, garlic, teaspoon of oil, salt and pepper together, spoon over the finished tray and scatter with parsley." }
   ],
 
-  "yield_note": "Serves 4, as stated by the source. Source times: 5 minutes preparation and 40 minutes cooking, 45 minutes in total. The source gives no resting time, and none is invented here.",
+  "yield_note": "Serves 4. The source card lists 5 minutes preparation, 40 minutes cooking and 45 minutes total, but its stages are 30 minutes + 10 to 15 minutes: 40 to 45 minutes cooking, or about 45 to 50 minutes including prep by editorial addition. Plan for that range rather than a fixed 40-minute cook. The source gives no resting time.",
 
   "sources": [
     {
@@ -56,12 +56,18 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from Sarah Howells' page at The Gluten Free Blogger, accessed 2026-09-14. Two notes on what is and is not claimed here. The source gives its piece size in inches; the centimetre figure above is plain arithmetic and is labelled as such. The source publishes in a gluten-free context, but this record makes no gluten-free claim: harissa pastes and halloumi brands differ, and only the packet in your hand can answer that. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here.",
+  "provenance_note": "Recipe facts paraphrased from Sarah Howells' page at The Gluten Free Blogger, accessed 2026-09-14. The source gives its piece size in inches; the centimetre figure above is plain arithmetic and is labelled as such. The source publishes in a gluten-free context, but this record makes no gluten-free claim: harissa pastes and halloumi brands differ, so check the ingredient and allergen labels of both products. The source writes tablespoons and teaspoons without stating a millilitre value, so no spoon size is asserted here.",
 
-  "reviewed_at": "2026-09-14",
+  "reviewed_at": "2026-11-07",
 
-  "record_version": "1.0.0",
+  "record_version": "1.0.1",
   "change_history": [
+    {
+      "version": "1.0.1",
+      "date": "2026-11-07",
+      "change": "Clarified the cooking and total-time ranges implied by the source’s staged method.",
+      "supersedes": "1.0.0"
+    },
     {
       "version": "1.0.0",
       "date": "2026-09-14",

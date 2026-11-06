@@ -4,7 +4,7 @@
   "collection_id": "world-recipes",
   "record_class": "sourced",
   "publication_ready": false,
-  "record_notice": "SOURCED RECORD — the ingredient ratios and microwave timing are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The millilitre and gram figures for spoon measures, the mug-size rule, the start-low timing and the doneness checks are this project's editorial adaptation. This record has not been kitchen-tested here and has had no professional food-safety review. Microwaves differ: cook to the doneness cue, not the clock.",
+  "record_notice": "SOURCED RECORD — the ingredient ratios and microwave timing are summarized in this project's own words from the recipe page cited in this record, accessed 2026-10-10. No source text or photograph is reproduced. The millilitre and gram figures for spoon measures, the mug-size rule, the start-low timing and the doneness checks are this project's editorial adaptation. This record has not been kitchen-tested here and has had no professional food-safety review. Microwaves differ. Check that the centre is fully set and contains no wet batter.",
 
   "name": {
     "primary": "Egg-Free Chocolate Microwave Mug Cake",
@@ -17,7 +17,7 @@
     "label_basis": "editorial-facet"
   },
 
-  "summary": "A one-mug chocolate cake with no egg, stirred together in the mug or a small bowl and cooked in the microwave in about a minute. It is a soft, fully cooked sponge, not a molten or lava cake: the centre should be set right through. Active time about 5 minutes; cook time about 1 to 1½ minutes; rest 1 minute; total about 8 minutes. Serves 1, or 2 sharing.",
+  "summary": "A one-mug chocolate cake with no egg, stirred together in the mug or a small bowl and cooked in the microwave in about a minute. Cook this soft sponge until the centre is set right through; do not leave a molten centre. Active time about 5 minutes; cook time about 1 to 1½ minutes; rest 1 minute; total about 8 minutes. Serves 1, or 2 sharing.",
 
   "variants": [],
 
@@ -51,7 +51,7 @@
     }
   ],
   "source_state": "sources-recorded",
-  "provenance_note": "Recipe facts paraphrased from the Table for Two page, accessed 2026-10-10. The source gives grams only for the flour (31 g) and millilitres only for part of the milk (59 ml); every other spoon-to-metric figure here is an approximate editorial conversion using a 15 ml tablespoon and a 5 ml teaspoon. The source's optional hazelnut-spread centre is omitted on purpose. The minimum mug size, the half-full rule, the wattage-dependent starting time and the no-wet-batter check are editorial guidance, not the source's.",
+  "provenance_note": "Recipe facts paraphrased from the Table for Two page, accessed 2026-10-10. The source gives grams only for the flour (31 g) and millilitres only for part of the milk (59 ml); every other spoon-to-metric figure here is an approximate editorial conversion using a 15 ml tablespoon and a 5 ml teaspoon. This version omits the source’s optional hazelnut-spread centre so the batter can be checked for doneness and to avoid tree-nut allergens. The minimum mug size, the half-full rule, the wattage-dependent starting time and the no-wet-batter check are editorial guidance, not the source's.",
 
   "reviewed_at": "2026-10-10",
 
