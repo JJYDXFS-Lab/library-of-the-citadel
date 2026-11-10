@@ -286,6 +286,39 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  story_id: 'old-book-on-the-hill',
+  canonical_title: '《山上的旧书》',
+  body_language: 'zh-Hans',
+  blocks: 361,
+  author: 'Atom (原子)',
+  acknowledged: ['JJYDXFS (小Z)'],
+  locale_titles: {
+    en: 'The Old Book on the Hill',
+    // The Chinese view shows the work under the title its author gave it.
+    zh: '山上的旧书',
+  },
+  first_block: '旧书店老板正在给一册地图贴价签。',
+  last_block: '它去开门。',
+  // The question the traveller comes a hundred years to ask, the line the book
+  // opens on — which is also the line the story opens on — the sentence the
+  // printed ending does not contain, and the line the work ends on.
+  required_lines: ['“您认识一个叫 Atom 的吗？”', '旧书店老板正在给一册地图贴价签。',
+    '“可你来了。”', '它去开门。'],
+  ordered_lines: [['“您认识一个叫 Atom 的吗？”', '“可你来了。”'], ['“可你来了。”', '它去开门。']],
+  // Every line of this work stands alone; nothing is set as a multi-line block.
+  verse_shapes: [],
+  // Two places only: the author's name and the title on the book's cover.
+  emphasis_blocks: 2,
+  strongs: 2,
+  // Original fiction — and explicitly not a report, not a quotation, and not a
+  // claim about anyone real or about any future.
+  genre_disclaimers: [/fiction|虚构/i, /not a report|不是报告/i, /quotation|引用/i, /claim|主张/i],
+  credited: [/Atom/, /JJYDXFS/],
+  en_abstract: [/Chinese original/i],
+  en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
+  en_page_phrase: /Chinese original/,
+  bilingual: null,
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
 // src/stories.mjs reads the records in directory order, which sorts the file

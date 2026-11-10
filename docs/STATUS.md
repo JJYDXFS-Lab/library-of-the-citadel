@@ -258,3 +258,38 @@ Real Chrome desktop and 390px mobile visual acceptance remains blocked by the
 multiple-profile preflight. No browser instance was closed or substituted;
 language interaction, visual overflow and footer appearance were not freshly
 verified. Coles rack source re-verification remains explicitly pending.
+
+
+## 2026-11-10 — Eighth story published to the shelf
+
+
+Added one authorized original work to the story shelf: the Chinese original
+fiction **《山上的旧书》** (The Old Book on the Hill), by Atom (原子), with
+JJYDXFS (小Z) as creative collaborator, first published 2026-11-10 as record
+version 1.0.0. The shelf census moved from seven works to eight
+(`content/stories/shelf.json` 1.6.0 → 1.7.0). No existing story's body or
+metadata changed, and no recipe, handbook, schema, template, configuration or
+dependency changed.
+
+The body is the author's canonical Chinese text, carried whole: **361 blocks**,
+including the twelve scene divisions the author set and the two places emphasis
+was asked for. The author's markdown was projected onto the existing
+`library.story/1.0.0` contract without changing the schema — scene dividers are
+carried as their own paragraph blocks, blockquote markers are formatting and were
+dropped while their text was kept verbatim, and bold spans became `emphasis`
+fields. Both the English and Chinese pages publish that same Chinese body
+unchanged; nothing is translated.
+
+Validation: `npm run check` **145 passed, 0 failed, 0 skipped**; the
+production-subpath build (`LIBRARY_BASE_PATH=/library-of-the-citadel/`) emitted
+**92 files, 28 recipes, 8 stories and 1 handbook**, EN/ZH. The published record
+was compared block by block and character by character against the author's
+canonical source, and reproduces it exactly. Generated EN and ZH reading pages
+were inspected: 361 rendered paragraphs each, matching the record, two emphasis
+spans, the shelf census showing eight, and the required footer credit
+`© 2026 JJYDXFS & Atom (原子). All rights reserved.` with both holders linked.
+
+Pending: this is a source-tree publication only. No commit, push or deployment
+was performed, and no live HTTP or browser acceptance of the new page has been
+run. Real Chrome desktop and 390px mobile visual acceptance remains blocked by
+the multiple-profile preflight recorded above.
