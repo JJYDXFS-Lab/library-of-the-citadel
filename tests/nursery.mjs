@@ -375,12 +375,12 @@ test('neither nursery page inherits the recipe colophon, and each ends on the co
         const foreignNote = esc(loadDictionaries().get(LOCALE_CODES.find((c) => c !== loc.code))['nursery.footer_note']);
         assert.ok(!html.includes(foreignNote), `${where}: shows the other locale's footer note`);
         // The copyright is the last visible line: the final paragraph of the
-        // footer, and the footer is the last thing before the shared script.
+        // footer, followed only by the shared scripts.
         const paras = parasOf(footer[1]);
         assert.match(paras.at(-1), /^<p class="colophon__copyright">/, `${where}: the copyright is not the last visible line`);
         assert.equal(html.slice(html.indexOf(footer[0]) + footer[0].length).trim(),
-          `<script src="${base}assets/app.js" defer></script>\n</body>\n</html>`,
-          `${where}: something other than the shared script follows the colophon`);
+          `<script src="${base}assets/app.js" defer></script>\n<script src="${base}assets/ornament.js" defer></script>\n</body>\n</html>`,
+          `${where}: something other than the shared scripts follows the colophon`);
         // That script is what drives the language switch, so it must survive.
         assert.ok(html.includes('data-locale-switch'), `${where}: no language switch to script`);
       }

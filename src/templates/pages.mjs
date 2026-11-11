@@ -195,6 +195,7 @@ ${copyright}
 <p class="colophon__meta">${fill(L.t.raw('footer.base_path'), { basePath: code(cfg.basePath) })}</p>
 </footer>
 <script src="${cfg.withBase('assets/app.js')}" defer></script>
+<script src="${cfg.withBase('assets/ornament.js')}" defer></script>
 </body>
 </html>`;
 }

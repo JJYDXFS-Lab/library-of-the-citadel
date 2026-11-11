@@ -789,6 +789,21 @@ h3.handbook__heading { font-size: clamp(1.1rem, 2.4vw, 1.35rem); }
   .handbook-contents__sub { padding-left: 1rem; }
 }
 
+/* An original botanical mark grown into measured reading-page whitespace by
+   assets/ornament.js. Inspired by the space-aware floral margins of Kevin
+   Raymond's Florilegium (MIT, 2026); no Florilegium source or art is used.
+   Without JavaScript nothing is drawn; in print it is hidden. */
+.ornament {
+  position: absolute;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: var(--brass-soft);
+  opacity: .5;
+}
+@media print { .ornament { display: none !important; } }
+
 .card__untranslated {
   font-size: 0.7rem;
   letter-spacing: 0.03em;

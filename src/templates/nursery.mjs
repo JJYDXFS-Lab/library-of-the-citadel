@@ -103,6 +103,7 @@ export function nurseryFoot(cfg, L) {
 ${copyright}
 </footer>
 <script src="${cfg.withBase('assets/app.js')}" defer></script>
+<script src="${cfg.withBase('assets/ornament.js')}" defer></script>
 </body>
 </html>`;
 }
