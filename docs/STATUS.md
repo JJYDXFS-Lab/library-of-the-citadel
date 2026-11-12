@@ -293,3 +293,7 @@ Pending: this is a source-tree publication only. No commit, push or deployment
 was performed, and no live HTTP or browser acceptance of the new page has been
 run. Real Chrome desktop and 390px mobile visual acceptance remains blocked by
 the multiple-profile preflight recorded above.
+
+## Story publication — 2026-11-13
+
+- Added the ninth story, 《往南走，直到信里有了橙子的香气》, in its complete Chinese text, with explicit fantasy fan-fiction provenance. Earlier eight stories remain unchanged.

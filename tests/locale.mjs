@@ -80,7 +80,7 @@ const EXPECTED_ITEM_IDS = [
 // other route.
 const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation', 'the-third-chair', 'agent-kindergarten',
   'agent-kindergarten-no-character-sheet', 'agent-kindergarten-cat-investor', 'river-has-no-name-yet',
-  'xiaoshi-did-not-bring-a-pencil', 'old-book-on-the-hill'];
+  'xiaoshi-did-not-bring-a-pencil', 'old-book-on-the-hill', 'south-until-letters-smell-of-oranges'];
 
 // Each class states what it is in its own words, in each language. A reader
 // must never have to guess which kind of record they are looking at.

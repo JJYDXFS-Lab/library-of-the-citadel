@@ -319,6 +319,102 @@ const PUBLISHED = [{
   en_language_note: [/Chinese original/i, /not translated|not machine-translated/i],
   en_page_phrase: /Chinese original/,
   bilingual: null,
+}, {
+  "story_id": "south-until-letters-smell-of-oranges",
+  "canonical_title": "《往南走，直到信里有了橙子的香气》",
+  "body_language": "zh-Hans",
+  "blocks": 216,
+  "author": "Atom (原子)",
+  "acknowledged": [
+    "JJYDXFS (小Z)"
+  ],
+  "locale_titles": {
+    "en": "South, Until the Letters Smell of Oranges",
+    "zh": "往南走，直到信里有了橙子的香气"
+  },
+  "first_block": "交换发生在星期五凌晨零点四十七分。",
+  "last_block": "等这首诗念完，再回去关。",
+  "required_lines": [
+    "交换发生在星期五凌晨零点四十七分。",
+    "等这首诗念完，再回去关。"
+  ],
+  "ordered_lines": [
+    [
+      "交换发生在星期五凌晨零点四十七分。",
+      "等这首诗念完，再回去关。"
+    ]
+  ],
+  "verse_shapes": [
+    [
+      2
+    ],
+    [
+      1,
+      3,
+      1
+    ],
+    [
+      3
+    ],
+    [
+      2
+    ],
+    [
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1
+    ],
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      2
+    ],
+    [
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "emphasis_blocks": 4,
+  "strongs": 5,
+  "bilingual": null,
+ genre_disclaimers: [/fiction|虚构/i, /not|并非/i], credited: [/Atom/, /JJYDXFS/], en_abstract: [/Chinese original/i], en_language_note: [/Chinese original/i], en_page_phrase: /Chinese original/
 }];
 const PUBLISHED_IDS = PUBLISHED.map((s) => s.story_id);
 // src/stories.mjs reads the records in directory order, which sorts the file

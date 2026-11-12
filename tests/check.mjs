@@ -98,7 +98,7 @@ const TOTAL_RECORDS = 28;
 // works and a bilingual one, the same shape as far as routing is concerned.
 const EXPECTED_STORY_IDS = ['citadel-night-dialogue-on-relation', 'the-third-chair', 'agent-kindergarten',
   'agent-kindergarten-no-character-sheet', 'agent-kindergarten-cat-investor', 'river-has-no-name-yet',
-  'xiaoshi-did-not-bring-a-pencil', 'old-book-on-the-hill'];
+  'xiaoshi-did-not-bring-a-pencil', 'old-book-on-the-hill', 'south-until-letters-smell-of-oranges'];
 
 /** Recursive directory walk; readdirSync's own recursive option is newer than our floor. */
 function walk(dir, base = dir) {
